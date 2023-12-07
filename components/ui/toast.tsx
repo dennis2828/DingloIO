@@ -45,6 +45,7 @@ const Toast = React.forwardRef<
     <ToastPrimitives.Root
       ref={ref}
       className={cn(toastVariants({ variant }), className)}
+      toastType={toastType}
       {...props}
     >
       {toastType==="SUCCESS" ? <Check className="w-7 h-7 text-softBlue"/>:null}

@@ -3,6 +3,7 @@ import { AccountValidator } from "@/validators/account";
 import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
+import bcrypt from "bcrypt";
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,14 +11,18 @@ export async function POST(req: NextRequest) {
     const { password, confirmPassword, ...accountData } =
       AccountValidator.parse(data);
 
+    let passwordToHash;
+
     if (password) {
       if (password.trim() !== confirmPassword.trim())
         return new NextResponse("Password doesn't match", { status: 400 });
+
+      passwordToHash = await bcrypt.hash(password,10);  
     }
 
     const newAccount = await db.user.create({
       data: {
-        password,
+        password: passwordToHash,
         ...accountData,
       },
     });
