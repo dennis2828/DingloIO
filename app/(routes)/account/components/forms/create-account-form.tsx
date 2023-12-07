@@ -14,11 +14,15 @@ import { useEffect, useState } from "react"
 import { toast } from "@/components/ui/use-toast"
 import { useMutation } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios";
+import {signIn} from "next-auth/react";
+import { useTheme } from "next-themes"
 
 export const CreateAccountForm = () =>{
+    const {theme} = useTheme();
+
     const [showErrors, setShowErrors] = useState<boolean>(false);
 
-    const {handleSubmit ,register, formState:{errors}} = useForm<AccountRequest>({
+    const {handleSubmit ,register, formState:{errors}, setValue} = useForm<AccountRequest>({
         resolver:zodResolver(AccountValidator),
     });
 
@@ -30,6 +34,9 @@ export const CreateAccountForm = () =>{
         },
         onSuccess:(res)=>{
             toast({toastType:"SUCCESS",title:res.data.msg});
+            setTimeout(()=>{
+                resetForm();
+            },2500);
         },
         onError:(error)=>{
             if(error instanceof AxiosError)
@@ -37,7 +44,6 @@ export const CreateAccountForm = () =>{
             else toast({toastType:"ERROR",title:"Something went wrong. Please try again later."});
         }
     });
-
 
     useEffect(()=>{
         if(errors && Object.keys(errors).length>0){
@@ -47,6 +53,13 @@ export const CreateAccountForm = () =>{
             },3000);
         }
     },[errors]);
+
+    function resetForm(){
+        setValue("username","");
+        setValue("email","");
+        setValue("password","");
+        setValue("confirmPassword","");
+    }
 
     return (
         <div>
@@ -64,7 +77,7 @@ export const CreateAccountForm = () =>{
                 <div className="mt-3 flex items-center justify-center gap-3">
                     <FcGoogle className="text-[1.4em] cursor-pointer"/>
                     <span className="text-xs">or</span>
-                    <Image src={"/github-mark.svg"} className="cursor-pointer" width={28} height={28} alt="github login"/>
+                    <Image role="button" onClick={()=>signIn()} src={theme==="light" ? "/github-mark.svg":"/github-mark-white.svg"} className="cursor-pointer" width={28} height={28} alt="github login"/>
                 </div>
                 <Separator className="h-[1px] bg-lightBlue mb-5 mt-1"/>
                 <div className="flex flex-col gap-2 xsM:flex-row xsM:gap-0 items-center">
