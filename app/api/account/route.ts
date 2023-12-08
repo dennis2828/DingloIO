@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
         if (error.meta?.target) {
           return new NextResponse(
             //@ts-ignore
-            `This ${error.meta.target[0]} already exists`
+            `This ${error.meta.target[0]} is already taken`
           ,{status:500});
         }
       }

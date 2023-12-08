@@ -16,15 +16,24 @@ import { useMutation } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios";
 import {signIn} from "next-auth/react";
 import { useTheme } from "next-themes"
+import { useRouter, useSearchParams } from "next/navigation"
 
 export const CreateAccountForm = () =>{
-    const {theme} = useTheme();
+    const router = useRouter();
 
+    const {theme} = useTheme();
+    const searchParams = useSearchParams();
+    const errorMessage = searchParams.get("error");
+
+
+    const [authErrorMessage,setAuthErrorMessage] = useState<string>();
     const [showErrors, setShowErrors] = useState<boolean>(false);
 
     const {handleSubmit ,register, formState:{errors}, setValue} = useForm<AccountRequest>({
         resolver:zodResolver(AccountValidator),
     });
+
+  
 
     const {mutate: createAccount, isPending} = useMutation({
         mutationFn:async (account: AccountRequest) =>{
@@ -44,7 +53,7 @@ export const CreateAccountForm = () =>{
             else toast({toastType:"ERROR",title:"Something went wrong. Please try again later."});
         }
     });
-
+    //Form error handling
     useEffect(()=>{
         if(errors && Object.keys(errors).length>0){
             setShowErrors(true);
@@ -53,6 +62,21 @@ export const CreateAccountForm = () =>{
             },3000);
         }
     },[errors]);
+
+    //Next-Auth error handling
+    useEffect(()=>{
+        if(errorMessage && errorMessage.trim()!==''){
+            router.push("/account/new");
+            setAuthErrorMessage(errorMessage);
+        }
+      },[errorMessage]);
+      
+    useEffect(()=>{
+        
+        if(authErrorMessage && authErrorMessage.trim()!==''){
+            toast({toastType:"ERROR", title:authErrorMessage || "Something went wrong. Please try again later."});
+        }
+    },[authErrorMessage]);
 
     function resetForm(){
         setValue("username","");
@@ -75,9 +99,9 @@ export const CreateAccountForm = () =>{
                     <FormInput register={register} registerName={"confirmPassword"} id="confirmPassword" errorMessage={showErrors ? errors.confirmPassword?.message:undefined} icon={<ShieldCheck className="w-5 h-5 text-softBlue"/>} placeholder="confirm password" className="border-none px-2"/>
                 </div>
                 <div className="mt-3 flex items-center justify-center gap-3">
-                    <FcGoogle className="text-[1.4em] cursor-pointer"/>
+                    <FcGoogle onClick={()=>signIn("google")} className="text-[1.4em] cursor-pointer"/>
                     <span className="text-xs">or</span>
-                    <Image role="button" onClick={()=>signIn()} src={theme==="light" ? "/github-mark.svg":"/github-mark-white.svg"} className="cursor-pointer" width={28} height={28} alt="github login"/>
+                    <Image role="button" onClick={()=>signIn("github")} src={theme==="light" ? "/github-mark.svg":"/github-mark-white.svg"} className="cursor-pointer" width={28} height={28} alt="github login"/>
                 </div>
                 <Separator className="h-[1px] bg-lightBlue mb-5 mt-1"/>
                 <div className="flex flex-col gap-2 xsM:flex-row xsM:gap-0 items-center">
