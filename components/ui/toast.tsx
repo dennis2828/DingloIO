@@ -1,7 +1,7 @@
 import * as React from "react"
 import * as ToastPrimitives from "@radix-ui/react-toast"
 import { cva, type VariantProps } from "class-variance-authority"
-import { AlertCircle, Check, Info, X } from "lucide-react"
+import { AlertCircle, Check, CopyCheck, Info, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -52,6 +52,8 @@ const Toast = React.forwardRef<
       {toastType==="ERROR" ? <X className="w-7 h-7 text-softBlue"/>:null}
       {toastType==="INFO" ? <Info className="w-7 h-7 text-softBlue"/>:null}
       {toastType==="DANGER" ? <AlertCircle className="w-7 h-7 text-softBlue"/>:null}
+      {toastType==="COPY" ? <CopyCheck className="w-7 h-7 text-softBlue"/>:null}
+
       {children}
     </ToastPrimitives.Root>
   )

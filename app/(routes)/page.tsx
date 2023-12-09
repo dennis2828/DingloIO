@@ -11,7 +11,9 @@ import { Separator } from "@/components/ui/separator";
 import { EnrollGift } from "./components/EnrollGift/enroll-gift";
 import { Footer } from "./components/Footer/footer";
 
-export default function Home() {
+export default function Home({searchParams}: {searchParams:{inviter: string}}) {
+  console.log(searchParams.inviter);
+  
   return (
     <main>
       <Container>
@@ -34,7 +36,7 @@ export default function Home() {
           <Features/>
         </section>
         <section className="my-28">
-          <EnrollGift/>
+          <EnrollGift inviter={searchParams.inviter}/>
         </section>
         <section className="mt-34">
           <Footer/>

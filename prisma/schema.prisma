@@ -23,4 +23,7 @@ model User {
   email String @unique
   password String?
   provider PROVIDERS @default(EMAIL)
+  isInvited Boolean @default(false)
+  invitedBy String?
+  invitations String[]
 }

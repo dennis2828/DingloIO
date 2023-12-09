@@ -1,9 +1,7 @@
 import { Container } from "@/components/container";
-import { getAuthSession } from "@/lib/authOptions";
 import Image from "next/image";
 
-const AccountPageLayout = async ({ children }: { children: React.ReactNode }) => {
-  const session = await getAuthSession();
+const AccountPageLayout = ({ children }: { children: React.ReactNode }) => {
   
   return (
     <Container className="">
