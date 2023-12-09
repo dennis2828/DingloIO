@@ -8,8 +8,7 @@ import bcrypt from "bcrypt";
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
-    const { password, confirmPassword, ...accountData } =
-      AccountValidator.parse(data);
+    const { password, confirmPassword, ...accountData } = AccountValidator.parse(data);
 
     let passwordToHash;
 

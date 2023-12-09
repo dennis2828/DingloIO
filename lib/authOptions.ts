@@ -4,6 +4,10 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import db from "./db";
 import jwt from "jsonwebtoken";
+import { ZodError } from "zod";
+import { SignInAccountValidator } from "@/validators/account";
+import bcrypt from "bcrypt";
+
 
 export const authOptions: NextAuthOptions = {
     providers:[
@@ -30,17 +34,47 @@ export const authOptions: NextAuthOptions = {
                 },
             },
             async authorize(credentials){
-                const user = {id:"42",username:"dingo",email:"dennismoldovan32@gmail.com", accessToken:""};
-
-                if(true)
-                    return user;
                 
-                return null;
+                try{
+                    
+                    const {email, password} = SignInAccountValidator.parse(credentials);
+                    
+                    const targetUser = await db.user.findUnique({
+                        where:{
+                            email,
+                        },
+                    });
+                    
+                    if(targetUser){
+                        if(!targetUser.password || targetUser.password.trim()==="")
+                            throw new Error(`Account is already created by ${targetUser.provider}.`);
+
+                        const match = await bcrypt.compare(password, targetUser.password);
+                        
+
+                        if(match){
+                            return {id:targetUser.id, name:targetUser.username, email:targetUser.email, provider:targetUser.provider, accessToken:""};
+                            
+                        }
+                        
+                        throw new Error("Password doesn't match.");
+                    }
+                    
+                    throw new Error("Cannot find your account.");
+
+                }catch(error){
+                    
+                    if (error instanceof ZodError)
+                        throw new Error(`${error.issues[0].message}`);
+
+                    throw new Error((error as Error).message);
+                }
             }
         }),
     ],
     callbacks:{
         async signIn({user}){
+            
             if(user && user.name && user.email){
                     const userAlreadyExists = await db.user.findUnique({
                         where:{
@@ -69,8 +103,8 @@ export const authOptions: NextAuthOptions = {
             return true;
         },
         async jwt({token, account}){
+
             if(token){
-                
                 const userAlreadyExists = await db.user.findUnique({
                     where:{
                         username:token.name!,
@@ -98,6 +132,7 @@ export const authOptions: NextAuthOptions = {
             
         },
         async session({ session, token }) {
+            
             if(session && session.user){
                 session.user.accessToken = token.accessToken as string;
                 session.user.id=token.id as string;
@@ -107,7 +142,7 @@ export const authOptions: NextAuthOptions = {
         },
     },
     pages:{
-        error: "/account/new",
+        error: "/account",
         signIn:"/account",
     },
 };
