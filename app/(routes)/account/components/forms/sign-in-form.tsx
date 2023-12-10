@@ -15,15 +15,12 @@ import { toast } from "@/components/ui/use-toast"
 import { useMutation } from "@tanstack/react-query"
 import {signIn} from "next-auth/react";
 import { useTheme } from "next-themes"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 
-export const SignInForm = () =>{
+
+export const SignInForm = ({errorMessage}:{errorMessage: string}) =>{
     const router = useRouter();
-
     const {theme} = useTheme();
-    const searchParams = useSearchParams();
-    const errorMessage = searchParams.get("error");
-
 
     const [authErrorMessage,setAuthErrorMessage] = useState<string>();
     const [showErrors, setShowErrors] = useState<boolean>(false);
@@ -35,7 +32,7 @@ export const SignInForm = () =>{
   
 
     const {mutate: SignIn, isPending} = useMutation({
-        mutationFn:async (account: SignInAccountRequest) =>{
+        mutationFn: async (account: SignInAccountRequest) =>{
             signIn("credentials",{...account, callbackUrl:"/"});
         },
         

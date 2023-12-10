@@ -1,8 +1,8 @@
 import { SignInForm } from "./components/forms/sign-in-form";
 
-const SignInPage = () =>{
+const SignInPage = ({searchParams}:{searchParams:{error: string}}) =>{
     return (
-      <SignInForm/>
+      <SignInForm errorMessage={searchParams.error}/>
     )
 }
 
