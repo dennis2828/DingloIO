@@ -1,57 +1,31 @@
+"use client"
 import { InfoText } from "@/components/info-text"
 import { Button } from "@/components/ui/button"
 import { Invitation } from "./invitation"
-import { getAuthSession } from "@/lib/authOptions"
-import db from "@/lib/db"
-import { revalidatePath } from "next/cache"
-import { cookies } from 'next/headers'
+import { useEffect } from "react"
+import { inviteUser } from "@/actions/invite"
+import { toast } from "@/components/ui/use-toast"
 
 
+export const EnrollGift = ({userId}:{userId: string}) =>{
 
-export const EnrollGift = async ({inviter}:{inviter: string}) =>{
-    const session = await getAuthSession();
-    if(!session || !session.user){
-      
-        return null;
-    };
-    console.log(session);
-    let inviterId=inviter;
+    useEffect(()=>{
+        async function handleInvite(){
+            const inviter = localStorage.getItem("inviterId");
 
-    if(inviterId && inviterId.trim()!=="" && inviterId!==session.user.id){
-        try{    
-            const inviterUser = await db.user.findUnique({
-                where:{
-                    id:inviterId,
-                }
-            });
-            if(inviterUser)
-            {
-                //update inviter invitations
-                await db.user.update({
-                    where:{
-                        id:inviterId,
-                    },
-                    data:{
-                        invitations:[...inviterUser.invitations, session.user.id],
-                    },
-                });
-
-                 //invitated feature
-                 await db.user.update({
-                    where:{
-                        id:session.user.id,
-                    },
-                    data:{
-                        isInvited: true,
-                        invitedBy:inviterId,
-                    },
-                });
+            if(inviter && inviter.trim()!==""){
+                
+               const {invited, msg} = await inviteUser(inviter);
+                
+                if(!invited)
+                    toast({title:msg, toastType:"ERROR"});
+                
+                localStorage.removeItem("inviterId");
             }
-        }catch(err){}finally{
-            revalidatePath("/");
         }
-    }
-   
+        
+        handleInvite();
+    },[]);
 
     return (
         <div className="dark:shadow-[0px_0px_20px_1px_rgba(126,154,234)] py-5 px-2 dark:rounded-md">
@@ -60,7 +34,7 @@ export const EnrollGift = async ({inviter}:{inviter: string}) =>{
             <div className="flex flex-col items-center justify-center gap-8">
                 <p className="text-center font-medium mt-3 xss:text-[1.1em] sm:text-[1.3em]">157 places <InfoText className="text-lightBlue">left</InfoText></p>
                 <div className="flex flex-col-reverse md:flex-row gap-3">
-                    <Invitation inviterId={session.user.id}/>
+                    <Invitation inviterId={userId}/>
                     <Button aria-label="COLLECT UNIQUE FEATURE NOW" variant={"softDefault"} className="hover:scale-95 self-center dark:bg-transparent transition-[500ms] whitespace-break-spaces">COLLECT UNIQUE FEATURE NOW</Button>
                 </div>
             </div>

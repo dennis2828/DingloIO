@@ -10,9 +10,10 @@ import { Features } from "./components/Features/features";
 import { Separator } from "@/components/ui/separator";
 import { EnrollGift } from "./components/EnrollGift/enroll-gift";
 import { Footer } from "./components/Footer/footer";
+import { EnrollWrapper } from "./components/EnrollGift/enroll-wrapper";
+import { Suspense } from "react";
 
 export default function Home({searchParams}: {searchParams:{inviter: string}}) {
-  console.log(searchParams.inviter);
   
   return (
     <main>
@@ -36,7 +37,9 @@ export default function Home({searchParams}: {searchParams:{inviter: string}}) {
           <Features/>
         </section>
         <section className="my-28">
-          <EnrollGift inviter={searchParams.inviter}/>
+        <Suspense>
+          <EnrollWrapper inviter={searchParams.inviter}/>
+        </Suspense>
         </section>
         <section className="mt-34">
           <Footer/>

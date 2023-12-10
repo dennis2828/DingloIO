@@ -3,7 +3,7 @@
 import { FormInput } from "@/components/forms/form-input"
 import { FormSubmit } from "@/components/forms/form-submit"
 import { Separator } from "@/components/ui/separator"
-import { User, LucideMails, Shield, ShieldCheck, Check, X } from "lucide-react"
+import { User, LucideMails, Shield, ShieldCheck } from "lucide-react"
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link"
 import Image from "next/image"
