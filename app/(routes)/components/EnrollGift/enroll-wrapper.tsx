@@ -2,6 +2,7 @@ import { getAuthSession } from "@/lib/authOptions"
 import { EnrollGift } from "./enroll-gift";
 import { SaveInviter } from "./save-inviter";
 import db from "@/lib/db";
+import { User } from "@prisma/client";
 
 export const EnrollWrapper = async ({inviter}:{inviter: string}) =>{
     const session = await getAuthSession();
@@ -17,10 +18,11 @@ export const EnrollWrapper = async ({inviter}:{inviter: string}) =>{
         },
         select:{
             invitations:true,
-        }
+            uniqueFeature:true,
+        },
     });
-
+    
     return (
-        <EnrollGift userId={session.user.id} invitations={user?.invitations || []}/>
+        <EnrollGift userId={session.user.id} invitations={user?.invitations || []} uniqueFeature={user!.uniqueFeature}/>
     )
 }

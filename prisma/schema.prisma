@@ -26,4 +26,5 @@ model User {
   isInvited Boolean @default(false)
   invitedBy String?
   invitations String[]
+  uniqueFeature Boolean @default(false)
 }

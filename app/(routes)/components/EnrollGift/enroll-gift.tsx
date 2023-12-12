@@ -2,11 +2,16 @@
 import { InfoText } from "@/components/info-text"
 import { Button } from "@/components/ui/button"
 import { Invitation } from "./invitation"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { inviteUser } from "@/actions/invite"
+import { toast } from "@/components/ui/use-toast"
+import { collectFeature } from "@/actions/collectFeature"
+import { cn } from "@/lib/utils"
+import { Check } from "lucide-react"
 
 
-export const EnrollGift = ({userId, invitations}:{userId: string, invitations: string[]}) =>{
+export const EnrollGift = ({userId, invitations, uniqueFeature}:{userId: string, invitations: string[], uniqueFeature: boolean}) =>{
+    const [collecting, setCollecting] = useState<boolean>(false);
 
     useEffect(()=>{
         async function handleInvite(){
@@ -21,6 +26,7 @@ export const EnrollGift = ({userId, invitations}:{userId: string, invitations: s
         handleInvite();
         return () => localStorage.removeItem("inviterId");
     },[]);
+    
 
     return (
         <div className="dark:shadow-[0px_0px_20px_1px_rgba(126,154,234)] py-5 px-2 dark:rounded-md">
@@ -30,7 +36,14 @@ export const EnrollGift = ({userId, invitations}:{userId: string, invitations: s
                 <p className="text-center font-medium mt-3 xss:text-[1.1em] sm:text-[1.3em]">157 places <InfoText className="text-lightBlue">left</InfoText></p>
                 <div className="flex flex-col-reverse md:items-center md:flex-row gap-3">
                     <Invitation inviterId={userId} invitations={invitations}/>
-                    <Button aria-label="COLLECT UNIQUE FEATURE NOW" variant={"softDefault"} className="hover:scale-95 self-center dark:bg-transparent transition-[500ms] whitespace-break-spaces">COLLECT UNIQUE FEATURE NOW</Button>
+                    <Button isLoading={collecting} onClick={async ()=>{
+                        setCollecting(true);
+                        const {collected, msg} = await collectFeature();
+                        toast({toastType:collected ? "SUCCESS":"ERROR", title:msg});
+                        setCollecting(false);
+
+                
+                    }} aria-label="COLLECT UNIQUE FEATURE NOW" variant={"softDefault"} className={cn("hover:scale-95 self-center dark:bg-transparent transition-[500ms] whitespace-break-spaces",uniqueFeature && "dark:bg-lightBlue text-gray-300 pointer-events-none")}>{uniqueFeature ? <Check className="w-4 h-4 mr-2"/>:null} {uniqueFeature ? "UNIQUE FEATURE WAS COLLECTED":"COLLECT UNIQUE FEATURE NOW"}</Button>
                 </div>
             </div>
         </div>
