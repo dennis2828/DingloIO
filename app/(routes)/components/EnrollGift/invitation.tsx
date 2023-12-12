@@ -1,7 +1,7 @@
 "use client"
 
 import { toast } from "@/components/ui/use-toast"
-import { absoluteURL, copyText } from "@/lib/utils"
+import { absoluteURL, cn, copyText } from "@/lib/utils"
 import { Copy, CopyCheck } from "lucide-react"
 import { useEffect, useState } from "react"
 
@@ -41,7 +41,7 @@ export const Invitation = ({inviterId, invitations}:{inviterId: string, invitati
                     }
                 </div>
             </div>
-            <p className="mr-2">{invitations.length} / 5</p>
+            <p className={cn("mr-2 font-bold", invitations.length >= 5 && "font-bold")}>{invitations.length <=5 ? <span>{invitations.length}</span>:<span className="text-softBlue">5</span>} / 5</p>
         </>
        
     )

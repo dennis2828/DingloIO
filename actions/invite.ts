@@ -14,6 +14,17 @@ export async function inviteUser(inviterId: string){
         if(session.user.id===inviterId)
             throw new Error("You cannot invite yourself");
 
+        const alreadyInvited = await db.user.findMany({
+            where:{
+                invitations:{
+                    has:session.user.id,
+                }
+            }
+        });
+
+        if(alreadyInvited)
+            throw new Error("You are already invited.");
+
         const currentUser = await db.user.findUnique({
             where:{
                 id: session.user.id,

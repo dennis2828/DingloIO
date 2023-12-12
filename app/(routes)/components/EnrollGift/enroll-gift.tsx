@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button"
 import { Invitation } from "./invitation"
 import { useEffect } from "react"
 import { inviteUser } from "@/actions/invite"
-import { toast } from "@/components/ui/use-toast"
 
 
 export const EnrollGift = ({userId, invitations}:{userId: string, invitations: string[]}) =>{
@@ -15,10 +14,7 @@ export const EnrollGift = ({userId, invitations}:{userId: string, invitations: s
 
             if(inviter && inviter.trim()!==""){
                 
-               const {invited, msg} = await inviteUser(inviter);
-                
-                if(!invited)
-                    toast({title:msg, toastType:"ERROR"});
+               await inviteUser(inviter);
             }
         }
         
