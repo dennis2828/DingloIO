@@ -9,8 +9,8 @@ interface FormSubmitProps extends HTMLAttributes<HTMLButtonElement>{
     isLoading?: boolean;
 }
 
-export const FormSubmit = ({label,disabled,isLoading, ...props}:FormSubmitProps) =>{
+export const FormSubmit = ({label,disabled,isLoading, children, ...props}:FormSubmitProps) =>{
     return (
-        <Button disabled={disabled} isLoading={isLoading} type="submit" {...props}>{label ? label:"Submit"}</Button>
+        <Button disabled={disabled} isLoading={isLoading} variant={"empty"} type="submit" {...props}>{label ? label:null} {children}</Button>
     )
 }

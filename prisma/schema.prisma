@@ -27,4 +27,5 @@ model User {
   invitedBy String?
   invitations String[]
   uniqueFeature Boolean @default(false)
+  newsletter String?
 }

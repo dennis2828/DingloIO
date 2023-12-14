@@ -2,8 +2,24 @@ import { Logo } from "@/components/logo"
 import Link from "next/link"
 import { Newsletter } from "./newsletter"
 import { Copyright } from "lucide-react"
+import { getAuthSession } from "@/lib/authOptions"
+import db from "@/lib/db"
 
-export const Footer = () =>{
+export const Footer = async () =>{
+    const session = await getAuthSession();
+    
+    let user = undefined;
+    if(session && session.user)
+        user = await db.user.findUnique({
+            where:{
+                id:session.user?.id,
+            },
+            select:{
+                newsletter: true,
+            },
+        });
+    
+    
     return (
         <footer>
             <div className="shadow-[0px_0px_2.5px_.9px_rgba(126,154,234)]"/>
@@ -19,7 +35,7 @@ export const Footer = () =>{
                         <Link href={"/"} className="hover:text-softBlue font-medium">documentation</Link>
                         <Link href={"/"} className="hover:text-softBlue font-medium">pricing</Link>
                     </div>
-                    <Newsletter/>
+                    {!session || !session.user ? null:<Newsletter newsletter={user?.newsletter!}/>}
                 </div>
             </div>
         </footer>
