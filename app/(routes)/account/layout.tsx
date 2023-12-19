@@ -4,7 +4,7 @@ import Image from "next/image";
 const AccountPageLayout = ({ children }: { children: React.ReactNode }) => {
   
   return (
-    <Container className="">
+    <Container>
       <div className="flex justify-center items-center gap-20 min-h-screen">
         <div>{children}</div>
         <Image

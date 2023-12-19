@@ -1,7 +1,6 @@
 "use client"
 
 import { subscribeNewsletter, unsubscribeNewsletter } from "@/actions/newsletter";
-import { FormSubmit } from "@/components/forms/form-submit";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";

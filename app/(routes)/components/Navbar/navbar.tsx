@@ -5,9 +5,11 @@ import { navbarLinks } from "@/constants/navbarLinks";
 import { NavLink } from "./nav-link";
 import { HamburgerMenu } from "./hamburger-menu";
 import { MobileNav } from "./mobile-nav";
+import { getAuthSession } from "@/lib/authOptions";
 
-export const Navbar = () => {
-  const isAuth = false;
+export const Navbar = async() => {
+  const session = await getAuthSession();
+
   return (
     <div>
       <nav className="flex items-center justify-between py-3">
@@ -17,7 +19,7 @@ export const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="flex items-center gap-4">
             <div className="hidden md:block">
-              {isAuth ? (
+              {session && session.user ? (
                 <div className="flex items-center gap-3">
                   {navbarLinks.map((navLink, index) => (
                     <NavLink key={index} navLink={navLink} />
