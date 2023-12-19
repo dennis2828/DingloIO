@@ -11,6 +11,6 @@ interface FormSubmitProps extends HTMLAttributes<HTMLButtonElement>{
 
 export const FormSubmit = ({label,disabled,isLoading, children, ...props}:FormSubmitProps) =>{
     return (
-        <Button disabled={disabled} isLoading={isLoading} variant={"empty"} type="submit" {...props}>{label ? label:null} {children}</Button>
+        <Button disabled={disabled} isLoading={isLoading} type="submit" {...props}>{label ? label:null} {children}</Button>
     )
 }

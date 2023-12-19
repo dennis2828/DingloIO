@@ -35,9 +35,9 @@ export const Newsletter = ({newsletter}:{newsletter: string}) =>{
                 toast({toastType:subscribed ? "SUCCESS":"ERROR", title: msg});
             })} className="flex items-center bg-white rounded-sm px-2 dark:bg-transparent dark:border-b dark:rounded-none dark:border-softBlue max-w-[500px] mx-auto">
                 <Input {...register("email")} placeholder={errors && errors.email && errors.email.message ? errors.email.message as string:"email address for newsletter"} className="border-none bg-white dark:bg-transparent max-w-[500px]"/>
-                <FormSubmit disabled={isLoading}>
+                <Button variant={"empty"} disabled={isLoading}>
                     <ScrollTextIcon className="w-4 h-4 cursor-pointer hover:text-softBlue duration-100"/>
-                </FormSubmit>
+                </Button>
             </form>
             {newsletter && newsletter.trim()!=="" ? <div className="flex justify-center">
             <Button disabled={isLoading} variant={"empty"} size={"sm"} onClick={async()=>{

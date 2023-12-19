@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 import { About } from "./components/About/about";
 import { Features } from "./components/Features/features";
 import { Separator } from "@/components/ui/separator";
-import { EnrollGift } from "./components/EnrollGift/enroll-gift";
 import { Footer } from "./components/Footer/footer";
 import { EnrollWrapper } from "./components/EnrollGift/enroll-wrapper";
 import { Suspense } from "react";
