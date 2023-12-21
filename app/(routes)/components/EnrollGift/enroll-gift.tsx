@@ -39,7 +39,7 @@ export const EnrollGift = ({userId, invitations, uniqueFeature}:{userId: string,
                     <Button isLoading={collecting} onClick={async ()=>{
                         setCollecting(true);
                         const {collected, msg} = await collectFeature();
-                        toast({title:msg});
+                        toast({toastType:collected ? "SUCCESS":"DANGER", title:msg});
                         setCollecting(false);
                     }} aria-label="COLLECT UNIQUE FEATURE NOW" variant={"softDefault"} className={cn("hover:scale-95 self-center dark:bg-transparent transition-[500ms] whitespace-break-spaces",uniqueFeature && "dark:bg-lightBlue text-gray-300 pointer-events-none")}>{uniqueFeature ? <Check className="w-4 h-4 mr-2"/>:null} {uniqueFeature ? "UNIQUE FEATURE WAS COLLECTED":"COLLECT UNIQUE FEATURE NOW"}</Button>
                 </div>
