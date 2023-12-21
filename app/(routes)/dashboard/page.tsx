@@ -1,17 +1,19 @@
-import { AppStatistics } from "./components/app-statistics";
-import { Header } from "./components/header";
+import { ProjectManager } from "./components/project-manager";
+import { ProjectStatistics } from "./components/project-statistics";
+import { Header } from "../../../components/header";
 
 const DashboardPage = () =>{
     return (
         <div>
             <Header/>
             <div>
-                <div>left panel</div>
                 <div className="mt-20">
-                    <AppStatistics/>
+                    <ProjectManager/>
+                </div>
+                <div className="mt-16">
+                    <ProjectStatistics/>
                 </div>
             </div>
-           
         </div>
     )
 }

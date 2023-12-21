@@ -1,9 +1,9 @@
 import { AppApiKey } from "./api-key"
 import { DataInfo } from "./data-info"
 
-export const AppStatistics = () =>{
+export const ProjectStatistics = () =>{
     return (
-        <div className="">
+        <div>
             <div className="flex flex-col gap-3 sm:flex-row items-center">
                 <DataInfo className="order-2 sm:order-none" amount={5} label="new messages"/>
                 <div className="order-1 sm:order-none">
