@@ -44,7 +44,7 @@ export async function generateStaticParams(){
 
 async function getAllProjects(){
     try{
-        const projects = await fetch("/api/project",{next:{revalidate:120}});
+        const projects = await fetch("/api/project",{next:{revalidate:0}});
 
         const jsonProjects = await projects.json();
     
