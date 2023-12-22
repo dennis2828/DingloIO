@@ -36,6 +36,8 @@ model Project {
   id String @id @default(uuid())
   projectName String
   password String
+  api_key String
+
 
   userId String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)

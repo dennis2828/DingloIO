@@ -7,6 +7,13 @@ import { getAuthSession } from "@/lib/authOptions";
 import { JsonWebTokenError } from "jsonwebtoken";
 import AuthorizationToken from "@/lib/verifyToken";
 
+function generateApiKey(){
+  const uniqueID = crypto.randomUUID();
+  const formattedID = uniqueID.replace(/-/g, '');
+
+  return `dinglo-${formattedID}`
+}
+
 export async function POST(req: NextRequest) {
   try {
     const session = await getAuthSession();
@@ -26,11 +33,14 @@ export async function POST(req: NextRequest) {
 
     passwordToHash = await bcrypt.hash(projectPassword,10);  
 
+
+
     const newAccount = await db.project.create({
       data: {
         ...projectData,
         password: passwordToHash,
-        userId:user.userId,
+        api_key: generateApiKey(),
+        userId: user.userId,
       },
     });
 
@@ -39,6 +49,8 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
+    console.log(error);
+    
     if(error instanceof JsonWebTokenError)
         return new NextResponse("Invalid authorization token",{status:400})
     
