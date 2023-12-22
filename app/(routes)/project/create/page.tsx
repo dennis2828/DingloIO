@@ -18,7 +18,7 @@ const CreateProjectPage = () => {
           <StyledLink href="/projects/more">More projects</StyledLink>
         </div>
       </div>
-      <div className="mt-16 flex gap-20 justify-center lg:justify-between">
+      <div className="mt-16 flex items-center gap-20 justify-center lg:justify-between">
         <CreateProjectForm />
         <div className="relative">
             <Image

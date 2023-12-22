@@ -12,7 +12,7 @@ export const ProjectManager = async () =>{
             userId:session!.user?.id,
         },
     });
-
+    
     return (
         <div className="flex items-center justify-between">
             <div className="max-w-fit">

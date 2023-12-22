@@ -13,7 +13,7 @@ import { EnrollWrapper } from "./components/EnrollGift/enroll-wrapper";
 import { Suspense } from "react";
 
 export default function Home({searchParams}: {searchParams:{inviter: string}}) {
-  
+    
   return (
     <main>
       <Container>
