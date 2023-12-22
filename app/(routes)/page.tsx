@@ -40,7 +40,7 @@ export default function Home({searchParams}: {searchParams:{inviter: string}}) {
           <EnrollWrapper inviter={searchParams.inviter}/>
         </Suspense>
         </section>
-        <section className="mt-34">
+        <section className="mt-32">
           <Footer/>
         </section>
       </Container>

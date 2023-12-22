@@ -7,10 +7,10 @@ const DashboardPage = () =>{
         <div>
             <Header/>
             <div>
-                <div className="mt-20">
+                <div className="mt-16">
                     <ProjectManager/>
                 </div>
-                <div className="mt-16">
+                <div className="mt-14">
                     <ProjectStatistics/>
                 </div>
             </div>

@@ -28,4 +28,15 @@ model User {
   invitations String[]
   uniqueFeature Boolean @default(false)
   newsletter String?
+
+  projects Project[]
+}
+
+model Project {
+  id String @id @default(uuid())
+  projectName String
+  password String
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

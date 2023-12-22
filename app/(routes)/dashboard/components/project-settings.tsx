@@ -1,10 +1,14 @@
-import Link from "next/link"
+import { StyledLink } from "@/components/ui/link"
 
 export const ProjectSettings = () =>{
     return (
         <div className="space-x-4">
-            <Link href={"/project"} className="text-sm border-b border-softBlue hover:border-transparent hover:text-softBlue font-semibold">Manage your project</Link>
-            <Link href={"/project/create"} className="text-sm border-b border-softBlue hover:border-transparent hover:text-softBlue font-semibold">New project</Link>
+            <StyledLink href="/project">
+                Manage your project
+            </StyledLink>
+            <StyledLink href="/project/create">
+                New project
+            </StyledLink>
         </div>
     )
 }

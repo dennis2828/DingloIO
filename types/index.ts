@@ -11,3 +11,8 @@ export interface NavbarLink {
     path: string;
 }
 export type Account = Omit<AccountRequest, "confirmPassword">;
+
+export interface AuthTokenPayload {
+    userId: string;
+    username: string;
+}
