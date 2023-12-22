@@ -20,15 +20,19 @@ const CreateProjectPage = () => {
       </div>
       <div className="mt-16 flex gap-20 justify-center lg:justify-between">
         <CreateProjectForm />
-        <Image
-          src={"/user-chat.jpg"}
-          width={2000}
-          height={1333}
-          className="hidden lg:block w-full h-full max-w-[600px] max-h-[700px] rounded-md object-cover"
-          quality={100}
-          priority
-          alt="user-chat image"
-        />
+        <div className="relative">
+            <Image
+            src={"/user-chat.jpg"}
+            width={2000}
+            height={1333}
+            className="hidden lg:block w-full h-full max-w-[600px] max-h-[700px] rounded-md object-cover"
+            quality={100}
+            priority
+            alt="user-chat image"
+            />
+            <div className="dark:absolute top-0 bottom-0 left-0 right-0 bg-black/5"></div>
+        </div>
+        
       </div>
     </div>
   );
