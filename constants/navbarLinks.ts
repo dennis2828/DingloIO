@@ -1,4 +1,7 @@
+import { getAuthSession } from "@/lib/authOptions";
+import db from "@/lib/db";
 import { NavbarLink } from "@/types";
+
 
 export const navbarLinks: Array<NavbarLink> = [
     {

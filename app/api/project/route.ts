@@ -50,3 +50,33 @@ export async function POST(req: NextRequest) {
     });
   }
 }
+
+
+export async function GET(req: NextRequest){
+  try {
+    const session = await getAuthSession();
+    if(!session || !session.user)
+        throw new Error("Unauthorized");
+
+    //verifiy session intergrity
+    const user = AuthorizationToken(session.user.accessToken);
+
+    const allProjects = await db.project.findMany({
+      where:{
+        userId: user.userId,
+      },
+    });
+
+    return NextResponse.json(
+      { projects: allProjects },
+      { status: 200 }
+    );
+  } catch (error) {
+    if(error instanceof JsonWebTokenError)
+        return new NextResponse("Invalid authorization token",{status:400})
+    
+    return new NextResponse("Something went wrong. Please try again later.", {
+      status: 500,
+    });
+  }
+}

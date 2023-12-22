@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Project } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface SelectProjectsProps {
   projects: Project[];
@@ -20,25 +20,38 @@ interface SelectProjectsProps {
 export const SelectProject = ({ projects }: SelectProjectsProps) => {
     const router = useRouter();
 
-    const [selectedProject, setSelectedProject] = useState<Project>(projects[0]);
+
+    const [selectedProject, setSelectedProject] = useState<Project>();
+
+    const selectedProjectId = useCallback(()=>{
+      return localStorage.getItem("selectedProject");
+    },[selectedProject]); 
 
     useEffect(()=>{
-        console.log(selectedProject);
-        
-        router.push(`/dashboard/${selectedProject.id}`);
-    },[selectedProject, router]);
+      const targetProject = projects.find(project=>project.id===selectedProjectId());
+
+      if(targetProject)
+        setSelectedProject(targetProject);
+      else{
+        setSelectedProject(projects[0])
+        router.push(`/dashboard/${projects[0].id}`);
+      }
+    },[]);
+
 
   return (
     <Select onValueChange={(projectId)=>{
       const findProject = projects.find(project=>project.id===projectId);
-      setSelectedProject(findProject!);
-    }}>
+      localStorage.setItem("selectedProject", findProject!.id);
+      router.push(`/dashboard/${findProject!.id}`);
+
+      }}>
       <SelectTrigger className="bg-tranparent border-softBlue">
-        <SelectValue className="bg-softBlue" placeholder={selectedProject.projectName} />
+        <SelectValue className="bg-softBlue" placeholder={selectedProject?.projectName} />
       </SelectTrigger>
-      <SelectContent onSelect={()=>console.log("clocked, sc")} defaultValue={"DingoDEV"} className="bg-transparent">
+      <SelectContent defaultValue={"DingoDEV"} className="bg-transparent">
         {projects && projects.length > 0 ? (
-          <SelectGroup onSelect={()=>console.log("clicked sg")} className="cursor-pointer">
+          <SelectGroup className="cursor-pointer">
             {projects.map((project) => (
               <SelectItem key={project.id} value={project.id}>
                 {project.projectName}
