@@ -4,6 +4,7 @@ import { Header } from "../../../../components/header";
 import db from "@/lib/db";
 import { redirect } from "next/navigation";
 import { Messages } from "./components/message";
+import { InitSocket } from "./components/init-socket";
 
 const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
     const project = await db.project.findUnique({
@@ -36,6 +37,7 @@ const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
             <div className="mt-16">
                 <Messages/>
             </div>
+            <InitSocket id={project.api_key}/>
         </div>
     )
 }
