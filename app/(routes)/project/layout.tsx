@@ -7,7 +7,7 @@ const ProjectPageLayout = ({children}:{children: React.ReactNode}) =>{
         <Container>
             <div className="min-h-screen flex flex-col">
                 <Header/>
-                <div className="flex-1">
+                <div>
                     {children}
                 </div>
                 <section className="mt-32">
