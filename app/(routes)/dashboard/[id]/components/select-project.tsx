@@ -25,8 +25,8 @@ export const SelectProject = ({ projects }: SelectProjectsProps) => {
 
     const selectedProjectId = useCallback(()=>{
       return localStorage.getItem("selectedProject");
-    },[selectedProject]); 
-
+    },[]); 
+    
     useEffect(()=>{
       const targetProject = projects.find(project=>project.id===selectedProjectId());
 
