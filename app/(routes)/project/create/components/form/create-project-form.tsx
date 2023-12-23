@@ -27,11 +27,11 @@ export const CreateProjectForm = () =>{
         mutationFn:async (project: ProjectRequest) =>{
             const res = await axios.post("/api/project",project);
 
-            return res;
+            return res.data;
         },
-        onSuccess:(res)=>{
-            toast({toastType:"SUCCESS",title:res.data.msg});
+        onSuccess:(data)=>{
             router.push("/dashboard");
+            toast({toastType:"SUCCESS",title:data.msg});
             setTimeout(()=>{
                 resetForm();
             },2500);

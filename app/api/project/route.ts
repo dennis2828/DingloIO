@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
   try {
     const session = await getAuthSession();
     if(!session || !session.user)
-        throw new Error("Unauthorized");
+        throw new Error("Unauthorized here");
 
     //verifiy session intergrity
     const user = AuthorizationToken(session.user.accessToken);
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
 
 
 
-    const newAccount = await db.project.create({
+    const newProject = await db.project.create({
       data: {
         ...projectData,
         password: passwordToHash,
@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json(
-      { account: newAccount, msg: "Your project was successfully created !" },
+      { project: newProject, msg: "Your project was successfully created !" },
       { status: 200 }
     );
   } catch (error) {
@@ -66,18 +66,20 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest){
   try {
-    const session = await getAuthSession();
-    if(!session || !session.user)
-        throw new Error("Unauthorized");
+
+    const authorizationToken = req.headers.get("authorization")?.split(" ")[1] || "";
 
     //verifiy session intergrity
-    const user = AuthorizationToken(session.user.accessToken);
+    const user = AuthorizationToken(authorizationToken);
 
     const allProjects = await db.project.findMany({
       where:{
         userId: user.userId,
       },
     });
+    
+    console.log(allProjects);
+    
 
     return NextResponse.json(
       { projects: allProjects },

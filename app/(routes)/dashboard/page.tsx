@@ -1,30 +1,30 @@
+import { Container } from "@/components/container";
+import { Header } from "@/components/header";
+import { InfoText } from "@/components/info-text";
 import { getAuthSession } from "@/lib/authOptions";
-import db from "@/lib/db";
-import { redirect } from "next/navigation";
+import { Separator } from "@/components/ui/separator";
+import { ProjectFeed } from "./components/project-feed";
+import { Suspense } from "react";
 
 
 const DashboardPage = async () =>{
     
     const session = await getAuthSession();
 
-    if(session && session.user){
-        const user = await db.user.findUnique({
-            where:{
-                id: session.user.id,
-            },
-            include:{
-                projects: true,
-            },
-        });
-
-        if(user && user.projects.length>0)
-            redirect(`/dashboard/${user.projects[0].id}`);
-        else redirect("/project/create");
-    }else{
-        redirect("/project/create");
-    }
-
-    return null;
+    return (
+        <Container>
+            <Header/>
+            <div className="mt-16">
+                <h1 className="font-bold text-[1.15em] xss:text-[1.19em] xs:text-[1.25em] xsMd:text-[1.4em] xsBig:text-[1.45em] sm:tet-[1.5em] md:text-[2em] lg:text-[2.5em]">Your <InfoText>projects</InfoText> (2)</h1>
+            </div>
+            <Separator className="h-[1.5px] mt-5 w-full bg-softBlue"/>
+            <div className="mt-10">
+                <Suspense fallback={<p>loading projects</p>}>
+                    <ProjectFeed userId={session!.user!.id}/>
+                </Suspense>
+            </div>
+        </Container>
+    )
 }
 
 export default DashboardPage;

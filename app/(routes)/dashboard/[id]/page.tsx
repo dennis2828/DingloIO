@@ -4,6 +4,8 @@ import { Header } from "../../../../components/header";
 import { Project } from "@prisma/client";
 import db from "@/lib/db";
 import { redirect } from "next/navigation";
+import { getAuthSession } from "@/lib/authOptions";
+import { Messages } from "./components/message";
 
 const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
     const project = await db.project.findUnique({
@@ -12,8 +14,9 @@ const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
         },
     }); 
 
-    if(!project) redirect("/");
-    
+    if(!project)
+        redirect("/project/create")
+
 
     return (
         <div>
@@ -26,6 +29,9 @@ const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
                     <ProjectStatistics project={project}/>
                 </div>
             </div>
+            <div className="mt-16">
+                <Messages/>
+            </div>
         </div>
     )
 }
@@ -34,17 +40,23 @@ export default DashboardProjectPage;
 
 export async function generateStaticParams(){
     const projects: Project[] = await getAllProjects();
+    if(projects.length===0)
+        return [];
 
     return projects.map(project=>(
         {
-            id: project.id,
+            id: project.id.toString(),
         }
     ));
 }
 
 async function getAllProjects(){
     try{
-        const projects = await fetch("/api/project",{next:{revalidate:0}});
+        const session = await getAuthSession();
+
+        const projects = await fetch("http://localhost:3000/api/project",{next:{revalidate:0}, method:"GET", headers:{
+            Authorization:`Bearer ${session?.user?.accessToken}`,
+        }});
 
         const jsonProjects = await projects.json();
     
