@@ -2,10 +2,10 @@
 
 import { toast } from "@/components/ui/use-toast";
 import { copyText } from "@/lib/utils";
-import { Project } from "@prisma/client";
+import { ClientProject } from "@/types";
 
 interface AppApiKeyProps{
-  project: Project;
+  project: ClientProject;
 }
 
 export const AppApiKey = ({project}: AppApiKeyProps) => {

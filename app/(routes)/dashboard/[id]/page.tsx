@@ -1,10 +1,8 @@
 import { ProjectManager } from "./components/project-manager";
 import { ProjectStatistics } from "./components/project-statistics";
 import { Header } from "../../../../components/header";
-import { Project } from "@prisma/client";
 import db from "@/lib/db";
 import { redirect } from "next/navigation";
-import { getAuthSession } from "@/lib/authOptions";
 import { Messages } from "./components/message";
 
 const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
@@ -12,10 +10,16 @@ const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
         where:{
             id: params.id,
         },
+        select:{
+            id:true,
+            projectName:true,
+            api_key:true,
+            userId: true,
+        },
     }); 
 
     if(!project)
-        redirect("/project/create")
+        redirect("/project/create");
 
 
     return (

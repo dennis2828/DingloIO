@@ -1,9 +1,9 @@
-import { Project } from "@prisma/client"
 import { AppApiKey } from "./api-key"
 import { DataInfo } from "./data-info"
+import { ClientProject } from "@/types";
 
 interface ProjectStatisticsProps {
-    project: Project;
+    project: ClientProject;
 }
 
 export const ProjectStatistics = ({project}: ProjectStatisticsProps) =>{

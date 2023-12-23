@@ -1,4 +1,5 @@
 import { AccountRequest } from "@/validators/account";
+import { Project } from "@prisma/client";
 
 export interface Feature {
     title: string;
@@ -16,3 +17,5 @@ export interface AuthTokenPayload {
     userId: string;
     username: string;
 }
+
+export type ClientProject = Omit<Project, "password">;
