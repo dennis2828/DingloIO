@@ -69,11 +69,33 @@ export const MessagesControl = () =>{
         }
     },[chatWithId]);
 
+    // get current connections
+    useEffect(()=>{
+        setCurrentChats(getSavedConnections());
+    },[]);  
 
+    function getSavedConnections() {
+        const matchingValues = [];
+        
+        // Iterate over all keys in localStorage
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          
+          // Check if the key starts with the specified static prefix
+          if (key && key.startsWith(prefix)) {
+            // Retrieve the dynamic part of the key
+            const connectionId = key.slice(prefix.length);
+            
+            matchingValues.push(connectionId);
+          }
+        }
+        
+        return matchingValues;
+      }
 
     return (
         <div>
-            <div className="flex items-center gap-4 mb-6">
+            <div className="flex flex-wrap items-center gap-4 mb-6">
                 {currentChats.map((chatInstance, idx)=>(
                     <Instance key={idx} handleClick={()=>setChatWithId(chatInstance)} chatId={chatInstance}/>
                 ))}
