@@ -3,7 +3,7 @@ import { ProjectStatistics } from "./components/project-statistics";
 import { Header } from "../../../../components/header";
 import db from "@/lib/db";
 import { redirect } from "next/navigation";
-import { Messages } from "./components/message";
+import { Messages } from "./components/messages";
 import { InitSocket } from "./components/init-socket";
 
 const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
