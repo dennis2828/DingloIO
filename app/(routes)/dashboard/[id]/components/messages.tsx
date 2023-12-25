@@ -1,7 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input";
-import { prefix } from "@/constants/literals";
 import { useSocket } from "@/hooks/useSocket";
 import { NewMessage } from "@/types";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -14,7 +13,6 @@ interface MessagesProps {
 
 export const Messages = ({chatId, messages, setMessages}: MessagesProps) =>{
     const {socket} = useSocket(state=>state);
-    console.log(messages);
     
     const [agentMessage, setAgentMessage] = useState<string>("");
 
@@ -35,15 +33,7 @@ export const Messages = ({chatId, messages, setMessages}: MessagesProps) =>{
                     if(!socket) return;
 
                     socket.emit("DingloServer-DashboardMessage",{...messages[0], message:agentMessage, isAgent: true})
-                    const isConversation = localStorage.getItem(`${prefix}${chatId}`);
-                    if(!isConversation || isConversation.trim()==="" || isConversation==="undefined") return;
-
-                    const updatedConversations: Array<NewMessage> = JSON.parse(isConversation);
-                    updatedConversations.push({...messages[0], message:agentMessage, isAgent: true});
-                    setMessages(updatedConversations);
-                    localStorage.setItem(`${prefix}${chatId}`, JSON.stringify(updatedConversations));
-
-                    //update conversation
+                    setMessages(prev=>[...prev, {connectionId:chatId, message:agentMessage, isAgent: true, messagedAt:new Date(Date.now()).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}])
                 }}>send back</Button>
             </form>
         </div>

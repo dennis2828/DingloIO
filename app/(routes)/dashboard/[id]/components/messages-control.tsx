@@ -4,14 +4,19 @@ import { Messages } from "./messages"
 import { useSocket } from "@/hooks/useSocket"
 import { Instance } from "./instance"
 import { NewMessage } from "@/types"
-import { prefix } from "@/constants/literals"
+import { Message } from "@prisma/client"
 
-export const MessagesControl = () =>{
+interface MessageControlProps{
+    connections: string[];
+    conversationsMessages: Array<Message>;
+}
+
+export const MessagesControl = ({connections, conversationsMessages}:MessageControlProps) =>{
     const {socket} = useSocket(state=>state);
     
-    const [currentChats, setCurrentChats] = useState<Array<string>>([]);
+    const [currentChats, setCurrentChats] = useState<Array<string>>(connections);
     
-    const [chatWithId, setChatWithId] = useState<string>("re");
+    const [chatWithId, setChatWithId] = useState<string>("");
     const [chatWithIdMessages, setChatWithIdMessages] = useState<Array<NewMessage>>([]);
     
 
@@ -21,22 +26,6 @@ export const MessagesControl = () =>{
         socket.off("DingloClient-DashboardMessage");
 
         socket.on("DingloClient-DashboardMessage",(message: NewMessage)=>{
-
-                //check existing conversation
-                const isConversation = localStorage.getItem(`${prefix}${message.connectionId}`);
-                
-                if(!isConversation || isConversation.trim()==="" || isConversation==="undefined"){
-                    //create conversation
-                    
-                    localStorage.setItem(`${prefix}${message.connectionId}`,JSON.stringify([message]));
-                }else{
-                    
-                    //update conversation
-                    const conversation: Array<NewMessage> = JSON.parse(isConversation);
-                    conversation.push(message);
-
-                    localStorage.setItem(`${prefix}${message.connectionId}`, JSON.stringify(conversation));
-                }
 
                 setCurrentChats(prev=>{
                     const findChat = prev.find(chat=>chat===message.connectionId);
@@ -58,40 +47,29 @@ export const MessagesControl = () =>{
 
     },[socket, chatWithId]);
 
-    // get select chatId messages
     useEffect(()=>{
         
-        if(chatWithId && chatWithId.trim()!==""){
-            const conversation = localStorage.getItem(`${prefix}${chatWithId}`)
-            if(conversation && conversation!=="undefined"){
-                setChatWithIdMessages(JSON.parse(conversation));
+        if(!chatWithId || chatWithId.trim()==="") return;
+        //filter conversations messages
+        const filteredMessages: Array<NewMessage> = [];
+        console.log(conversationsMessages);
+        
+        for(const cm of conversationsMessages){
+            if(cm.conversationId===chatWithId){
+
+                filteredMessages.push({
+                    connectionId: cm.conversationId,
+                    isAgent: cm.isAgent,
+                    message: cm.message,
+                    messagedAt: cm.messagedAt,
+                });
             }
         }
-    },[chatWithId]);
-
-    // get current connections
-    useEffect(()=>{
-        setCurrentChats(getSavedConnections());
-    },[]);  
-
-    function getSavedConnections() {
-        const matchingValues = [];
+      
         
-        // Iterate over all keys in localStorage
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          
-          // Check if the key starts with the specified static prefix
-          if (key && key.startsWith(prefix)) {
-            // Retrieve the dynamic part of the key
-            const connectionId = key.slice(prefix.length);
-            
-            matchingValues.push(connectionId);
-          }
-        }
-        
-        return matchingValues;
-      }
+        setChatWithIdMessages(filteredMessages);
+    },[chatWithId]);    
+
 
     return (
         <div>

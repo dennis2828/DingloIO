@@ -1,5 +1,5 @@
 import { AppWindow } from "lucide-react";
-import { PageInfo } from "../components/page-info";
+import { PageInfo } from "../dashboard/[id]/project/components/page-info";
 import { ProjectAmount } from "./components/project-amount";
 import { StyledLink } from "@/components/ui/link";
 import { CreateProjectForm } from "./components/form/create-project-form";

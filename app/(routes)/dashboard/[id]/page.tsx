@@ -3,7 +3,6 @@ import { ProjectStatistics } from "./components/project-statistics";
 import { Header } from "../../../../components/header";
 import db from "@/lib/db";
 import { redirect } from "next/navigation";
-import { Messages } from "./components/messages";
 import { InitSocket } from "./components/init-socket";
 import { MessagesContainer } from "./components/messages-container";
 
@@ -36,7 +35,7 @@ const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
                 </div>
             </div>
             <div className="mt-16">
-                <MessagesContainer/>
+                <MessagesContainer projectId={project.id}/>
             </div>
             <InitSocket id={project.api_key}/>
         </div>
