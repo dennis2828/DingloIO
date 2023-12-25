@@ -4,7 +4,7 @@ import { ProjectSettings } from "./project-settings"
 import { SelectProject } from "./select-project"
 import { getAuthSession } from "@/lib/authOptions"
 
-export const ProjectManager = async () =>{
+export const ProjectManager = async ({projectId}:{projectId: string}) =>{
     const session = await getAuthSession();
 
     const allProjects = await db.project.findMany({
@@ -18,7 +18,7 @@ export const ProjectManager = async () =>{
             <div className="max-w-fit">
                 <SelectProject projects={allProjects}/>
             </div>
-            <ProjectSettings/>
+            <ProjectSettings projectId={projectId}/>
         </div>
     )
 }

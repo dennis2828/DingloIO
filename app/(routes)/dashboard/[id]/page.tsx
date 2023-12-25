@@ -28,7 +28,7 @@ const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
             <Header/>
             <div>
                 <div className="mt-16">
-                    <ProjectManager/>
+                    <ProjectManager projectId={project.id}/>
                 </div>
                 <div className="mt-14">
                     <ProjectStatistics project={project}/>
