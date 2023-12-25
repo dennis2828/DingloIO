@@ -16,6 +16,8 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
     
     const [currentChats, setCurrentChats] = useState<Array<string>>(connections);
     
+    const [curentConversationsMessages, setCurrentConversationsMessages] = useState(conversationsMessages);
+
     const [chatWithId, setChatWithId] = useState<string>("");
     const [chatWithIdMessages, setChatWithIdMessages] = useState<Array<NewMessage>>([]);
     
@@ -35,6 +37,7 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
                 });
       
             // add new chatId related messages
+            setCurrentConversationsMessages(prev=>[...prev, {id:"test", message:message.message, isAgent:false, conversationId:message.connectionId, messagedAt:new Date(Date.now()).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}])
             if(message.connectionId===chatWithId){
                 setChatWithIdMessages(prev=>[...prev, message]);
             }
@@ -54,7 +57,7 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
         const filteredMessages: Array<NewMessage> = [];
         console.log(conversationsMessages);
         
-        for(const cm of conversationsMessages){
+        for(const cm of curentConversationsMessages){
             if(cm.conversationId===chatWithId){
 
                 filteredMessages.push({
