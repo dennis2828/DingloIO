@@ -1,10 +1,14 @@
 import { Container } from "@/components/container";
+import { Footer } from "../../components/Footer/footer";
 
 const DashboardLayout = ({children}:{children: React.ReactNode}) =>{
     return (
-        <Container>
+        <div>
             {children}
-        </Container>
+            <Container className="mt-32">
+                <Footer/>
+            </Container>
+        </div>
     )
 }
 

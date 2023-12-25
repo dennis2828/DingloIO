@@ -5,6 +5,7 @@ import { useSocket } from "@/hooks/useSocket"
 import { Instance } from "./instance"
 import { NewMessage } from "@/types"
 import { Message } from "@prisma/client"
+import { Separator } from "@/components/ui/separator"
 
 interface MessageControlProps{
     connections: string[];
@@ -18,7 +19,7 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
     
     const [curentConversationsMessages, setCurrentConversationsMessages] = useState(conversationsMessages);
 
-    const [chatWithId, setChatWithId] = useState<string>("");
+    const [chatWithId, setChatWithId] = useState<string>(connections[0] || "");
     const [chatWithIdMessages, setChatWithIdMessages] = useState<Array<NewMessage>>([]);
     
 
@@ -33,6 +34,12 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
                     const findChat = prev.find(chat=>chat===message.connectionId);
                     if(!findChat)
                         return [message.connectionId, ...prev];
+                    return prev;
+                });
+                //select the chat
+                setChatWithId(prev=>{
+                    if(!prev || prev.trim()==="")
+                        return message.connectionId;
                     return prev;
                 });
       
@@ -55,7 +62,6 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
         if(!chatWithId || chatWithId.trim()==="") return;
         //filter conversations messages
         const filteredMessages: Array<NewMessage> = [];
-        console.log(conversationsMessages);
         
         for(const cm of curentConversationsMessages){
             if(cm.conversationId===chatWithId){
@@ -76,13 +82,22 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
 
     return (
         <div>
-            <div className="flex flex-wrap items-center gap-4 mb-6">
+            <div className="flex flex-wrap items-center gap-4 mb-4">
                 {currentChats.map((chatInstance, idx)=>(
-                    <Instance key={idx} handleClick={()=>setChatWithId(chatInstance)} chatId={chatInstance}/>
+                    <Instance key={idx} handleClick={()=>setChatWithId(chatInstance)} selectedChat={chatWithId} chatId={chatInstance}/>
                 ))}
             </div>
-           
-            <Messages setMessages={setChatWithIdMessages} messages={chatWithIdMessages} chatId={chatWithId}/>
+            <Separator className="w-full h-[1.1px] bg-softBlue mb-6"/>
+            {currentChats && currentChats.length> 0 ? (
+                <div className="shadow-[0px_0px_10px_1px_rgb(67,117,224)] rounded-t-sm rounded-b-sm">
+                <div className="flex justify-center bg-softBlue p-2 rounded-t-sm">
+                    <p className="font-bold text-center text-white">Realtime conversation</p>
+                </div>
+                <div className="bg-transparent dark:bg-[#0d0d0f] p-3 rounded-b-sm">
+                    <Messages setMessages={setChatWithIdMessages} messages={chatWithIdMessages} chatId={chatWithId}/>
+                </div>
+            </div>
+            ):null}
         </div>
     )
 }
