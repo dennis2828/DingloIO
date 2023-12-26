@@ -27,15 +27,22 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
     useEffect(()=>{ 
         if(!socket) return;
         socket.off("DingloClient-DashboardMessage");
+        socket.off("DingloClient-NewConnection");
+
+        socket.on("DingloClient-NewConnection",(connectionId: string)=>{
+            console.log("new connectionc", connectionId);
+            
+            setCurrentChats(prev=>{
+                const findChat = prev.find(chat=>chat===connectionId);
+                if(!findChat)
+                    return [connectionId, ...prev];
+                return prev;
+            });
+        });
 
         socket.on("DingloClient-DashboardMessage",(message: NewMessage)=>{
 
-                setCurrentChats(prev=>{
-                    const findChat = prev.find(chat=>chat===message.connectionId);
-                    if(!findChat)
-                        return [message.connectionId, ...prev];
-                    return prev;
-                });
+                
                 //select the chat
                 setChatWithId(prev=>{
                     if(!prev || prev.trim()==="")

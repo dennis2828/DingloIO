@@ -17,15 +17,21 @@ export async function DELETE(req: NextRequest, {params}:{params:{id: string, con
       
         if(!params.id || !params.conversationId)
           throw new Error("Invalid delete request. Please provide the project id and conversation id");
-        
-          const deletedProject = await db.conversation.delete({
+          
+        const conversationToDelete = await db.conversation.findUnique({
           where:{
-            projectId: params.id,
             connectionId: params.conversationId,
           },
         });
 
-        if(!deletedProject) throw new Error("Cannot delete the project. Please try again later.");
+        if(!conversationToDelete)
+          throw new Error("Cannot find any conversation to delete.");
+
+        await db.conversation.delete({
+          where:{
+            connectionId: params.conversationId,
+          },
+        });
 
       return NextResponse.json(
         {msg: "Conversation was successfully created !" },
