@@ -41,17 +41,17 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
         });
 
         socket.on("DingloClient-DashboardMessage",(message: NewMessage)=>{
-
-                
-                //select the chat
-                setChatWithId(prev=>{
-                    if(!prev || prev.trim()==="")
-                        return message.connectionId;
-                    return prev;
-                });
+            // select the chat
+            setChatWithId(prev=>{
+                if(!prev || prev.trim()==="")
+                    return message.connectionId;
+                return prev;
+            });
       
             // add new chatId related messages
             setCurrentConversationsMessages(prev=>[...prev, {id:"test", message:message.message, isAgent:false, conversationId:message.connectionId, messagedAt:new Date(Date.now()).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}])
+
+            // update the current conversation if needed
             if(message.connectionId===chatWithId){
                 setChatWithIdMessages(prev=>[...prev, message]);
             }

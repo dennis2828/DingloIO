@@ -37,7 +37,7 @@ export const Messages = ({chatId, messages, setMessages}: MessagesProps) =>{
                         if(!socket) return;
 
                         if(agentMessage && agentMessage.trim()!==""){
-                            socket.emit("DingloServer-DashboardMessage",{connectionId:chatId, message:agentMessage, isAgent: true})
+                            socket.emit("DingloServer-DashboardMessage",{connectionId:chatId, message:agentMessage, isAgent: true, messagedAt:new Date(Date.now()).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })})
                             setMessages(prev=>[...prev, {connectionId:chatId, message:agentMessage, isAgent: true, messagedAt:new Date(Date.now()).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}]);
                         }else{
                             setPlaceholderMessage("Cannot sent empty messages");
