@@ -14,12 +14,6 @@ export const InitSocket = ({id}:{id: string}) =>{
             setSocket(newSocket);
         }
         
-    
-        return () => {
-            socket?.disconnect();
-            setSocket(null);
-        };
-        
     },[]);
     
     return null;

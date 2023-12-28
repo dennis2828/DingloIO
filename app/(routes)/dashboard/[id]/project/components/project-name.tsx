@@ -1,13 +1,12 @@
 "use client"
 
 import { Input } from "@/components/ui/input";
-import { useState, useRef } from "react"
+import { useState } from "react"
 import { useClickOutside } from '@mantine/hooks';
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { toast } from "@/components/ui/use-toast";
 import { revalidate } from "@/actions/revalidatePath";
-
 
 
 export const ProjectName = ({project}:{project: {id: string, projectName: string}})=>{

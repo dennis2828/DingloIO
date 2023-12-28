@@ -4,17 +4,24 @@ import { ProjectActive } from "./components/project-active";
 import { ProjectName } from "./components/project-name";
 import db from "@/lib/db";
 import { redirect } from "next/navigation";
+import { getAuthSession } from "@/lib/authOptions";
 
 const ProjectPage = async ({params}:{params:{id: string}}) =>{
+    const session = await getAuthSession();
+
     const targetProject = await db.project.findUnique({
         where:{
             id: params.id,
+            userId: session!.user!.id,
         },
         select:{
             id: true,
             projectName: true,
+            api_key: true,
+            disabled: true,
         },
     });
+
     if(!targetProject)
         redirect("/dashboard");
 
@@ -24,7 +31,7 @@ const ProjectPage = async ({params}:{params:{id: string}}) =>{
                 <PageInfo label="Manage your project" icon={<AppWindow className="w-5 h-5 text-white dark:text-softBlue"/>}/>
                 <div className="flex flex-col xsBig:flex-row xsBig:items-center justify-center mt-10 md:mt-0 gap-4">
                     <ProjectName project={targetProject}/>
-                    <ProjectActive/>
+                    <ProjectActive userId={session!.user!.id} projectId={targetProject.id} disabled={targetProject.disabled}/>
                 </div>
             </div>
         </div>

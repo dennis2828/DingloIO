@@ -12,12 +12,6 @@ const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
         where:{
             id: params.id,
         },
-        select:{
-            id:true,
-            projectName:true,
-            api_key:true,
-            userId: true,
-        },
     }); 
 
     if(!project)
