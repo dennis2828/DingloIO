@@ -22,10 +22,6 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
     const [chatWithId, setChatWithId] = useState<{connectionId: string, online: boolean}>(connections[0] || "");
     const [chatWithIdMessages, setChatWithIdMessages] = useState<Array<NewMessage>>([]);
     
-    useEffect(()=>{
-        console.log("cc",currentChats);
-        
-    },[currentChats]);
 
     // handle incoming messages
     useEffect(()=>{ 
@@ -34,7 +30,7 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
         socket.off("DingloClient-NewConnection");
 
         socket.on("DingloClient-NewConnection",(connectionId: string)=>{
-            console.log("new connection");
+            console.log("new connection", connectionId);
             
             setCurrentChats(prev=>{
                 const findChat = prev.find(chat=>chat.connectionId===connectionId);
