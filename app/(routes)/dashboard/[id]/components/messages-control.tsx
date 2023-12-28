@@ -8,20 +8,24 @@ import { Message } from "@prisma/client"
 import { Separator } from "@/components/ui/separator"
 
 interface MessageControlProps{
-    connections: string[];
+    connections: Array<{connectionId: string, online: boolean}>;
     conversationsMessages: Array<Message>;
 }
 
 export const MessagesControl = ({connections, conversationsMessages}:MessageControlProps) =>{
     const {socket} = useSocket(state=>state);
-    
-    const [currentChats, setCurrentChats] = useState<Array<string>>(connections);
+
+    const [currentChats, setCurrentChats] = useState<Array<{connectionId: string, online: boolean}>>(connections);
     
     const [curentConversationsMessages, setCurrentConversationsMessages] = useState(conversationsMessages);
 
-    const [chatWithId, setChatWithId] = useState<string>(connections[0] || "");
+    const [chatWithId, setChatWithId] = useState<{connectionId: string, online: boolean}>(connections[0] || "");
     const [chatWithIdMessages, setChatWithIdMessages] = useState<Array<NewMessage>>([]);
     
+    useEffect(()=>{
+        console.log("cc",currentChats);
+        
+    },[currentChats]);
 
     // handle incoming messages
     useEffect(()=>{ 
@@ -30,20 +34,44 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
         socket.off("DingloClient-NewConnection");
 
         socket.on("DingloClient-NewConnection",(connectionId: string)=>{
-                        
+            console.log("new connection");
+            
             setCurrentChats(prev=>{
-                const findChat = prev.find(chat=>chat===connectionId);
+                const findChat = prev.find(chat=>chat.connectionId===connectionId);
                 if(!findChat)
-                    return [connectionId, ...prev];
-                return prev;
+                    return [{connectionId, online:true}, ...prev];
+                else{
+                    return prev.map(chat=>{
+                        if(chat.connectionId===connectionId){
+                            return {...chat, online: true};
+                        }
+                        return chat;
+                    });
+                }
+            });
+        });
+
+        socket.on("DingloClient-Disconnect",(connectionId: string)=>{
+            console.log(connectionId);
+            
+            setCurrentChats(prev=>{
+                return prev.map(chat=>{
+                    if(chat.connectionId===connectionId){
+                        return {
+                            ...chat,
+                            online: false,
+                        }
+                    }
+                    return chat;
+                });
             });
         });
 
         socket.on("DingloClient-DashboardMessage",(message: NewMessage)=>{
             // select the chat
             setChatWithId(prev=>{
-                if(!prev || prev.trim()==="")
-                    return message.connectionId;
+                if(!prev || prev.connectionId==="")
+                    return {connectionId:message.connectionId, online:true};
                 return prev;
             });
       
@@ -51,7 +79,7 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
             setCurrentConversationsMessages(prev=>[...prev, {id:"test", message:message.message, isAgent:false, conversationId:message.connectionId, messagedAt:new Date(Date.now()).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}])
 
             // update the current conversation if needed
-            if(message.connectionId===chatWithId){
+            if(message.connectionId===chatWithId.connectionId){
                 setChatWithIdMessages(prev=>[...prev, message]);
             }
             
@@ -65,12 +93,12 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
 
     useEffect(()=>{
         
-        if(!chatWithId || chatWithId.trim()==="") return;
+        if(!chatWithId || chatWithId.connectionId.trim()==="") return;
         //filter conversations messages
         const filteredMessages: Array<NewMessage> = [];
         
         for(const cm of curentConversationsMessages){
-            if(cm.conversationId===chatWithId){
+            if(cm.conversationId===chatWithId.connectionId){
 
                 filteredMessages.push({
                     connectionId: cm.conversationId,
@@ -90,7 +118,7 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
         <div>
             <div className="flex flex-wrap items-center gap-4 mb-4">
                 {currentChats.map((chatInstance, idx)=>(
-                    <Instance key={idx} handleClick={()=>setChatWithId(chatInstance)} selectedChat={chatWithId} chatId={chatInstance}/>
+                    <Instance key={idx} handleClick={()=>setChatWithId(chatInstance)} selectedChat={chatWithId} chatInstance={chatInstance}/>
                 ))}
             </div>
             <Separator className="w-full h-[1.1px] bg-softBlue mb-6"/>
@@ -100,7 +128,7 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
                     <p className="font-bold text-center text-white">Realtime conversation</p>
                 </div>
                 <div className="bg-transparent dark:bg-[#0d0d0f] p-3 rounded-b-sm">
-                    <Messages setMessages={setChatWithIdMessages} messages={chatWithIdMessages} chatId={chatWithId}/>
+                    <Messages setMessages={setChatWithIdMessages} messages={chatWithIdMessages} chatId={chatWithId.connectionId}/>
                 </div>
             </div>
             ):null}

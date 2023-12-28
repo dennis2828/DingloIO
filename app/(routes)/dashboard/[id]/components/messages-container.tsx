@@ -11,23 +11,27 @@ export const MessagesContainer = async ({projectId}:{projectId: string}) =>{
             projectId,
         },
     });
-    const connectionsId = projectConversations.map(conv=>conv.connectionId);
+    const connections = projectConversations.map(conv=>{
+      return {
+        connectionId: conv.connectionId, 
+        online: conv.online
+      }});
 
     //all conversations messages
     const conversationsMessages: Array<Message> = [];
 
-    for (const connectionId of connectionsId) {
+    for (const connection of connections) {
         try {
           const messagesForConnection = await db.message.findMany({
             where: {
-              conversationId: connectionId,
+              conversationId: connection.connectionId,
             },
           });
     
           // Push the results into conversationsMessages array
           conversationsMessages.push(...messagesForConnection);
         } catch (error) {
-          console.error(`Error fetching messages for connection ${connectionId}:`, error);
+          console.error(`Error fetching messages for connections`);
         }
     }
 
@@ -36,10 +40,10 @@ export const MessagesContainer = async ({projectId}:{projectId: string}) =>{
         <div>
             <p className="font-bold text-[1.5em] mb-4">Active connections &#40;{projectConversations.length}&#41;</p>
             
-            <MessagesControl connections={connectionsId} conversationsMessages={conversationsMessages}/>
-            <div className="mt-16">
-              <ConnectionsControl connections={connectionsId} projectId={projectId}/>
-            </div>
+            <MessagesControl connections={connections} conversationsMessages={conversationsMessages}/>
+            {/* <div className="mt-16">
+              <ConnectionsControl connections={connections} projectId={projectId}/>
+            </div> */}
         </div>
     )
 }
