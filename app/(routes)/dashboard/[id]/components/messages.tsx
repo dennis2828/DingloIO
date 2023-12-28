@@ -36,11 +36,21 @@ export const Messages = ({ chatId, messages, setMessages }: MessagesProps) => {
 
   useEffect(()=>{
     if(!socket) return;
+    socket.off("DingloClient-Typing");
 
     socket.on("DingloClient-Typing",(typing)=>{
-        setClientTyping(typing.isTyping);
+        console.log("typing",typing,chatId);
+        
+        if(typing.connectionId===chatId)
+            setClientTyping(typing.isTyping);
     });
-  },[socket]);
+
+  },[socket, chatId]);
+  
+
+  useEffect(()=>{
+    setClientTyping(false);
+  },[chatId]);
 
   return (
     <div>

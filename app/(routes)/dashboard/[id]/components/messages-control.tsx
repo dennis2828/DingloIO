@@ -30,8 +30,7 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
         socket.off("DingloClient-NewConnection");
 
         socket.on("DingloClient-NewConnection",(connectionId: string)=>{
-            console.log("new connectionc", connectionId);
-            
+                        
             setCurrentChats(prev=>{
                 const findChat = prev.find(chat=>chat===connectionId);
                 if(!findChat)
