@@ -15,8 +15,8 @@ export const Messages = ({ chatId, messages, setMessages }: MessagesProps) => {
   const { socket } = useSocket((state) => state);
 
   const [agentMessage, setAgentMessage] = useState<string>("");
-  const [placeholderMessage, setPlaceholderMessage] =
-    useState<string>("Write your message");
+  const [placeholderMessage, setPlaceholderMessage] = useState<string>("Write your message");
+  const [clientTyping, setClientTyping] = useState<boolean>(false);
 
   useEffect(() => {
     if (agentMessage && agentMessage !== "") {
@@ -33,6 +33,14 @@ export const Messages = ({ chatId, messages, setMessages }: MessagesProps) => {
         },500);
     }
   }, [agentMessage]);
+
+  useEffect(()=>{
+    if(!socket) return;
+
+    socket.on("DingloClient-Typing",(typing)=>{
+        setClientTyping(typing.isTyping);
+    });
+  },[socket]);
 
   return (
     <div>
@@ -58,6 +66,9 @@ export const Messages = ({ chatId, messages, setMessages }: MessagesProps) => {
             </p>
           </div>
         ))}
+        {clientTyping ? (
+            <div className="bg-white text-softBlue rounded-full w-fit text-xs p-1">user is typing...</div>
+        ):null} 
       </div>
       <form
         onSubmit={(e) => {
