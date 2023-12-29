@@ -20,7 +20,7 @@ const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
 
     return (
         <Container>
-            <InitSocket id={project.api_key} projectId={params.id}/>
+            <InitSocket id={project.api_key}/>
             <Header/>
             <div>
                 <div className="mt-16">

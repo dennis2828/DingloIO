@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSocket } from "@/hooks/useSocket";
 import { NewMessage } from "@/types";
-import { useMutation } from "@tanstack/react-query";
+import { TrashIcon } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 interface MessagesProps {
@@ -51,6 +51,8 @@ export const Messages = ({ chatId, messages, setMessages }: MessagesProps) => {
     setClientTyping(false);
   }, [chatId]);
 
+    
+
 
   return (
     <div>
@@ -60,7 +62,7 @@ export const Messages = ({ chatId, messages, setMessages }: MessagesProps) => {
             key={index}
             className={`${
               msg.isAgent
-                ? "bg-softBlue ml-auto text-white"
+                ? "bg-softBlue ml-auto text-white duration-150 group cursor-pointer"
                 : "bg-white mr-auto text-softBlue"
             } px-2 py-.5 max-w-full w-fit font-medium rounded-md`}
           >
@@ -74,6 +76,9 @@ export const Messages = ({ chatId, messages, setMessages }: MessagesProps) => {
             <p className={`${msg.isAgent ? "text-end" : "text-start"}`}>
               {msg.message}
             </p>
+              <div className="opacity-0 group-hover:opacity-100 duration-150">
+                <TrashIcon className="w-4 h-4 text-red-500"/>
+              </div>
           </div>
         ))}
         {clientTyping ? (
@@ -99,6 +104,8 @@ export const Messages = ({ chatId, messages, setMessages }: MessagesProps) => {
         <div className="flex justify-start xsBig:justify-center">
           <Button
             onClick={() => {
+              console.log("dmclick",chatId);
+              
               if (!socket) return;
 
               if (agentMessage && agentMessage.trim() !== "") {

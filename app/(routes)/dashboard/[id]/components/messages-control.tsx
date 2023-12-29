@@ -25,14 +25,16 @@ export const MessagesControl = ({projectId, connections, conversationsMessages}:
     const [chatWithIdMessages, setChatWithIdMessages] = useState<Array<NewMessage>>([]);
     
 
-    // handle incoming messages
     useEffect(()=>{ 
         if(!socket) return;
 
 
         socket.on("DingloClient-NewConnection",(connectionId: string)=>{
-            console.log("new connection", connectionId);
-            
+            setChatWithId(prev=>{
+                if(!prev || prev.connectionId.trim()==="")
+                    return {connectionId, online:true};
+                return prev;
+            });
             setCurrentChats(prev=>{
                 const findChat = prev.find(chat=>chat.connectionId===connectionId);
                 if(!findChat)
@@ -47,11 +49,9 @@ export const MessagesControl = ({projectId, connections, conversationsMessages}:
                 }
             });
             revalidate(`/dashboard/${projectId}`);
-
         });
 
         socket.on("DingloClient-Disconnect",(connectionId: string)=>{
-            console.log(connectionId);
             
             setCurrentChats(prev=>{
                 return prev.map(chat=>{
@@ -81,7 +81,8 @@ export const MessagesControl = ({projectId, connections, conversationsMessages}:
             if(message.connectionId===chatWithId.connectionId){
                 setChatWithIdMessages(prev=>[...prev, message]);
             }
-            
+            revalidate(`/dashboard/${projectId}/project`);
+
         });
 
         return ()=>{
