@@ -40,7 +40,7 @@ export const MessagesContainer = async ({projectId}:{projectId: string}) =>{
         <div>
             <p className="font-bold text-[1.5em] mb-4">Active connections &#40;{projectConversations.length}&#41;</p>
             
-            <MessagesControl connections={connections} conversationsMessages={conversationsMessages}/>
+            <MessagesControl projectId={projectId} connections={connections} conversationsMessages={conversationsMessages}/>
             <div className="mt-16">
               <ConnectionsControl connections={connections} projectId={projectId}/>
             </div>

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSocket } from "@/hooks/useSocket";
 import { NewMessage } from "@/types";
+import { useMutation } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 interface MessagesProps {
@@ -15,7 +16,8 @@ export const Messages = ({ chatId, messages, setMessages }: MessagesProps) => {
   const { socket } = useSocket((state) => state);
 
   const [agentMessage, setAgentMessage] = useState<string>("");
-  const [placeholderMessage, setPlaceholderMessage] = useState<string>("Write your message");
+  const [placeholderMessage, setPlaceholderMessage] =
+    useState<string>("Write your message");
   const [clientTyping, setClientTyping] = useState<boolean>(false);
 
   useEffect(() => {
@@ -26,31 +28,29 @@ export const Messages = ({ chatId, messages, setMessages }: MessagesProps) => {
         //debounce
         socket.emit("DingloServer-Typing", { chatId, isTyping: true });
       }, 500);
-    }else{
-        if (!socket) return;
-        setTimeout(()=>{
-            socket.emit("DingloServer-Typing", { chatId, isTyping: false });
-        },500);
+    } else {
+      if (!socket) return;
+      setTimeout(() => {
+        socket.emit("DingloServer-Typing", { chatId, isTyping: false });
+      }, 500);
     }
   }, [agentMessage]);
 
-  useEffect(()=>{
-    if(!socket) return;
+  useEffect(() => {
+    if (!socket) return;
     socket.off("DingloClient-Typing");
 
-    socket.on("DingloClient-Typing",(typing)=>{
-        console.log("typing",typing,chatId);
-        
-        if(typing.connectionId===chatId)
-            setClientTyping(typing.isTyping);
+    socket.on("DingloClient-Typing", (typing) => {
+      console.log("typing", typing, chatId);
+
+      if (typing.connectionId === chatId) setClientTyping(typing.isTyping);
     });
+  }, [socket, chatId]);
 
-  },[socket, chatId]);
-  
-
-  useEffect(()=>{
+  useEffect(() => {
     setClientTyping(false);
-  },[chatId]);
+  }, [chatId]);
+
 
   return (
     <div>
@@ -77,8 +77,10 @@ export const Messages = ({ chatId, messages, setMessages }: MessagesProps) => {
           </div>
         ))}
         {clientTyping ? (
-            <div className="bg-white text-softBlue rounded-full w-fit text-xs p-1">user is typing...</div>
-        ):null} 
+          <div className="bg-white text-softBlue rounded-full w-fit text-xs p-1">
+            user is typing...
+          </div>
+        ) : null}
       </div>
       <form
         onSubmit={(e) => {

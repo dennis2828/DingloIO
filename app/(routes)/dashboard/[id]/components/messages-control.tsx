@@ -6,13 +6,15 @@ import { Instance } from "./instance"
 import { NewMessage } from "@/types"
 import { Message } from "@prisma/client"
 import { Separator } from "@/components/ui/separator"
+import { revalidate } from "@/actions/revalidatePath"
 
 interface MessageControlProps{
+    projectId: string
     connections: Array<{connectionId: string, online: boolean}>;
     conversationsMessages: Array<Message>;
 }
 
-export const MessagesControl = ({connections, conversationsMessages}:MessageControlProps) =>{
+export const MessagesControl = ({projectId, connections, conversationsMessages}:MessageControlProps) =>{
     const {socket} = useSocket(state=>state);
 
     const [currentChats, setCurrentChats] = useState<Array<{connectionId: string, online: boolean}>>(connections);
@@ -26,8 +28,7 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
     // handle incoming messages
     useEffect(()=>{ 
         if(!socket) return;
-        socket.off("DingloClient-DashboardMessage");
-        socket.off("DingloClient-NewConnection");
+
 
         socket.on("DingloClient-NewConnection",(connectionId: string)=>{
             console.log("new connection", connectionId);
@@ -45,6 +46,8 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
                     });
                 }
             });
+            revalidate(`/dashboard/${projectId}`);
+
         });
 
         socket.on("DingloClient-Disconnect",(connectionId: string)=>{
@@ -83,6 +86,7 @@ export const MessagesControl = ({connections, conversationsMessages}:MessageCont
 
         return ()=>{
             socket.off("DingloClient-DashboardMessage");
+            socket.off("DingloClient-NewConnection");
         }
 
     },[socket, chatWithId]);

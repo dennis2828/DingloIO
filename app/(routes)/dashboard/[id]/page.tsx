@@ -20,6 +20,7 @@ const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
 
     return (
         <Container>
+            <InitSocket id={project.api_key} projectId={params.id}/>
             <Header/>
             <div>
                 <div className="mt-16">
@@ -32,7 +33,6 @@ const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
             <div className="mt-16">
                 <MessagesContainer projectId={project.id}/>
             </div>
-            <InitSocket id={project.api_key}/>
         </Container>
     )
 }

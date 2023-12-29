@@ -4,7 +4,6 @@ import { useSocket } from "@/hooks/useSocket"
 import { useMutation } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios"
 import { X } from "lucide-react"
-import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 interface ConnectionsControlProps{
@@ -19,7 +18,6 @@ export const ConnectionsControl = ({connections, projectId}:ConnectionsControlPr
     const [currentConnections, setCurrentConnections] = useState<Array<{connectionId: string, online: boolean}>>(connections);
     useEffect(()=>{
         if(!socket) return;
-        socket.off("DingloClient-NewConnection")
         
         socket.on("DingloClient-NewConnection",(connectionId: string)=>{
             
@@ -37,6 +35,10 @@ export const ConnectionsControl = ({connections, projectId}:ConnectionsControlPr
                 }
             });
         });
+
+        return ()=>{
+            socket.off("DingloClient-NewConnection");
+        }
     },[socket]);
     
     
