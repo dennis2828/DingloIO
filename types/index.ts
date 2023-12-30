@@ -27,16 +27,3 @@ export interface NewMessage {
     message: string;
     messagedAt: string;
 }
-
-connectionId
-: 
-"SNWUWR9Gnf0Z-JOGFCw-0"
-isAgent
-: 
-false
-message
-: 
-"i am the first client"
-messagedAt
-: 
-"07:55 PM"

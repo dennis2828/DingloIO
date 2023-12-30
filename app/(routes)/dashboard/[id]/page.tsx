@@ -4,13 +4,18 @@ import { Header } from "../../../../components/header";
 import db from "@/lib/db";
 import { redirect } from "next/navigation";
 import { InitSocket } from "./components/init-socket";
-import { MessagesContainer } from "./components/messages-container";
+import { MessagesWrapper } from "./components/message-panel/messages-wrapper";
 import { Container } from "@/components/container";
+import { getAuthSession } from "@/lib/authOptions";
 
 const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
+    const session = await getAuthSession();
+
+
     const project = await db.project.findUnique({
         where:{
             id: params.id,
+            userId: session!.user!.id,
         },
     }); 
 
@@ -31,7 +36,7 @@ const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
                 </div>
             </div>
             <div className="mt-16">
-                <MessagesContainer projectId={project.id}/>
+                <MessagesWrapper projectId={project.id}/>
             </div>
         </Container>
     )

@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { TrashIcon } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
 
 interface MessagesProps {
   projectId: string;
@@ -18,9 +19,8 @@ interface MessagesProps {
 
 export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesProps) => {
   const { socket } = useSocket((state) => state);
-  
-  const [syncedMessages, setSyncedMessages] = useState(messages);
 
+  const [syncedMessages, setSyncedMessages] = useState(messages);
 
   const [agentMessage, setAgentMessage] = useState<string>("");
   const [placeholderMessage, setPlaceholderMessage] =
@@ -59,7 +59,7 @@ export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesP
   }, [chatId]);
 
     
-  const {mutate: deleteMessage, isPending} = useMutation({
+  const {mutate: deleteMessage, isPending: isDeleting} = useMutation({
     mutationFn: async(messageId: string)=>{
       const res = await axios.delete(`/api/project/${projectId}/conversation/${chatId}/message/${messageId}`);
 
@@ -79,6 +79,38 @@ export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesP
       setSyncedMessages(prev=>{
         return prev.filter(msg=>msg.id!==variables);
       });
+    }
+  });
+
+  const {mutate: createMessage, isPending: isCreating} = useMutation({
+    mutationFn: async(newMessage:{id: string, message: string, messagedAt: string, isAgent: boolean})=>{
+      const res = await axios.post(`/api/project/${projectId}/conversation/${chatId}/message`,newMessage);
+
+      return res.data;
+    },
+    onSuccess:(data, variables)=>{
+      toast({toastType:"SUCCESS",title:"Message was successfully created"});
+      
+      if(!socket) return;
+
+      socket.emit("DingloServer-DashboardMessage", {
+        id: variables.id,
+        connectionId: chatId,
+        message: variables.message,
+        isAgent: variables.isAgent,
+        messagedAt: new Date(Date.now()).toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      });
+    },
+    onError:(err)=>{
+      setSyncedMessages(messages);
+      toast({toastType:"ERROR",title:"Message was not sent"});
+    },
+    onMutate:(variables)=>{
+
+      setSyncedMessages(prev=>[...prev, {...variables, connectionId: chatId}])
     }
   });
 
@@ -135,35 +167,11 @@ export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesP
           placeholder={placeholderMessage}
         />
         <div className="flex justify-start xsBig:justify-center">
-          <Button
+          <Button isLoading={isCreating}
             onClick={() => {
-              console.log("dmclick",chatId);
               
-              if (!socket) return;
-
               if (agentMessage && agentMessage.trim() !== "") {
-                socket.emit("DingloServer-DashboardMessage", {
-                  connectionId: chatId,
-                  message: agentMessage,
-                  isAgent: true,
-                  messagedAt: new Date(Date.now()).toLocaleTimeString("en-US", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }),
-                });
-                setMessages((prev) => [
-                  ...prev,
-                  {
-                    id:"r",
-                    connectionId: chatId,
-                    message: agentMessage,
-                    isAgent: true,
-                    messagedAt: new Date(Date.now()).toLocaleTimeString(
-                      "en-US",
-                      { hour: "2-digit", minute: "2-digit" }
-                    ),
-                  },
-                ]);
+                createMessage({id:uuidv4(), message: agentMessage, messagedAt:new Date(Date.now()).toLocaleTimeString("en-US",{ hour: "2-digit", minute: "2-digit" }), isAgent: true});
               } else {
                 setPlaceholderMessage("Cannot sent empty messages");
               }

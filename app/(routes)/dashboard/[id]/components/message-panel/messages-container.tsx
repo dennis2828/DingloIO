@@ -1,22 +1,15 @@
-import db from "@/lib/db"
-import { MessagesControl } from "./messages-control"
+import db from "@/lib/db";
+import { Conversation } from "@prisma/client";
 import { Message } from "@prisma/client";
+import { MessagesControl } from "./messages-control";
 import { ConnectionsControl } from "./connections-control";
 
+interface MessagesContainerProps{
+    projectId: string;
+    connections: Array<Conversation>;
+}
 
-export const MessagesContainer = async ({projectId}:{projectId: string}) =>{
-    // all conversation connections
-    const projectConversations = await db.conversation.findMany({
-        where:{
-            projectId,
-        },
-    });
-    const connections = projectConversations.map(conv=>{
-      return {
-        connectionId: conv.connectionId, 
-        online: conv.online
-      }});
-
+export const MessagesContainer = async ({projectId, connections}: MessagesContainerProps) =>{
     //all conversations messages
     const conversationsMessages: Array<Message> = [];
 
@@ -34,12 +27,8 @@ export const MessagesContainer = async ({projectId}:{projectId: string}) =>{
           console.error(`Error fetching messages for connections`);
         }
     }
-
-    
     return (
         <div>
-            <p className="font-bold text-[1.5em] mb-4">Active connections &#40;{projectConversations.length}&#41;</p>
-            
             <MessagesControl projectId={projectId} connections={connections} conversationsMessages={conversationsMessages}/>
             <div className="mt-16">
               <ConnectionsControl connections={connections} projectId={projectId}/>

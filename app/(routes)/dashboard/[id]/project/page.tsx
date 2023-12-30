@@ -5,7 +5,7 @@ import { ProjectName } from "./components/project-name";
 import db from "@/lib/db";
 import { redirect } from "next/navigation";
 import { getAuthSession } from "@/lib/authOptions";
-import { ConnectionsControl } from "../components/connections-control";
+import { ConnectionsControl } from "../components/message-panel/connections-control";
 import { Message } from "@prisma/client";
 import { AllMessages } from "./components/all-messages";
 

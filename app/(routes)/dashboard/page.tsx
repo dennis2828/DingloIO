@@ -4,7 +4,6 @@ import { InfoText } from "@/components/info-text";
 import { getAuthSession } from "@/lib/authOptions";
 import { Separator } from "@/components/ui/separator";
 import { ProjectFeed } from "./components/project-feed";
-import { Suspense } from "react";
 
 
 const DashboardPage = async () =>{
@@ -19,9 +18,7 @@ const DashboardPage = async () =>{
             </div>
             <Separator className="h-[1.5px] mt-5 w-full bg-softBlue"/>
             <div className="mt-10">
-                <Suspense fallback={<p>loading projects</p>}>
-                    <ProjectFeed userId={session!.user!.id}/>
-                </Suspense>
+                <ProjectFeed userId={session!.user!.id}/>
             </div>
         </Container>
     )
