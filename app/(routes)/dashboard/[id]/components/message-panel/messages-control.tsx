@@ -75,7 +75,7 @@ export const MessagesControl = ({projectId, connections, conversationsMessages}:
             });
       
             // add new chatId related messages
-            setCurrentConversationsMessages(prev=>[...prev, {id:"test", message:message.message, isAgent:false, conversationId:message.connectionId, messagedAt:new Date(Date.now()).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}])
+            setCurrentConversationsMessages(prev=>[...prev, {id:message.id, isAgent: message.isAgent, conversationId: message.connectionId, message:message.message, messagedAt:message.messagedAt}]);
 
             // update the current conversation if needed
             if(message.connectionId===chatWithId.connectionId){
