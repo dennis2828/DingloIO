@@ -19,6 +19,9 @@ interface MessagesProps {
 export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesProps) => {
   const { socket } = useSocket((state) => state);
   
+  const [syncedMessages, setSyncedMessages] = useState(messages);
+
+
   const [agentMessage, setAgentMessage] = useState<string>("");
   const [placeholderMessage, setPlaceholderMessage] =
     useState<string>("Write your message");
@@ -66,19 +69,25 @@ export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesP
       toast({toastType:"SUCCESS",title:"Message was successfully deleted"});
     },
     onError:(err)=>{
+      setSyncedMessages(messages);
       toast({toastType:"ERROR",title:"Message was not deleted"});
     },
     onMutate:(variables)=>{
-      setMessages(prev=>{
+      setSyncedMessages(prev=>{
         return prev.filter(msg=>msg.id!==variables);
       });
     }
   });
 
+  // synchronize messages
+  useEffect(()=>{
+    setSyncedMessages(messages);
+  },[messages]);
+
   return (
     <div>
       <div className="space-y-6 max-h-[500px] overflow-y-scroll overflowContainer">
-        {messages.map((msg, index) => (
+        {syncedMessages.map((msg, index) => (
           <div
             key={index}
             className={`${

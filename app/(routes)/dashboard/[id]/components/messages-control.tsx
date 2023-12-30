@@ -67,7 +67,7 @@ export const MessagesControl = ({projectId, connections, conversationsMessages}:
         });
 
         socket.on("DingloClient-DashboardMessage",(message: NewMessage)=>{
-            // select the chat
+            // select the chat if not selected
             setChatWithId(prev=>{
                 if(!prev || prev.connectionId==="")
                     return {connectionId:message.connectionId, online:true};
