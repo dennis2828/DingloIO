@@ -1,20 +1,24 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/use-toast";
 import { useSocket } from "@/hooks/useSocket";
 import { NewMessage } from "@/types";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import { TrashIcon } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 interface MessagesProps {
+  projectId: string;
   chatId: string;
   messages: Array<NewMessage>;
   setMessages: Dispatch<SetStateAction<Array<NewMessage>>>;
 }
 
-export const Messages = ({ chatId, messages, setMessages }: MessagesProps) => {
+export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesProps) => {
   const { socket } = useSocket((state) => state);
-
+  
   const [agentMessage, setAgentMessage] = useState<string>("");
   const [placeholderMessage, setPlaceholderMessage] =
     useState<string>("Write your message");
@@ -52,7 +56,24 @@ export const Messages = ({ chatId, messages, setMessages }: MessagesProps) => {
   }, [chatId]);
 
     
+  const {mutate: deleteMessage, isPending} = useMutation({
+    mutationFn: async(messageId: string)=>{
+      const res = await axios.delete(`/api/project/${projectId}/conversation/${chatId}/message/${messageId}`);
 
+      return res.data;
+    },
+    onSuccess:(data)=>{
+      toast({toastType:"SUCCESS",title:"Message was successfully deleted"});
+    },
+    onError:(err)=>{
+      toast({toastType:"ERROR",title:"Message was not deleted"});
+    },
+    onMutate:(variables)=>{
+      setMessages(prev=>{
+        return prev.filter(msg=>msg.id!==variables);
+      });
+    }
+  });
 
   return (
     <div>
@@ -77,7 +98,7 @@ export const Messages = ({ chatId, messages, setMessages }: MessagesProps) => {
               {msg.message}
             </p>
               <div className="opacity-0 group-hover:opacity-100 duration-150">
-                <TrashIcon className="w-4 h-4 text-red-500"/>
+                <TrashIcon onClick={()=>deleteMessage(msg.id)} className="w-4 h-4 text-red-500"/>
               </div>
           </div>
         ))}
@@ -121,6 +142,7 @@ export const Messages = ({ chatId, messages, setMessages }: MessagesProps) => {
                 setMessages((prev) => [
                   ...prev,
                   {
+                    id:"r",
                     connectionId: chatId,
                     message: agentMessage,
                     isAgent: true,

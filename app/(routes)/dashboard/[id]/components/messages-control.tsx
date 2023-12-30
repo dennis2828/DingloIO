@@ -100,8 +100,9 @@ export const MessagesControl = ({projectId, connections, conversationsMessages}:
         
         for(const cm of curentConversationsMessages){
             if(cm.conversationId===chatWithId.connectionId){
-
+            
                 filteredMessages.push({
+                    id: cm.id,
                     connectionId: cm.conversationId,
                     isAgent: cm.isAgent,
                     message: cm.message,
@@ -112,7 +113,12 @@ export const MessagesControl = ({projectId, connections, conversationsMessages}:
       
         
         setChatWithIdMessages(filteredMessages);
-    },[chatWithId]);    
+    },[chatWithId]); 
+    
+    useEffect(()=>{
+        console.log("cim", chatWithIdMessages);
+        
+    },[chatWithIdMessages]);
 
 
     return (
@@ -129,7 +135,7 @@ export const MessagesControl = ({projectId, connections, conversationsMessages}:
                     <p className="font-bold text-center text-white">Realtime conversation</p>
                 </div>
                 <div className="bg-transparent dark:bg-[#0d0d0f] p-3 rounded-b-sm">
-                    <Messages setMessages={setChatWithIdMessages} messages={chatWithIdMessages} chatId={chatWithId.connectionId}/>
+                    <Messages projectId={projectId} setMessages={setChatWithIdMessages} messages={chatWithIdMessages} chatId={chatWithId.connectionId}/>
                 </div>
             </div>
             ):null}

@@ -21,6 +21,7 @@ export interface AuthTokenPayload {
 export type ClientProject = Omit<Project, "password">;
 
 export interface NewMessage {
+    id: string;
     connectionId: string;
     isAgent: boolean;
     message: string;
