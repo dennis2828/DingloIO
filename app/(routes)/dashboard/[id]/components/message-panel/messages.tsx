@@ -6,9 +6,9 @@ import { useSocket } from "@/hooks/useSocket";
 import { NewMessage } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { TrashIcon } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
+import { DeleteMessage } from "./delete-message";
 
 interface MessagesProps {
   projectId: string;
@@ -59,28 +59,7 @@ export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesP
   }, [chatId]);
 
     
-  const {mutate: deleteMessage, isPending: isDeleting} = useMutation({
-    mutationFn: async(messageId: string)=>{
-      const res = await axios.delete(`/api/project/${projectId}/conversation/${chatId}/message/${messageId}`);
-
-      return res.data;
-    },
-    onSuccess:(data, variables)=>{
-      toast({toastType:"SUCCESS",title:"Message was successfully deleted"});
-      
-      if(!socket) return;
-      socket.emit("DingloServer-DeleteMessage",{id: variables, connectionId: chatId});
-    },
-    onError:(err)=>{
-      setSyncedMessages(messages);
-      toast({toastType:"ERROR",title:"Message was not deleted"});
-    },
-    onMutate:(variables)=>{
-      setSyncedMessages(prev=>{
-        return prev.filter(msg=>msg.id!==variables);
-      });
-    }
-  });
+  
 
   const {mutate: createMessage, isPending: isCreating} = useMutation({
     mutationFn: async(newMessage:{id: string, message: string, messagedAt: string, isAgent: boolean})=>{
@@ -141,9 +120,7 @@ export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesP
             <p className={`${msg.isAgent ? "text-end" : "text-start"}`}>
               {msg.message}
             </p>
-              <div className="opacity-0 group-hover:opacity-100 duration-150">
-                <TrashIcon onClick={()=>deleteMessage(msg.id)} className="w-4 h-4 text-red-500"/>
-              </div>
+              <DeleteMessage projectId={projectId} chatId={chatId} messages={messages} msg={msg} setSyncedMessages={setSyncedMessages}/>
           </div>
         ))}
         {clientTyping ? (
@@ -167,7 +144,7 @@ export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesP
           placeholder={placeholderMessage}
         />
         <div className="flex justify-start xsBig:justify-center">
-          <Button isLoading={isCreating}
+          <Button disabled={isCreating}
             onClick={() => {
               
               if (agentMessage && agentMessage.trim() !== "") {

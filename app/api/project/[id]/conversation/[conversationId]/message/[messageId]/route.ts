@@ -13,7 +13,7 @@ export async function DELETE(req: NextRequest, {params}:{params:{id: string, con
   
       //verifiy session intergrity
       const user = AuthorizationToken(session.user.accessToken);
-        
+
       if(!params.id || !params.conversationId || !params.messageId || params.id.trim()==="" || params.conversationId.trim()==="" || params.messageId.trim()==="")
         throw new Error("Params are invalid");
 

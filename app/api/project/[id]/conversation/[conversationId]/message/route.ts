@@ -16,7 +16,7 @@ export async function POST(req: NextRequest, {params}:{params:{id: string, conve
   
       //verifiy session intergrity
       const user = AuthorizationToken(session.user.accessToken);
-        
+
       if(!params.id || !params.conversationId || params.id.trim()==="" || params.conversationId.trim()==="")
         throw new Error("Params are invalid");
 
