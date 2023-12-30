@@ -23,8 +23,7 @@ export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesP
   const [syncedMessages, setSyncedMessages] = useState(messages);
 
   const [agentMessage, setAgentMessage] = useState<string>("");
-  const [placeholderMessage, setPlaceholderMessage] =
-    useState<string>("Write your message");
+  const [placeholderMessage, setPlaceholderMessage] = useState<string>("Write your message");
   const [clientTyping, setClientTyping] = useState<boolean>(false);
 
   useEffect(() => {
@@ -52,6 +51,10 @@ export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesP
 
       if (typing.connectionId === chatId) setClientTyping(typing.isTyping);
     });
+
+    return () =>{
+      socket.off("DingloClient-Typing");
+    }
   }, [socket, chatId]);
 
   useEffect(() => {
@@ -85,10 +88,9 @@ export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesP
     },
     onError:(err)=>{
       setSyncedMessages(messages);
-      toast({toastType:"ERROR",title:"Message was not sent"});
+      toast({toastType:"ERROR",title:"Message cannot be sent. Please try again later."});
     },
     onMutate:(variables)=>{
-
       setSyncedMessages(prev=>[...prev, {...variables, connectionId: chatId}])
     }
   });
