@@ -65,8 +65,11 @@ export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesP
 
       return res.data;
     },
-    onSuccess:(data)=>{
+    onSuccess:(data, variables)=>{
       toast({toastType:"SUCCESS",title:"Message was successfully deleted"});
+      
+      if(!socket) return;
+      socket.emit("DingloServer-DeleteMessage",{id: variables, connectionId: chatId});
     },
     onError:(err)=>{
       setSyncedMessages(messages);
