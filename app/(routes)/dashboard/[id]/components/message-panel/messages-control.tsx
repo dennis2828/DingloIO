@@ -2,7 +2,6 @@ import { Messages } from "./messages"
 import { ConversationWithMessages } from "@/types"
 import { Conversation } from "@prisma/client"
 import { Separator } from "@/components/ui/separator"
-import { MessagesHeader } from "./messages-header"
 
 interface MessageControlProps{
     projectId: string;
@@ -14,7 +13,6 @@ export const MessagesControl = ({projectId, conversation, allConversations}:Mess
 
     return (
         <div>
-            <MessagesHeader projectId={projectId} allConversations={allConversations}/>
             <Separator className="w-full h-[1.1px] bg-softBlue mb-6"/>
                 <div className="shadow-[0px_0px_10px_1px_rgb(67,117,224)] rounded-t-sm rounded-b-sm">
                 <div className="flex justify-center bg-softBlue p-2 rounded-t-sm">

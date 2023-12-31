@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { DeleteMessage } from "./delete-message";
 import { Message } from "@prisma/client";
-import { useRouter } from "next/navigation";
 import { revalidate } from "@/actions/revalidatePath";
 
 interface MessagesProps {
@@ -20,10 +19,8 @@ interface MessagesProps {
 
 export const Messages = ({ projectId, conversationId, messages }: MessagesProps) => {
   const { socket } = useSocket((state) => state);
-  const router = useRouter();
 
   const [syncedMessages, setSyncedMessages] = useState(messages);
-  const [currentConversationId, setCurrentConversationId] = useState(conversationId);
   const [agentMessage, setAgentMessage] = useState<string>("");
   const [placeholderMessage, setPlaceholderMessage] = useState<string>("Write your message");
   const [clientTyping, setClientTyping] = useState<boolean>(false);
@@ -34,12 +31,12 @@ export const Messages = ({ projectId, conversationId, messages }: MessagesProps)
 
       setTimeout(() => {
         //debounce
-        socket.emit("DingloServer-Typing", { conversationId: currentConversationId, isTyping: true });
+        socket.emit("DingloServer-Typing", { conversationId: conversationId, isTyping: true });
       }, 500);
     } else {
       if (!socket) return;
       setTimeout(() => {
-        socket.emit("DingloServer-Typing", { conversationId: currentConversationId, isTyping: false });
+        socket.emit("DingloServer-Typing", { conversationId: conversationId, isTyping: false });
       }, 500);
     }
   }, [agentMessage]);
@@ -48,32 +45,30 @@ export const Messages = ({ projectId, conversationId, messages }: MessagesProps)
     if (!socket) return;
 
     socket.on("DingloClient-Typing", (typing) => {
-      console.log("typing", typing, conversationId, currentConversationId);
+      console.log("typing", typing, conversationId, conversationId);
 
-      if (typing.connectionId === currentConversationId) setClientTyping(typing.isTyping);
+      if (typing.connectionId === conversationId) setClientTyping(typing.isTyping);
       else setClientTyping(false);
     });
 
     return () =>{
       socket.off("DingloClient-Typing");
     }
-  }, [socket, currentConversationId, conversationId]);
+  }, [socket, conversationId]);
 
 
   useEffect(()=>{
-    setCurrentConversationId(conversationId);
     revalidate(`/dashboard/${projectId}`);
-    
   },[conversationId]);
   useEffect(()=>{
     setClientTyping(false);
     revalidate(`/dashboard/${projectId}`);
-  },[currentConversationId]);
+  },[conversationId]);
   
 
   const {mutate: createMessage, isPending: isCreating} = useMutation({
     mutationFn: async(newMessage:{id: string, message: string, messagedAt: string, isAgent: boolean})=>{
-      const res = await axios.post(`/api/project/${projectId}/conversation/${currentConversationId}/message`,newMessage);
+      const res = await axios.post(`/api/project/${projectId}/conversation/${conversationId}/message`,newMessage);
 
       return res.data;
     },
@@ -84,7 +79,7 @@ export const Messages = ({ projectId, conversationId, messages }: MessagesProps)
 
       socket.emit("DingloServer-DashboardMessage", {
         id: variables.id,
-        connectionId: currentConversationId,
+        connectionId: conversationId,
         message: variables.message,
         isAgent: variables.isAgent,
         messagedAt: new Date(Date.now()).toLocaleTimeString("en-US", {
@@ -98,7 +93,7 @@ export const Messages = ({ projectId, conversationId, messages }: MessagesProps)
       toast({toastType:"ERROR",title:"Message cannot be sent. Please try again later."});
     },
     onMutate:(variables)=>{
-      setSyncedMessages(prev=>[...prev, {...variables, conversationId: currentConversationId}])
+      setSyncedMessages(prev=>[...prev, {...variables, conversationId: conversationId}])
     }
   });
 

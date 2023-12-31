@@ -9,17 +9,17 @@ import { Instance } from "./instance";
 interface MessagesHeaderProps {
   projectId: string;
   allConversations: Conversation[];
+  isConversationId: boolean;
 }
 
 export const MessagesHeader = ({
   allConversations,
   projectId,
+  isConversationId
 }: MessagesHeaderProps) => {
   const { socket } = useSocket();
 
-  const [selectedConv, setSelectedConv] = useState<Conversation>(
-    allConversations[0]
-  );
+  const [selectedConv, setSelectedConv] = useState<Conversation | undefined>(isConversationId ? allConversations[0] : undefined);
   const [currentConversations, setCurrentConversations] =
     useState<Array<Conversation>>(allConversations);
 
@@ -65,7 +65,7 @@ export const MessagesHeader = ({
       socket.off("DingloClient-NewConnection");
       socket.off("DingloClient-Disconnect");
     };
-  }, [socket]);
+  }, [socket, allConversations, currentConversations]);
 
   useEffect(() => {
     setCurrentConversations(allConversations);
