@@ -8,10 +8,10 @@ import { MessagesWrapper } from "./components/message-panel/messages-wrapper";
 import { Container } from "@/components/container";
 import { getAuthSession } from "@/lib/authOptions";
 
-const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
+const DashboardProjectPage = async ({params, searchParams}:{params:{id: string}, searchParams:{conversation: string}}) =>{
     const session = await getAuthSession();
-
-
+    console.log(searchParams);
+    
     const project = await db.project.findUnique({
         where:{
             id: params.id,
@@ -21,6 +21,17 @@ const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
 
     if(!project)
         redirect("/create");
+
+    if(searchParams.conversation && searchParams.conversation.trim()!==""){
+        const targetConversation = await db.conversation.findUnique({
+            where:{
+                projectId: project.id,
+                connectionId: searchParams.conversation,
+            },
+        });
+        
+        if(!targetConversation) redirect(`/dashboard/${project.id}`);
+    }
 
 
     return (
@@ -36,7 +47,7 @@ const DashboardProjectPage = async ({params}:{params:{id: string}}) =>{
                 </div>
             </div>
             <div className="mt-16">
-                <MessagesWrapper projectId={project.id}/>
+                <MessagesWrapper projectId={project.id} conversationId={searchParams.conversation}/>
             </div>
         </Container>
     )

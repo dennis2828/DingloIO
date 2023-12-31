@@ -1,38 +1,26 @@
-import db from "@/lib/db";
-import { Conversation } from "@prisma/client";
-import { Message } from "@prisma/client";
 import { MessagesControl } from "./messages-control";
 import { ConnectionsControl } from "./connections-control";
+import { ConversationWithMessages } from "@/types";
+import db from "@/lib/db";
 
 interface MessagesContainerProps{
     projectId: string;
-    connections: Array<Conversation>;
+    conversation: ConversationWithMessages;
 }
 
-export const MessagesContainer = async ({projectId, connections}: MessagesContainerProps) =>{
-    //all conversations messages
-    const conversationsMessages: Array<Message> = [];
+export const MessagesContainer = async ({projectId, conversation}: MessagesContainerProps) =>{
+    const allConversations = await db.conversation.findMany({
+      where:{
+          projectId,
+      },
+  });
 
-    for (const connection of connections) {
-        try {
-          const messagesForConnection = await db.message.findMany({
-            where: {
-              conversationId: connection.connectionId,
-            },
-          });
-    
-          // Push the results into conversationsMessages array
-          conversationsMessages.push(...messagesForConnection);
-        } catch (error) {
-          console.error(`Error fetching messages for connections`);
-        }
-    }
     return (
         <div>
-            <MessagesControl projectId={projectId} connections={connections} conversationsMessages={conversationsMessages}/>
-            <div className="mt-16">
+            <MessagesControl projectId={projectId} conversation={conversation} allConversations={allConversations}/>
+            {/* <div className="mt-16">
               <ConnectionsControl connections={connections} projectId={projectId}/>
-            </div>
+            </div> */}
         </div>
     )
 }

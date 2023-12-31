@@ -34,7 +34,7 @@ export const SelectProject = ({ projects }: SelectProjectsProps) => {
         setSelectedProject(targetProject);
       else{
         setSelectedProject(projects[0])
-        router.push(`/dashboard/${projects[0].id}`);
+        // router.push(`/dashboard/${projects[0].id}`);
       }
     },[]);
 

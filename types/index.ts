@@ -1,5 +1,5 @@
 import { AccountRequest } from "@/validators/account";
-import { Project } from "@prisma/client";
+import { Conversation, Message, Project } from "@prisma/client";
 
 export interface Feature {
     title: string;
@@ -27,3 +27,7 @@ export interface NewMessage {
     message: string;
     messagedAt: string;
 }
+
+export type ConversationWithMessages = Conversation & {
+    messages: Message[];
+  };

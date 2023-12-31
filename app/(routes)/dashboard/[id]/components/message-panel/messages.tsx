@@ -3,21 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { useSocket } from "@/hooks/useSocket";
-import { NewMessage } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import { DeleteMessage } from "./delete-message";
+import { Message } from "@prisma/client";
 
 interface MessagesProps {
   projectId: string;
-  chatId: string;
-  messages: Array<NewMessage>;
-  setMessages: Dispatch<SetStateAction<Array<NewMessage>>>;
+  conversationId: string;
+  messages: Array<Message>;
 }
 
-export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesProps) => {
+export const Messages = ({ projectId, conversationId, messages }: MessagesProps) => {
   const { socket } = useSocket((state) => state);
 
   const [syncedMessages, setSyncedMessages] = useState(messages);
@@ -32,12 +31,12 @@ export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesP
 
       setTimeout(() => {
         //debounce
-        socket.emit("DingloServer-Typing", { chatId, isTyping: true });
+        socket.emit("DingloServer-Typing", { conversationId, isTyping: true });
       }, 500);
     } else {
       if (!socket) return;
       setTimeout(() => {
-        socket.emit("DingloServer-Typing", { chatId, isTyping: false });
+        socket.emit("DingloServer-Typing", { conversationId, isTyping: false });
       }, 500);
     }
   }, [agentMessage]);
@@ -47,26 +46,26 @@ export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesP
     socket.off("DingloClient-Typing");
 
     socket.on("DingloClient-Typing", (typing) => {
-      console.log("typing", typing, chatId);
+      console.log("typing", typing, conversationId);
 
-      if (typing.connectionId === chatId) setClientTyping(typing.isTyping);
+      if (typing.connectionId === conversationId) setClientTyping(typing.isTyping);
     });
 
     return () =>{
       socket.off("DingloClient-Typing");
     }
-  }, [socket, chatId]);
+  }, [socket]);
 
-  useEffect(() => {
-    setClientTyping(false);
-  }, [chatId]);
+  // useEffect(() => {
+  //   setClientTyping(false);
+  // }, []);
 
     
   
 
   const {mutate: createMessage, isPending: isCreating} = useMutation({
     mutationFn: async(newMessage:{id: string, message: string, messagedAt: string, isAgent: boolean})=>{
-      const res = await axios.post(`/api/project/${projectId}/conversation/${chatId}/message`,newMessage);
+      const res = await axios.post(`/api/project/${projectId}/conversation/${conversationId}/message`,newMessage);
 
       return res.data;
     },
@@ -77,7 +76,7 @@ export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesP
 
       socket.emit("DingloServer-DashboardMessage", {
         id: variables.id,
-        connectionId: chatId,
+        connectionId: conversationId,
         message: variables.message,
         isAgent: variables.isAgent,
         messagedAt: new Date(Date.now()).toLocaleTimeString("en-US", {
@@ -91,7 +90,7 @@ export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesP
       toast({toastType:"ERROR",title:"Message cannot be sent. Please try again later."});
     },
     onMutate:(variables)=>{
-      setSyncedMessages(prev=>[...prev, {...variables, connectionId: chatId}])
+      setSyncedMessages(prev=>[...prev, {...variables, conversationId: conversationId}])
     }
   });
 
@@ -122,7 +121,7 @@ export const Messages = ({ projectId, chatId, messages, setMessages }: MessagesP
             <p className={`${msg.isAgent ? "text-end" : "text-start"}`}>
               {msg.message}
             </p>
-              <DeleteMessage projectId={projectId} chatId={chatId} messages={messages} msg={msg} setSyncedMessages={setSyncedMessages}/>
+              <DeleteMessage projectId={projectId} conversationId={conversationId} messages={messages} msg={msg} setSyncedMessages={setSyncedMessages}/>
           </div>
         ))}
         {clientTyping ? (

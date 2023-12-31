@@ -1,16 +1,40 @@
-"use client"
+"use client";
+
+import { Conversation } from "@prisma/client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Dispatch, SetStateAction } from "react";
 
 interface InstanceProps {
-    selectedChat: {connectionId: string, online: boolean};
-    chatInstance: {connectionId: string, online: boolean}
-    handleClick: () => void;
+  selectedConv: Conversation
+  convInstance: Conversation
+  setSelectedConv: Dispatch<SetStateAction<Conversation>>;
 }
 
-export const Instance = ({chatInstance, handleClick, selectedChat}: InstanceProps) =>{
-    return (
-        <div role="button" onClick={handleClick} className={`font-bold text-lightBlue cursor-pointer hover:-translate-y-1 duration-100 flex items-center gap-1 ${chatInstance.connectionId===selectedChat.connectionId ? "text-softBlue":null}`}>
-        <div className={`w-[10px] h-[10px] rounded-full ${chatInstance.online ? "bg-green-600":"bg-red-600"}`}/>
-        {chatInstance.connectionId}
-        </div>
-    )
-}
+export const Instance = ({
+  convInstance,
+  selectedConv,
+  setSelectedConv
+}: InstanceProps) => {
+
+    const pathname = usePathname();
+
+  return (
+    <Link
+    onClick={()=>setSelectedConv(convInstance)}
+    href={`http://localhost:3000/${pathname}?conversation=${convInstance.connectionId}`}
+      className={`font-bold text-lightBlue cursor-pointer hover:-translate-y-1 duration-100 flex items-center gap-1 ${
+        convInstance.connectionId === selectedConv.connectionId
+          ? "text-softBlue"
+          : null
+      }`}
+    >
+      <div
+        className={`w-[10px] h-[10px] rounded-full ${
+          convInstance.online ? "bg-green-600" : "bg-red-600"
+        }`}
+      />
+      {convInstance.connectionId}
+    </Link>
+  );
+};

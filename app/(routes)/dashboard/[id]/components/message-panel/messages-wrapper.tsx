@@ -1,18 +1,37 @@
 import db from "@/lib/db"
 import { MessagesContainer } from "./messages-container";
 
-export const MessagesWrapper = async ({projectId}:{projectId: string}) =>{
-    // all conversation connections
-    const projectConversations = await db.conversation.findMany({
+
+interface MessagesWrapperProps{
+    projectId: string;
+    conversationId: string | null;
+}
+
+export const MessagesWrapper = async ({projectId, conversationId}: MessagesWrapperProps) =>{
+    // conversation connections
+    
+    if(!conversationId || conversationId.trim()==="")
+        return (
+            <div>
+                <p className="font-bold text-[1.5em] mb-4">Active connections &#40;0&#41;</p>
+            </div>
+        )
+
+    const targetConversation = await db.conversation.findUnique({
         where:{
+            connectionId: conversationId,
             projectId,
+        },
+        include:{
+            messages: true,
         },
     });
 
+   
+
     return (
         <div>
-            <p className="font-bold text-[1.5em] mb-4">Active connections &#40;{projectConversations.length}&#41;</p>
-            <MessagesContainer projectId={projectId} connections={projectConversations}/>
+            <MessagesContainer projectId={projectId} conversation={targetConversation!}/>
         </div>
     )
 }

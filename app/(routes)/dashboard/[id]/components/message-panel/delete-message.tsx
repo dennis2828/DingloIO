@@ -3,6 +3,7 @@
 import { toast } from "@/components/ui/use-toast";
 import { useSocket } from "@/hooks/useSocket";
 import { NewMessage } from "@/types";
+import { Message } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { TrashIcon } from "lucide-react"
@@ -10,18 +11,18 @@ import { Dispatch, SetStateAction } from "react";
 
 interface DeleteMessageProps{
     projectId: string;
-    chatId: string;
-    messages: Array<NewMessage>;
-    msg: NewMessage
-    setSyncedMessages: Dispatch<SetStateAction<Array<NewMessage>>>;
+    conversationId: string;
+    messages: Array<Message>;
+    msg: Message
+    setSyncedMessages: Dispatch<SetStateAction<Array<Message>>>;
 }
 
-export const DeleteMessage = ({projectId, msg, chatId, messages, setSyncedMessages}: DeleteMessageProps) =>{
+export const DeleteMessage = ({projectId, msg, conversationId, messages, setSyncedMessages}: DeleteMessageProps) =>{
     const {socket} = useSocket();
 
     const {mutate: deleteMessage, isPending: isDeleting} = useMutation({
         mutationFn: async(messageId: string)=>{
-          const res = await axios.delete(`/api/project/${projectId}/conversation/${chatId}/message/${messageId}`);
+          const res = await axios.delete(`/api/project/${projectId}/conversation/${conversationId}/message/${messageId}`);
     
           return res.data;
         },
@@ -29,7 +30,7 @@ export const DeleteMessage = ({projectId, msg, chatId, messages, setSyncedMessag
           toast({toastType:"SUCCESS",title:"Message was successfully deleted"});
           
           if(!socket) return;
-          socket.emit("DingloServer-DeleteMessage",{id: variables, connectionId: chatId});
+          socket.emit("DingloServer-DeleteMessage",{id: variables, connectionId: conversationId});
         },
         onError:(err)=>{
           toast({toastType:"ERROR",title:"Message was not deleted"});
