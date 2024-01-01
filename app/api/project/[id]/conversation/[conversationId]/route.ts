@@ -20,6 +20,7 @@ export async function DELETE(req: NextRequest, {params}:{params:{id: string, con
           
         const conversationToDelete = await db.conversation.findUnique({
           where:{
+            projectId:params.id,
             connectionId: params.conversationId,
           },
         });

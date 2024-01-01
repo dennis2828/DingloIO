@@ -47,6 +47,8 @@ export const Messages = ({ projectId, conversationId, messages }: MessagesProps)
     socket.on("DingloClient-DashboardMessage", (msg) => {
       console.log("new message rt", msg);
       
+      // admin is joined in the same room for multiple client, update the current conversation
+      if(msg.conversationId===conversationId)
       setSyncedMessages(prev=>[...prev, msg]);
       
     });
@@ -58,6 +60,7 @@ export const Messages = ({ projectId, conversationId, messages }: MessagesProps)
     });
 
     return () =>{
+      socket.off("DingloClient-DashboardMessage");
       socket.off("DingloClient-Typing");
     }
   }, [socket, conversationId]);
@@ -65,8 +68,6 @@ export const Messages = ({ projectId, conversationId, messages }: MessagesProps)
 
   useEffect(()=>{
     revalidate(`/dashboard/${projectId}`);
-  },[conversationId]);
-  useEffect(()=>{
     setClientTyping(false);
     revalidate(`/dashboard/${projectId}`);
   },[conversationId]);
