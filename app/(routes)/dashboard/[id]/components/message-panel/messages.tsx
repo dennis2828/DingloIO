@@ -44,8 +44,14 @@ export const Messages = ({ projectId, conversationId, messages }: MessagesProps)
   useEffect(() => {
     if (!socket) return;
 
+    socket.on("DingloClient-DashboardMessage", (msg) => {
+      console.log("new message rt", msg);
+      
+      setSyncedMessages(prev=>[...prev, msg]);
+      
+    });
+
     socket.on("DingloClient-Typing", (typing) => {
-      console.log("typing", typing, conversationId, conversationId);
 
       if (typing.connectionId === conversationId) setClientTyping(typing.isTyping);
       else setClientTyping(false);
