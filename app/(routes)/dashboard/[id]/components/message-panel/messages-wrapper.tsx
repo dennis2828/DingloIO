@@ -17,7 +17,7 @@ export const MessagesWrapper = async ({projectId, conversationId}: MessagesWrapp
     });
     if(!conversationId || conversationId.trim()==="")
         return (
-            <MessagesHeader isConversationId={false} projectId={projectId} allConversations={allConversations}/>
+            <MessagesHeader conversationId={undefined} projectId={projectId} allConversations={allConversations}/>
         )
 
     const targetConversation = await db.conversation.findUnique({
@@ -30,11 +30,10 @@ export const MessagesWrapper = async ({projectId, conversationId}: MessagesWrapp
         },
     });
 
-   
 
     return (
         <div>
-            <MessagesHeader isConversationId={true} projectId={projectId} allConversations={allConversations}/>
+            <MessagesHeader conversationId={conversationId} projectId={projectId} allConversations={allConversations}/>
             <MessagesContainer projectId={projectId} conversation={targetConversation!}/>
         </div>
     )
