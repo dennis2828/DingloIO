@@ -1,29 +1,30 @@
 import db from "@/lib/db"
 import { MessagesContainer } from "./messages-container";
 import { MessagesHeader } from "./messages-header";
+import { Project } from "@prisma/client";
 
 
 interface MessagesWrapperProps{
-    projectId: string;
+    project: Project;
     conversationId: string | null;
 }
 
-export const MessagesWrapper = async ({projectId, conversationId}: MessagesWrapperProps) =>{
+export const MessagesWrapper = async ({project, conversationId}: MessagesWrapperProps) =>{
     // conversation connections
     const allConversations = await db.conversation.findMany({
         where:{
-            projectId,
+            projectId: project.id,
         },
     });
     if(!conversationId || conversationId.trim()==="")
         return (
-            <MessagesHeader conversationId={undefined} projectId={projectId} allConversations={allConversations}/>
+            <MessagesHeader conversationId={undefined} projectId={project.id} allConversations={allConversations}/>
         )
 
     const targetConversation = await db.conversation.findUnique({
         where:{
             connectionId: conversationId,
-            projectId,
+            projectId: project.id,
         },
         include:{
             messages: true,
@@ -33,8 +34,8 @@ export const MessagesWrapper = async ({projectId, conversationId}: MessagesWrapp
 
     return (
         <div>
-            <MessagesHeader conversationId={conversationId} projectId={projectId} allConversations={allConversations}/>
-            <MessagesContainer projectId={projectId} conversation={targetConversation!}/>
+            <MessagesHeader conversationId={conversationId} projectId={project.id} allConversations={allConversations}/>
+            <MessagesContainer project={project} conversation={targetConversation!}/>
         </div>
     )
 }

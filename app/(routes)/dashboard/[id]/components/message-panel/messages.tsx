@@ -8,22 +8,23 @@ import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { DeleteMessage } from "./delete-message";
-import { Message } from "@prisma/client";
+import { Message, Project } from "@prisma/client";
 import { revalidate } from "@/actions/revalidatePath";
 
 interface MessagesProps {
-  projectId: string;
+  project: Project;
   conversationId: string;
   messages: Array<Message>;
 }
 
 export const Messages = ({
-  projectId,
+  project,
   conversationId,
   messages,
 }: MessagesProps) => {
   const { socket } = useSocket((state) => state);
-
+  console.log("MESSAGES", project);
+  
   const [syncedMessages, setSyncedMessages] = useState(messages);
   const [agentMessage, setAgentMessage] = useState<string>("");
   const [placeholderMessage, setPlaceholderMessage] =
@@ -76,10 +77,10 @@ export const Messages = ({
   }, [socket, conversationId]);
 
   useEffect(() => {
-    revalidate(`/dashboard/${projectId}`);
+    revalidate(`/dashboard/${project.id}`);
     setClientTyping(false);
-    revalidate(`/dashboard/${projectId}`);
-  }, [conversationId, projectId]);
+    revalidate(`/dashboard/${project.id}`);
+  }, [conversationId, project.id]);
 
   const { mutate: createMessage, isPending: isCreating } = useMutation({
     mutationFn: async (newMessage: {
@@ -87,9 +88,11 @@ export const Messages = ({
       message: string;
       messagedAt: string;
       isAgent: boolean;
+      agentName: string;
+      agentImage: string;
     }) => {
       const res = await axios.post(
-        `/api/project/${projectId}/conversation/${conversationId}/message`,
+        `/api/project/${project.id}/conversation/${conversationId}/message`,
         newMessage
       );
 
@@ -103,6 +106,8 @@ export const Messages = ({
         connectionId: conversationId,
         message: variables.message,
         isAgent: variables.isAgent,
+        agentName: variables.agentName,
+        agentImage: variables.agentImage,
         messagedAt: new Date(Date.now()).toLocaleTimeString("en-US", {
           hour: "2-digit",
           minute: "2-digit",
@@ -160,7 +165,7 @@ export const Messages = ({
               {msg.message}
             </p>
             <DeleteMessage
-              projectId={projectId}
+              projectId={project.id}
               conversationId={conversationId}
               messages={messages}
               msg={msg}
@@ -199,6 +204,8 @@ export const Messages = ({
                     hour: "2-digit",
                     minute: "2-digit",
                   }),
+                  agentImage: project.agentImage,
+                  agentName: project.agentName,
                   isAgent: true,
                 });
               } else {

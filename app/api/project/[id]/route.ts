@@ -10,7 +10,7 @@ export async function PATCH(req: NextRequest, {params}:{params:{id: string}}) {
     try {
       const session = await getAuthSession();
       if(!session || !session.user)
-          throw new Error("Unauthorized here");
+          throw new Error("Unauthorized");
   
       //verifiy session intergrity
       const user = AuthorizationToken(session.user.accessToken);
@@ -39,6 +39,9 @@ export async function PATCH(req: NextRequest, {params}:{params:{id: string}}) {
          ...dataToUpdate, 
         },
       });
+
+      //update messages
+      
   
       return NextResponse.json(
         { msg: "Project was successfully updated" },

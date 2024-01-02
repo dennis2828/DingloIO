@@ -47,7 +47,7 @@ const DashboardProjectPage = async ({params, searchParams}:{params:{id: string},
                 </div>
             </div>
             <div className="mt-16">
-                <MessagesWrapper projectId={project.id} conversationId={searchParams.conversation}/>
+                <MessagesWrapper project={project} conversationId={searchParams.conversation}/>
             </div>
         </Container>
     )

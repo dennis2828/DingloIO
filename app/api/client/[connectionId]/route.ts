@@ -9,7 +9,6 @@ export async function POST(
 ) {
   try {
     const data = await req.json();
-    console.log(data);
 
     if (!params.connectionId || params.connectionId.trim() === "")
       throw new Error("Connection id cannot be null");
@@ -32,7 +31,7 @@ export async function POST(
         isAgent: false,
       },
     });
-
+  
     return NextResponse.json(
       { msg: "Message was successfully created!" },
       { status: 200 }
@@ -81,8 +80,18 @@ export async function GET(
       },
     });
 
+
+
+    console.log("cm",connectionMessages);
+    const messagesWithAgent = connectionMessages.map(conn=>({
+      ...conn,
+      agentName: conn.isAgent ? targetProject.agentName : undefined,
+      agentImage: conn.isAgent ? targetProject.agentImage : undefined,
+    }));
+
+
     return NextResponse.json(
-      { messages: connectionMessages },
+      { messages: messagesWithAgent },
       { status: 200 }
     );
   } catch (error) {

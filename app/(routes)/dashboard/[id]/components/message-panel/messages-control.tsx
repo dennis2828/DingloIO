@@ -1,15 +1,15 @@
 import { Messages } from "./messages"
 import { ConversationWithMessages } from "@/types"
-import { Conversation } from "@prisma/client"
+import { Conversation, Project } from "@prisma/client"
 import { Separator } from "@/components/ui/separator"
 
 interface MessageControlProps{
-    projectId: string;
+    project: Project;
     conversation: ConversationWithMessages;
     allConversations: Conversation[];
 }
 
-export const MessagesControl = ({projectId, conversation, allConversations}:MessageControlProps) =>{    
+export const MessagesControl = ({project, conversation, allConversations}:MessageControlProps) =>{    
 
     return (
         <div>
@@ -19,7 +19,7 @@ export const MessagesControl = ({projectId, conversation, allConversations}:Mess
                     <p className="font-bold text-center text-white">Realtime conversation</p>
                 </div>
                 <div className="bg-transparent dark:bg-[#0d0d0f] p-3 rounded-b-sm">
-                    <Messages projectId={projectId} conversationId={conversation.connectionId} messages={conversation.messages}/>
+                    <Messages project={project} conversationId={conversation.connectionId} messages={conversation.messages}/>
                 </div>
             </div>
         </div>
