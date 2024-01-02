@@ -8,6 +8,7 @@ import { getAuthSession } from "@/lib/authOptions";
 import { ConnectionsControl } from "../components/message-panel/connections-control";
 import { Message } from "@prisma/client";
 import { AllMessages } from "./components/all-messages";
+import { AgentProfile } from "./components/agent-customization/agent-profile";
 
 const ProjectPage = async ({ params }: { params: { id: string } }) => {
   const session = await getAuthSession();
@@ -33,37 +34,31 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
       projectId: targetProject.id,
     },
   });
-  const connections = conversations.map((conv) => {
-    return {
-      connectionId: conv.connectionId,
-      online: conv.online,
-    };
-  });
 
   const conversationsMessages: Array<Message> = [];
 
-    for (const connection of connections) {
+    for (const conversation of conversations) {
         try {
-          const messagesForConnection = await db.message.findMany({
+          const messagesForConversation = await db.message.findMany({
             where: {
-              conversationId: connection.connectionId,
+              conversationId: conversation.connectionId,
             },
           });
     
           // Push the results into conversationsMessages array
-          conversationsMessages.push(...messagesForConnection);
+          conversationsMessages.push(...messagesForConversation);
         } catch (error) {
           console.error(`Error fetching messages for connections`);
         }
     }
   return (
     <div>
-      <div className="flex flex-col md:flex-row md:items-center justify-between">
+      <div className="flex flex-col xsBig:flex-row items-center justify-between mt-16 mb-10">
         <PageInfo
           label="Manage your project"
           icon={<AppWindow className="w-5 h-5 text-white dark:text-softBlue" />}
         />
-        <div className="flex flex-col xsBig:flex-row xsBig:items-center justify-center mt-10 md:mt-0 gap-4">
+        <div className="flex flex-col xs:flex-row items-center justify-center mt-6 xsBig:mt-0 gap-4">
           <ProjectName project={targetProject} />
           <ProjectActive
             userId={session!.user!.id}
@@ -72,11 +67,12 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
           />
         </div>
       </div>
-      <div>
+      <AgentProfile projectId={targetProject.id} userId={session?.user?.id!} agentName={session?.user?.name!} agentImage={"/profile.jpg"}/>
+      <div className="mt-20">
         <AllMessages messages={conversationsMessages}/>
       </div>
       <div className="mt-20">
-        <ConnectionsControl connections={connections} projectId={targetProject.id}/>
+        <ConnectionsControl connections={conversations} projectId={targetProject.id}/>
       </div>
     </div>
   );

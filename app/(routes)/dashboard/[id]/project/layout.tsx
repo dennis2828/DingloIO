@@ -1,6 +1,5 @@
 import { Container } from "@/components/container";
 import { Header } from "@/components/header"
-import { Footer } from "@/app/(routes)/components/Footer/footer";
 
 const ProjectPageLayout = ({children}:{children: React.ReactNode}) =>{
     return (
@@ -10,10 +9,7 @@ const ProjectPageLayout = ({children}:{children: React.ReactNode}) =>{
                 <div>
                     {children}
                 </div>
-                <section className="mt-32">
-                    <Footer/>
-                </section>
-            </div>
+                </div>
         </Container>
     )
 }
