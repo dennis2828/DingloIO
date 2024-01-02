@@ -1,31 +1,38 @@
-import { MessagesControl } from "./messages-control";
-import { ConnectionsControl } from "./connections-control";
 import { ConversationWithMessages } from "@/types";
-import db from "@/lib/db";
-import { MessagesHeader } from "./messages-header";
 import { Project } from "@prisma/client";
+import { Separator } from "@/components/ui/separator";
+import { Messages } from "./messages";
 
-interface MessagesContainerProps{
-    project: Project;
-    conversation: ConversationWithMessages;
+interface MessagesContainerProps {
+  project: Project;
+  conversation: ConversationWithMessages;
 }
 
-export const MessagesContainer = async ({project, conversation}: MessagesContainerProps) =>{
-    const allConversations = await db.conversation.findMany({
-      where:{
-          projectId: project.id,
-      },
-  });
-  console.log(allConversations);
+export const MessagesContainer = ({
+  project,
+  conversation,
+}: MessagesContainerProps) => {
   
 
-    return (
-        <div>
-
-            <MessagesControl project={project} conversation={conversation} allConversations={allConversations}/>
-            {/* <div className="mt-16">
-              <ConnectionsControl connections={connections} projectId={projectId}/>
-            </div> */}
+  return (
+    <div>
+      <div>
+        <Separator className="w-full h-[1.1px] bg-softBlue mb-6" />
+        <div className="shadow-[0px_0px_10px_1px_rgb(67,117,224)] rounded-t-sm rounded-b-sm">
+          <div className="flex justify-center bg-softBlue p-2 rounded-t-sm">
+            <p className="font-bold text-center text-white">
+              Realtime conversation
+            </p>
+          </div>
+          <div className="bg-transparent dark:bg-[#0d0d0f] p-3 rounded-b-sm">
+            <Messages
+              project={project}
+              conversationId={conversation.connectionId}
+              messages={conversation.messages}
+            />
+          </div>
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};

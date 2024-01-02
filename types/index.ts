@@ -28,6 +28,11 @@ export interface NewMessage {
     messagedAt: string;
 }
 
+export interface PredefinedAnswer {
+    question: string;
+    answer: string;
+}
+
 export type ConversationWithMessages = Conversation & {
     messages: Message[];
   };

@@ -12,14 +12,15 @@ interface ProjectActiveProps{
     projectId: string;
 }
 export const ProjectActive = ({userId, disabled, projectId}: ProjectActiveProps) =>{
+    const {socket} = useSocket(state=>state);
+
     const [isDisabled, setIsDisabled] = useState<boolean>(disabled);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const {socket} = useSocket(state=>state);
 
 
     useEffect(()=>{
         if(!socket) return;
-        socket.off("DingloClient-ProjectDisabled");
+
         
         socket.on("DingloClient-ProjectDisabled",(status)=>{
             setIsDisabled(!status.isDisabled);
@@ -27,14 +28,15 @@ export const ProjectActive = ({userId, disabled, projectId}: ProjectActiveProps)
             revalidate(`/dashboard/${projectId}`);
         });
 
+        return ()=>{
+            socket.off("DingloClient-ProjectDisabled");
+        }
     },[socket]);
 
     return (
         <Button isLoading={isLoading} disabled={isLoading} variant={isDisabled ? "default":"destructive"} onClick={()=>{
-            console.log("clicking");
             
             if(!socket) return;
-            console.log("retrun");
             setIsLoading(true);
             socket.emit("DingloServer-ProjectStatus",{userId, isDisabled});
             setIsLoading(false)

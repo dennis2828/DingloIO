@@ -17,7 +17,6 @@ export const AgentProfile = ({projectId, agentImage, agentName}: AgentProfilePro
                     <AgentImage agentImage={agentImage} projectId={projectId}/>
                     <AgentName projectId={projectId} agentName={agentName}/>
                 </div>
-                <div>content</div>
             </div>
         </div>
     )
