@@ -9,6 +9,7 @@ import { ConnectionsControl } from "../components/message-panel/connections-cont
 import { Message } from "@prisma/client";
 import { AllMessages } from "./components/all-messages";
 import { AgentProfile } from "./components/agent-customization/agent-profile";
+import { AnswersContainer } from "./components/predefined-answers/answers-container";
 
 const ProjectPage = async ({ params }: { params: { id: string } }) => {
   const session = await getAuthSession();
@@ -71,13 +72,19 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
           />
         </div>
       </div>
-      <AgentProfile projectId={targetProject.id} userId={session?.user?.id!} agentName={targetProject.agentName} agentImage={targetProject.agentImage}/>
-      <div className="mt-20">
-        <AllMessages messages={conversationsMessages}/>
+      <div className="mt-20 flex items-start justify-between">
+        <AgentProfile projectId={targetProject.id} userId={session?.user?.id!} agentName={targetProject.agentName} agentImage={targetProject.agentImage}/>
+        <AnswersContainer/>
       </div>
-      <div className="mt-20">
-        <ConnectionsControl connections={conversations} projectId={targetProject.id}/>
+      <div className="mt-20 flex justify-between">
+        <div>
+          <ConnectionsControl connections={conversations} projectId={targetProject.id}/>
+        </div>
+        <div>
+          <AllMessages messages={conversationsMessages}/>
+        </div>
       </div>
+      
     </div>
   );
 };
