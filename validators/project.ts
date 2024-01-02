@@ -10,3 +10,11 @@ export const ProjectValidator = z.object({
 });
 
 export type ProjectRequest = z.infer<typeof ProjectValidator>;
+
+export const ProjectUpdateValidator = z.object({
+    projectName: z.optional(z.string({required_error:"Project name is required"}).min(3, "Project name must be at least 3 characters")),
+    agentName: z.optional(z.string({required_error:"Agent name is required"}).min(3, "Agent name must be at least 3 characters")),
+    agentImage: z.optional(z.string({required_error:"Image is required"})),
+});
+
+export type ProjectUpdateRequest = z.infer<typeof ProjectUpdateValidator>;

@@ -1,6 +1,7 @@
 import { getAuthSession } from "@/lib/authOptions";
 import db from "@/lib/db";
 import AuthorizationToken from "@/lib/verifyToken";
+import { ProjectUpdateValidator } from "@/validators/project";
 import { JsonWebTokenError } from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
@@ -13,9 +14,11 @@ export async function PATCH(req: NextRequest, {params}:{params:{id: string}}) {
   
       //verifiy session intergrity
       const user = AuthorizationToken(session.user.accessToken);
-  
+      console.log(user, params);
+      
       const data = await req.json();
-      if(!data.projectName) throw new Error("You must provide a project name.");
+
+      const dataToUpdate = ProjectUpdateValidator.parse(data);
         
       const targetProject = await db.project.findUnique({
         where:{
@@ -23,7 +26,8 @@ export async function PATCH(req: NextRequest, {params}:{params:{id: string}}) {
             userId: user.userId,
         },
       });
-
+      console.log(targetProject);
+      
       if(!targetProject) throw new Error("Cannot find any project.");
 
       //update project
@@ -33,12 +37,12 @@ export async function PATCH(req: NextRequest, {params}:{params:{id: string}}) {
             userId:user.userId,
         },
         data: {
-          projectName: data.projectName,  
+         ...dataToUpdate, 
         },
       });
   
       return NextResponse.json(
-        { msg: "Project name was successfully changed" },
+        { msg: "Project was successfully updated" },
         { status: 200 }
       );
     } catch (error) {

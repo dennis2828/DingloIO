@@ -38,6 +38,8 @@ export async function POST(req: NextRequest) {
     const newProject = await db.project.create({
       data: {
         ...projectData,
+        agentImage: "/profile.jpg",
+        agentName: session.user.name,
         password: passwordToHash,
         api_key: generateApiKey(),
         userId: user.userId,

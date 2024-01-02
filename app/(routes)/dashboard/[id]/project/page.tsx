@@ -21,6 +21,8 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
     select: {
       id: true,
       projectName: true,
+      agentName: true,
+      agentImage: true,
       api_key: true,
       disabled: true,
     },
@@ -51,6 +53,8 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
           console.error(`Error fetching messages for connections`);
         }
     }
+
+
   return (
     <div>
       <div className="flex flex-col xsBig:flex-row items-center justify-between mt-16 mb-10">
@@ -67,7 +71,7 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
           />
         </div>
       </div>
-      <AgentProfile projectId={targetProject.id} userId={session?.user?.id!} agentName={session?.user?.name!} agentImage={"/profile.jpg"}/>
+      <AgentProfile projectId={targetProject.id} userId={session?.user?.id!} agentName={targetProject.agentName} agentImage={targetProject.agentImage}/>
       <div className="mt-20">
         <AllMessages messages={conversationsMessages}/>
       </div>
