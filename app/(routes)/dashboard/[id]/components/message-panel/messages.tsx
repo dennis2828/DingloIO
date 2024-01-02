@@ -4,9 +4,9 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { useSocket } from "@/hooks/useSocket";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { DeleteMessage } from "./delete-message";
 import { Message } from "@prisma/client";
 import { revalidate } from "@/actions/revalidatePath";
@@ -17,12 +17,17 @@ interface MessagesProps {
   messages: Array<Message>;
 }
 
-export const Messages = ({ projectId, conversationId, messages }: MessagesProps) => {
+export const Messages = ({
+  projectId,
+  conversationId,
+  messages,
+}: MessagesProps) => {
   const { socket } = useSocket((state) => state);
 
   const [syncedMessages, setSyncedMessages] = useState(messages);
   const [agentMessage, setAgentMessage] = useState<string>("");
-  const [placeholderMessage, setPlaceholderMessage] = useState<string>("Write your message");
+  const [placeholderMessage, setPlaceholderMessage] =
+    useState<string>("Write your message");
   const [clientTyping, setClientTyping] = useState<boolean>(false);
 
   useEffect(() => {
@@ -31,12 +36,18 @@ export const Messages = ({ projectId, conversationId, messages }: MessagesProps)
 
       setTimeout(() => {
         //debounce
-        socket.emit("DingloServer-Typing", { conversationId: conversationId, isTyping: true });
+        socket.emit("DingloServer-Typing", {
+          conversationId: conversationId,
+          isTyping: true,
+        });
       }, 500);
     } else {
       if (!socket) return;
       setTimeout(() => {
-        socket.emit("DingloServer-Typing", { conversationId: conversationId, isTyping: false });
+        socket.emit("DingloServer-Typing", {
+          conversationId: conversationId,
+          isTyping: false,
+        });
       }, 500);
     }
   }, [agentMessage]);
@@ -46,43 +57,46 @@ export const Messages = ({ projectId, conversationId, messages }: MessagesProps)
 
     socket.on("DingloClient-DashboardMessage", (msg) => {
       console.log("new message rt", msg);
-      
+
       // admin is joined in the same room for multiple client, update the current conversation
-      if(msg.conversationId===conversationId)
-      setSyncedMessages(prev=>[...prev, msg]);
-      
+      if (msg.conversationId === conversationId)
+        setSyncedMessages((prev) => [...prev, msg]);
     });
 
     socket.on("DingloClient-Typing", (typing) => {
-
-      if (typing.connectionId === conversationId) setClientTyping(typing.isTyping);
+      if (typing.connectionId === conversationId)
+        setClientTyping(typing.isTyping);
       else setClientTyping(false);
     });
 
-    return () =>{
+    return () => {
       socket.off("DingloClient-DashboardMessage");
       socket.off("DingloClient-Typing");
-    }
+    };
   }, [socket, conversationId]);
 
-
-  useEffect(()=>{
+  useEffect(() => {
     revalidate(`/dashboard/${projectId}`);
     setClientTyping(false);
     revalidate(`/dashboard/${projectId}`);
-  },[conversationId]);
-  
+  }, [conversationId, projectId]);
 
-  const {mutate: createMessage, isPending: isCreating} = useMutation({
-    mutationFn: async(newMessage:{id: string, message: string, messagedAt: string, isAgent: boolean})=>{
-      const res = await axios.post(`/api/project/${projectId}/conversation/${conversationId}/message`,newMessage);
+  const { mutate: createMessage, isPending: isCreating } = useMutation({
+    mutationFn: async (newMessage: {
+      id: string;
+      message: string;
+      messagedAt: string;
+      isAgent: boolean;
+    }) => {
+      const res = await axios.post(
+        `/api/project/${projectId}/conversation/${conversationId}/message`,
+        newMessage
+      );
 
       return res.data;
     },
-    onSuccess:(data, variables)=>{
-      toast({toastType:"SUCCESS",title:"Message was successfully created"});
-      
-      if(!socket) return;
+    onSuccess: (data, variables) => {
+      if (!socket) return;
 
       socket.emit("DingloServer-DashboardMessage", {
         id: variables.id,
@@ -95,19 +109,33 @@ export const Messages = ({ projectId, conversationId, messages }: MessagesProps)
         }),
       });
     },
-    onError:(err)=>{
+    onError: (error) => {
       setSyncedMessages(messages);
-      toast({toastType:"ERROR",title:"Message cannot be sent. Please try again later."});
+      if (error instanceof AxiosError)
+        toast({
+          toastType: "ERROR",
+          title:
+            error.response?.data ||
+            "Something went wrong. Please try again later.",
+        });
+      else
+        toast({
+          toastType: "ERROR",
+          title: "Something went wrong. Please try again later.",
+        });
     },
-    onMutate:(variables)=>{
-      setSyncedMessages(prev=>[...prev, {...variables, conversationId: conversationId}])
-    }
+    onMutate: (variables) => {
+      setSyncedMessages((prev) => [
+        ...prev,
+        { ...variables, conversationId: conversationId },
+      ]);
+    },
   });
 
   // synchronize messages
-  useEffect(()=>{
+  useEffect(() => {
     setSyncedMessages(messages);
-  },[messages]);
+  }, [messages]);
 
   return (
     <div>
@@ -131,7 +159,13 @@ export const Messages = ({ projectId, conversationId, messages }: MessagesProps)
             <p className={`${msg.isAgent ? "text-end" : "text-start"}`}>
               {msg.message}
             </p>
-              <DeleteMessage projectId={projectId} conversationId={conversationId} messages={messages} msg={msg} setSyncedMessages={setSyncedMessages}/>
+            <DeleteMessage
+              projectId={projectId}
+              conversationId={conversationId}
+              messages={messages}
+              msg={msg}
+              setSyncedMessages={setSyncedMessages}
+            />
           </div>
         ))}
         {clientTyping ? (
@@ -155,11 +189,18 @@ export const Messages = ({ projectId, conversationId, messages }: MessagesProps)
           placeholder={placeholderMessage}
         />
         <div className="flex justify-start xsBig:justify-center">
-          <Button disabled={isCreating}
+          <Button
             onClick={() => {
-              
               if (agentMessage && agentMessage.trim() !== "") {
-                createMessage({id:uuidv4(), message: agentMessage, messagedAt:new Date(Date.now()).toLocaleTimeString("en-US",{ hour: "2-digit", minute: "2-digit" }), isAgent: true});
+                createMessage({
+                  id: uuidv4(),
+                  message: agentMessage,
+                  messagedAt: new Date(Date.now()).toLocaleTimeString("en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }),
+                  isAgent: true,
+                });
               } else {
                 setPlaceholderMessage("Cannot sent empty messages");
               }
