@@ -26,7 +26,6 @@ export async function PATCH(req: NextRequest, {params}:{params:{id: string}}) {
             userId: user.userId,
         },
       });
-      console.log(targetProject);
       
       if(!targetProject) throw new Error("Cannot find any project.");
 

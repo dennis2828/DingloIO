@@ -32,7 +32,7 @@ export const AgentImage = ({agentImage, projectId}: AgentImageProps) =>{
         onMutate:(variable)=>{
             setCurrentImage(variable);
         }
-      })
+      });
 
     return (
         <CldUploadWidget uploadPreset="h7trytjb" onUpload={(result: any)=>updateProject(result.info.secure_url)}>

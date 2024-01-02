@@ -13,7 +13,7 @@ export const ProjectName = ({project}:{project: {id: string, projectName: string
     const editForm = useClickOutside(()=>{
         if(project.projectName!==projectName)
             editProject(projectName);
-        else setIsEditing(false);
+        setIsEditing(false);
     });
 
     const [projectName, setProjectName] = useState<string>(project.projectName);
@@ -37,9 +37,10 @@ export const ProjectName = ({project}:{project: {id: string, projectName: string
             else toast({toastType:"ERROR",title:"Something went wrong. Please try again later."});
         },
         onSettled:()=>{
+            setIsEditing(false);
             revalidate(`/dashboard/${project.id}/project`);
-        }
-    })
+        },
+    });
 
 
     if(isEditing)

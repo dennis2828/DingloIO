@@ -13,7 +13,7 @@ export const AgentProfile = ({projectId, agentImage, agentName}: AgentProfilePro
         <div>
             <p className="font-bold text-[1.5em] mb-4">Change your profile appearance</p>
             <div className="flex justify-between">
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col items-center gap-2">
                     <AgentImage agentImage={agentImage} projectId={projectId}/>
                     <AgentName projectId={projectId} agentName={agentName}/>
                 </div>
