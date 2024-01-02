@@ -3,6 +3,7 @@
 import { revalidate } from "@/actions/revalidatePath";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
+import { useSocket } from "@/hooks/useSocket";
 import { useClickOutside } from "@mantine/hooks";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -14,7 +15,7 @@ interface AgentNameProps{
 }
 
 export const AgentName = ({projectId, agentName}: AgentNameProps) =>{
-    
+    const {socket} = useSocket();
     const editForm = useClickOutside(()=>{
         if(agentName!==currentAgentName)
             updateProject(currentAgentName);
@@ -32,6 +33,7 @@ export const AgentName = ({projectId, agentName}: AgentNameProps) =>{
             return res;
         },
         onSuccess:()=>{
+            socket?.emit("DingloServer-AgentChange");
             toast({toastType:"SUCCESS", title:"Profile name was successfully updated!"})
         },
         onError:()=>{

@@ -39,8 +39,6 @@ export async function PATCH(req: NextRequest, {params}:{params:{id: string}}) {
          ...dataToUpdate, 
         },
       });
-
-      //update messages
       
   
       return NextResponse.json(

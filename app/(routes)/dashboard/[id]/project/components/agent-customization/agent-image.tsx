@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "@/components/ui/use-toast";
+import { useSocket } from "@/hooks/useSocket";
 
 
 interface AgentImageProps{
@@ -14,15 +15,17 @@ interface AgentImageProps{
 }
 
 export const AgentImage = ({agentImage, projectId}: AgentImageProps) =>{
+    const {socket} = useSocket();
     const [currentImage, setCurrentImage] = useState<string>(agentImage);
 
     const {mutate: updateProject, isPending} = useMutation({
         mutationFn: async(imageUrl: string)=>{
             const res = await axios.patch(`/api/project/${projectId}`,{agentImage: imageUrl});
-    
+            
             return res;
         },
         onSuccess:()=>{
+            socket?.emit("DingloServer-AgentChange")
             toast({toastType:"SUCCESS", title:"Profile image was successfully updated!"})
         },
         onError:()=>{
