@@ -1,10 +1,17 @@
+import db from "@/lib/db"
 import { CreateAnswer } from "./create-answers"
 
-export const AnswersContainer = async () =>{
+export const AnswersContainer = async ({projectId}:{projectId: string}) =>{
+    
+    const predefinedAnswers = await db.predefinedAnswer.findMany({
+        where:{
+            projectId,
+        },
+    });
+
     return (
         <div className="flex items-center gap-2">
-            <p className="font-bold text-[1.5em]">Set default answers</p>
-            <CreateAnswer/>
+            <CreateAnswer projectId={projectId} initialAnswers={predefinedAnswers}/>
         </div>
     )
 }

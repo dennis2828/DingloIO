@@ -74,7 +74,7 @@ const ProjectPage = async ({ params }: { params: { id: string } }) => {
       </div>
       <div className="mt-20 flex items-start justify-between">
         <AgentProfile projectId={targetProject.id} userId={session?.user?.id!} agentName={targetProject.agentName} agentImage={targetProject.agentImage}/>
-        <AnswersContainer/>
+        <AnswersContainer projectId={targetProject.id}/>
       </div>
       <div className="mt-20 flex justify-between">
         <div>
