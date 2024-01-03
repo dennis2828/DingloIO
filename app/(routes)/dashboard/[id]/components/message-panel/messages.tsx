@@ -8,23 +8,25 @@ import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { DeleteMessage } from "./delete-message";
-import { Message, Project } from "@prisma/client";
+import { Message, PredefinedAnswer, Project } from "@prisma/client";
 import { revalidate } from "@/actions/revalidatePath";
 
 interface MessagesProps {
   project: Project;
   conversationId: string;
   messages: Array<Message>;
+  predefinedAnswers: Array<PredefinedAnswer>;
 }
 
 export const Messages = ({
   project,
   conversationId,
   messages,
+  predefinedAnswers,
 }: MessagesProps) => {
   const { socket } = useSocket((state) => state);
   console.log("MESSAGES", project);
-  
+
   const [syncedMessages, setSyncedMessages] = useState(messages);
   const [agentMessage, setAgentMessage] = useState<string>("");
   const [placeholderMessage, setPlaceholderMessage] =
@@ -57,11 +59,28 @@ export const Messages = ({
     if (!socket) return;
 
     socket.on("DingloClient-DashboardMessage", (msg) => {
-      console.log("new message rt", msg);
-
       // admin is joined in the same room for multiple client, update the current conversation
       if (msg.conversationId === conversationId)
         setSyncedMessages((prev) => [...prev, msg]);
+
+      // check for possible automated message
+      const possbileAnswer = predefinedAnswers.filter(
+        (answ) => answ.question === msg.message
+      );
+
+      if (possbileAnswer) {
+        createMessage({
+          id: uuidv4(),
+          message: possbileAnswer[0].answer + " (auttomat)",
+          messagedAt: new Date(Date.now()).toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          agentImage:"https://res.cloudinary.com/dulb5sobi/image/upload/v1704311444/xjqlhfye2gn1f7urynwv.png",
+          agentName: project.agentName,
+          isAgent: true,
+        });
+      }
     });
 
     socket.on("DingloClient-Typing", (typing) => {

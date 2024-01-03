@@ -23,10 +23,13 @@ export const AnswerValues = ({ answer, projectId, initialAnswers, setPredefinedA
             const res = await axios.patch(`/api/project/${projectId}/answers/${id}`,{question: answerData.question, answer: answerData.answer});
             return res.data;
         },
+        onSuccess:()=>{
+            toast({toastType:"SUCCESS", title:"Item was successfully updated!"});
+        },
         onError:(err)=>{
             
             setPredefinedAnswers(initialAnswers);
-            toast({toastType:'ERROR', title:"Error!"});
+            toast({toastType:'ERROR', title:"Something went wrong. Please try again later!"});
         },
         onMutate:(variable)=>{
             setPredefinedAnswers(prev=>{
@@ -66,7 +69,7 @@ export const AnswerValues = ({ answer, projectId, initialAnswers, setPredefinedA
         placeholder="Answer to repond"
       />
       
-        <Check onClick={()=>editPredefinedAnswer(answer.id)} role="button" className="text-green-500 w-5 h-5 cursor-pointer hover:text-green-600 duration-150" />
+        <Check onClick={()=>editPredefinedAnswer(answer.id)} role="button" className="text-green-500 w-10 h-10 cursor-pointer hover:text-green-600 duration-150" />
     </div>
   );
 };

@@ -11,6 +11,7 @@ import { useClickOutside } from "@mantine/hooks";
 import { PredefinedAnswer } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { Answer } from "./answer";
+import { revalidate } from "@/actions/revalidatePath";
 
 interface CreateAnswerProps{
     projectId: string;
@@ -40,12 +41,11 @@ export const CreateAnswer = ({projectId, initialAnswers}: CreateAnswerProps) =>{
                 question:"",
                 answer:"",
             });
+            revalidate(`/dashboard/${projectId}`);
         },
         onError:(err)=>{
-            console.log("ERRROR",err);
-            
             setPredefinedAnswers(initialAnswers);
-            toast({toastType:'ERROR', title:"Error!"});
+            toast({toastType:'ERROR', title:"Something went wrong. Please try again later!"});
         },
         onMutate:(variable)=>{
             setPredefinedAnswers(prev=>[...prev, variable]);
@@ -59,16 +59,15 @@ export const CreateAnswer = ({projectId, initialAnswers}: CreateAnswerProps) =>{
                 <Button size={"sm"} onClick={()=>setIsOpen(prev=>!prev)}>Add new field</Button>
             </div>
             {/* render all the predefined answers */}
-            <div className="space-y-2">
+            <div className="space-y-2 mt-6">
                 {predefinedAnswers.map(answ=>(
-                    <Answer answer={answ} projectId={projectId} initialAnswers={initialAnswers} setPredefinedAnswers={setPredefinedAnswers}/>
+                    <Answer key={answ.id} answer={answ} projectId={projectId} initialAnswers={predefinedAnswers} setPredefinedAnswers={setPredefinedAnswers}/>
                 ))}
             </div>
           
             {isOpen ? (
-                <form ref={createAnswerRef} className="flex" onSubmit={(e)=>{
+                <form ref={createAnswerRef} className="flex mt-5" onSubmit={(e)=>{
                     e.preventDefault();
-                    console.log("subbmitnigngs");
                     
                     if(newInstance && newInstance.answer.trim()!=="" && newInstance.question.trim()!==""){
                         //create new predefined answer
@@ -83,7 +82,7 @@ export const CreateAnswer = ({projectId, initialAnswers}: CreateAnswerProps) =>{
                         ...prev,
                         answer: e.target.value,
                     }))} className="rounded-none rounded-r-md placeholder:text-center px-2" placeholder="Answer to repond"/>
-                    <FormSubmit>Crete</FormSubmit>
+                    <FormSubmit className="ml-1">Add</FormSubmit>
                 </form>
             ):null}
         </div>

@@ -2,17 +2,23 @@ import { ConversationWithMessages } from "@/types";
 import { Project } from "@prisma/client";
 import { Separator } from "@/components/ui/separator";
 import { Messages } from "./messages";
+import db from "@/lib/db";
 
 interface MessagesContainerProps {
   project: Project;
   conversation: ConversationWithMessages;
 }
 
-export const MessagesContainer = ({
+export const MessagesContainer = async ({
   project,
   conversation,
 }: MessagesContainerProps) => {
   
+  const predefinedAnswers = await db.predefinedAnswer.findMany({
+    where:{
+      projectId: project.id,
+    },
+  });
 
   return (
     <div>
@@ -29,6 +35,7 @@ export const MessagesContainer = ({
               project={project}
               conversationId={conversation.connectionId}
               messages={conversation.messages}
+              predefinedAnswers={predefinedAnswers}
             />
           </div>
         </div>
