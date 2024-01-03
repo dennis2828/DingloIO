@@ -65,6 +65,7 @@ export const AnswerValues = ({ answer, projectId, initialAnswers, setPredefinedA
         className="rounded-none bg-[#f3f4f6] text-[#747881] rounded-r-md placeholder:text-center px-2"
         placeholder="Answer to repond"
       />
+      
         <Check onClick={()=>editPredefinedAnswer(answer.id)} role="button" className="text-green-500 w-5 h-5 cursor-pointer hover:text-green-600 duration-150" />
     </div>
   );

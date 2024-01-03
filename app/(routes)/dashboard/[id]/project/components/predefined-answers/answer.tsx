@@ -39,6 +39,7 @@ export const Answer = ({ answer, projectId, initialAnswers, setPredefinedAnswers
   
     return (
     <div className="flex items-center">
+        {answer.answer}
         <AnswerValues projectId={projectId} answer={answer} initialAnswers={initialAnswers} setPredefinedAnswers={setPredefinedAnswers}/>
         <Trash onClick={()=>deletePredefinedAnswer(answer.id)} role="button" className="text-red-500 w-5 h-5 cursor-pointer hover:text-red-600 duration-150" />
     </div>
