@@ -10,7 +10,7 @@ export const AnswersContainer = async ({projectId}:{projectId: string}) =>{
     });
 
     return (
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col items-center gap-2">
             <CreateAnswer projectId={projectId} initialAnswers={predefinedAnswers}/>
         </div>
     )

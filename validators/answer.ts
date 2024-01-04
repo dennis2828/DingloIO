@@ -1,7 +1,6 @@
 import z from "zod";
 
 export const AnswerValidator = z.object({
-    id: z.string({required_error:"You must provide an required"}),
     projectId: z.string({required_error:"You must provide a project id"}),
     question: z.string({required_error:"Question is required"}),
     answer:z.string({required_error:"Answer is required"}),
