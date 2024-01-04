@@ -37,9 +37,7 @@ export const Answer = ({ answer, projectId}:AnswerProps) => {
   
     return (
     <div className="flex items-center">
-        <p>{answer.question}</p>
-        <p>{answer.answer}</p>
-        {/* <AnswerValues projectId={projectId} answer={answer} initialAnswers={initialAnswers} setPredefinedAnswers={setPredefinedAnswers}/> */}
+        <AnswerValues projectId={projectId} answer={answer}/>
         <Trash onClick={()=>deletePredefinedAnswer(answer.id)} role="button" className={`text-red-500 w-5 h-5 cursor-pointer hover:text-red-600 duration-150 ${isPending ? "text-red-800":null}`} />
     </div>
   );

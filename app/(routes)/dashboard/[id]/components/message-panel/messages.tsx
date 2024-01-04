@@ -68,10 +68,10 @@ export const Messages = ({
         (answ) => answ.question === msg.message
       );
 
-      if (possbileAnswer) {
+      if (possbileAnswer && possbileAnswer.length>0) {
         createMessage({
           id: uuidv4(),
-          message: possbileAnswer[0].answer + " (auttomat)",
+          message: possbileAnswer[0].answer,
           messagedAt: new Date(Date.now()).toLocaleTimeString("en-US", {
             hour: "2-digit",
             minute: "2-digit",

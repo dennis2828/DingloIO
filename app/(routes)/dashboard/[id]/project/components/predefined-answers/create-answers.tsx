@@ -53,7 +53,6 @@ export const CreateAnswer = ({
       return res.data;
     },
     onMutate: (variable) => {
-      // setPredefinedAnswers(prev=>[...prev, variable]);
       queryClient.setQueryData(["predAnswers"], (old: PredefinedAnswer[]) => [
         ...old,
         {

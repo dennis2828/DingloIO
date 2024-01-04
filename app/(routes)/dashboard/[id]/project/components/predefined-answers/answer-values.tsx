@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { PredefinedAnswer } from "@prisma/client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Check } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -11,12 +11,13 @@ import { Dispatch, SetStateAction, useState } from "react";
 interface AnswerValuesProps {
   answer: PredefinedAnswer;
   projectId: string;
-  initialAnswers: PredefinedAnswer[];
-  setPredefinedAnswers: Dispatch<SetStateAction<Array<PredefinedAnswer>>>;
 }
 
-export const AnswerValues = ({ answer, projectId, initialAnswers, setPredefinedAnswers }: AnswerValuesProps) => {
+export const AnswerValues = ({ answer, projectId }: AnswerValuesProps) => {
     const [answerData, setAnswerData] = useState<PredefinedAnswer>(answer);
+
+    const queryClient = useQueryClient();
+
 
     const {mutate: editPredefinedAnswer, isPending} = useMutation({
         mutationFn: async(id: string)=>{
@@ -27,21 +28,22 @@ export const AnswerValues = ({ answer, projectId, initialAnswers, setPredefinedA
             toast({toastType:"SUCCESS", title:"Item was successfully updated!"});
         },
         onError:(err)=>{
-            
-            setPredefinedAnswers(initialAnswers);
             toast({toastType:'ERROR', title:"Something went wrong. Please try again later!"});
         },
         onMutate:(variable)=>{
-            setPredefinedAnswers(prev=>{
-                return prev.map(answ=>{
+            queryClient.setQueryData(["predAnswers"],(old: PredefinedAnswer[])=>{
+                return old.map(answ=>{
                     return {
                         ...answ,
                         question: answ.id===variable ? answerData.question: answ.question,
                         answer: answ.id===variable ? answerData.answer: answ.answer,
                     }
                 });
-            });
-        }
+            })
+        },
+        onSettled:()=>{
+            queryClient.invalidateQueries({queryKey:["predAnswers"]});
+        },
     });
 
     return (
@@ -68,8 +70,9 @@ export const AnswerValues = ({ answer, projectId, initialAnswers, setPredefinedA
         className="rounded-none bg-[#f3f4f6] text-[#747881] rounded-r-md placeholder:text-center px-2"
         placeholder="Answer to repond"
       />
-      
-        <Check onClick={()=>editPredefinedAnswer(answer.id)} role="button" className="text-green-500 w-10 h-10 cursor-pointer hover:text-green-600 duration-150" />
+        {answerData.question !== answer.question || answerData.answer !== answer.answer ? (
+            <Check onClick={()=>editPredefinedAnswer(answer.id)} role="button" className="text-green-500 w-10 h-10 cursor-pointer hover:text-green-600 duration-150" />
+        ):null}
     </div>
   );
 };
