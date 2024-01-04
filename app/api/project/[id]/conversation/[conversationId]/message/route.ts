@@ -29,6 +29,7 @@ export async function POST(req: NextRequest, {params}:{params:{id: string, conve
       });
 
       if(!targetProject) throw new Error("Cannot find any project.");
+      
       const newMessage = await db.message.create({
         data:{
             conversationId: params.conversationId,

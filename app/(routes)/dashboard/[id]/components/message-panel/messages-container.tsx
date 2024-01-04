@@ -3,6 +3,7 @@ import { Project } from "@prisma/client";
 import { Separator } from "@/components/ui/separator";
 import { Messages } from "./messages";
 import db from "@/lib/db";
+import { CreateMessage } from "./create-message";
 
 interface MessagesContainerProps {
   project: Project;
@@ -37,6 +38,7 @@ export const MessagesContainer = async ({
               messages={conversation.messages}
               predefinedAnswers={predefinedAnswers}
             />
+            <CreateMessage project={project} conversationId={conversation.connectionId}/>
           </div>
         </div>
       </div>
