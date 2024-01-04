@@ -56,7 +56,7 @@ model Conversation {
 }
 
 model Message {
-  id             String       @id
+  id             String       @id @default(uuid())
   message        String
   isAgent        Boolean
   messagedAt     String

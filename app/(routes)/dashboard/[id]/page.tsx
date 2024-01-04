@@ -10,7 +10,6 @@ import { getAuthSession } from "@/lib/authOptions";
 
 const DashboardProjectPage = async ({params, searchParams}:{params:{id: string}, searchParams:{conversation: string}}) =>{
     const session = await getAuthSession();
-    console.log(searchParams);
     
     const project = await db.project.findUnique({
         where:{

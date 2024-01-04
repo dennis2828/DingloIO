@@ -3,13 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { useSocket } from "@/hooks/useSocket";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { DeleteMessage } from "./delete-message";
 import { Message, PredefinedAnswer, Project } from "@prisma/client";
-import { revalidate } from "@/actions/revalidatePath";
 
 interface MessagesProps {
   project: Project;
@@ -25,13 +23,23 @@ export const Messages = ({
   predefinedAnswers,
 }: MessagesProps) => {
   const { socket } = useSocket((state) => state);
-  console.log("MESSAGES", project);
 
-  const [syncedMessages, setSyncedMessages] = useState(messages);
+  // const [syncedMessages, setSyncedMessages] = useState(messages);
   const [agentMessage, setAgentMessage] = useState<string>("");
-  const [placeholderMessage, setPlaceholderMessage] =
-    useState<string>("Write your message");
+  const [placeholderMessage, setPlaceholderMessage] = useState<string>("Write your message");
   const [clientTyping, setClientTyping] = useState<boolean>(false);
+  
+  const queryClient = useQueryClient();
+  const {data, isPending} = useQuery({
+    queryKey:["messages"],
+    queryFn: async()=>{
+      const res = await axios.get(`/api/project/${project.id}/conversation/${conversationId}/message`);
+      
+      return res.data as Message[];
+    },
+    initialData: messages,
+  });
+
 
   useEffect(() => {
     if (agentMessage && agentMessage !== "") {
@@ -61,7 +69,12 @@ export const Messages = ({
     socket.on("DingloClient-DashboardMessage", (msg) => {
       // admin is joined in the same room for multiple client, update the current conversation
       if (msg.conversationId === conversationId)
-        setSyncedMessages((prev) => [...prev, msg]);
+      {
+        queryClient.setQueryData(["messages"], (old: Message[])=>[
+          ...old,
+          msg,
+        ]);
+      }
 
       // check for possible automated message
       const possbileAnswer = predefinedAnswers.filter(
@@ -70,14 +83,12 @@ export const Messages = ({
 
       if (possbileAnswer && possbileAnswer.length>0) {
         createMessage({
-          id: uuidv4(),
           message: possbileAnswer[0].answer,
           messagedAt: new Date(Date.now()).toLocaleTimeString("en-US", {
             hour: "2-digit",
             minute: "2-digit",
           }),
-          agentImage:"https://res.cloudinary.com/dulb5sobi/image/upload/v1704311444/xjqlhfye2gn1f7urynwv.png",
-          agentName: project.agentName,
+          conversationId: conversationId,
           isAgent: true,
         });
       }
@@ -95,21 +106,9 @@ export const Messages = ({
     };
   }, [socket, conversationId]);
 
-  useEffect(() => {
-    revalidate(`/dashboard/${project.id}`);
-    setClientTyping(false);
-    revalidate(`/dashboard/${project.id}`);
-  }, [conversationId, project.id]);
 
   const { mutate: createMessage, isPending: isCreating } = useMutation({
-    mutationFn: async (newMessage: {
-      id: string;
-      message: string;
-      messagedAt: string;
-      isAgent: boolean;
-      agentName: string;
-      agentImage: string;
-    }) => {
+    mutationFn: async (newMessage: Omit<Message, "id">) => {
       const res = await axios.post(
         `/api/project/${project.id}/conversation/${conversationId}/message`,
         newMessage
@@ -117,16 +116,16 @@ export const Messages = ({
 
       return res.data;
     },
-    onSuccess: (data, variables) => {
-      if (!socket) return;
+    onMutate: (variable) => {
+      queryClient.setQueryData(["messages"], (old: Message[])=>[...old, variable]);
+      if(!socket) return;
 
       socket.emit("DingloServer-DashboardMessage", {
-        id: variables.id,
         connectionId: conversationId,
-        message: variables.message,
-        isAgent: variables.isAgent,
-        agentName: variables.agentName,
-        agentImage: variables.agentImage,
+        message: variable.message,
+        isAgent: variable.isAgent,
+        agentName: project.agentName,
+        agentImage: project.agentImage,
         messagedAt: new Date(Date.now()).toLocaleTimeString("en-US", {
           hour: "2-digit",
           minute: "2-digit",
@@ -134,7 +133,8 @@ export const Messages = ({
       });
     },
     onError: (error) => {
-      setSyncedMessages(messages);
+      console.log("CREATE",error);
+      
       if (error instanceof AxiosError)
         toast({
           toastType: "ERROR",
@@ -148,23 +148,20 @@ export const Messages = ({
           title: "Something went wrong. Please try again later.",
         });
     },
-    onMutate: (variables) => {
-      setSyncedMessages((prev) => [
-        ...prev,
-        { ...variables, conversationId: conversationId },
-      ]);
-    },
+    onSettled:()=>{
+      queryClient.invalidateQueries({queryKey:["messages"]});
+
+      if(!socket) return;
+
+      socket?.emit("DingloServer-InvalidateQuery",{connectionId: conversationId});
+    }
   });
 
-  // synchronize messages
-  useEffect(() => {
-    setSyncedMessages(messages);
-  }, [messages]);
 
   return (
     <div>
       <div className="space-y-6 max-h-[500px] overflow-y-scroll overflowContainer">
-        {syncedMessages.map((msg, index) => (
+        {data.map((msg, index) => (
           <div
             key={index}
             className={`${
@@ -183,13 +180,13 @@ export const Messages = ({
             <p className={`${msg.isAgent ? "text-end" : "text-start"}`}>
               {msg.message}
             </p>
-            <DeleteMessage
+            {/* <DeleteMessage
               projectId={project.id}
               conversationId={conversationId}
               messages={messages}
               msg={msg}
               setSyncedMessages={setSyncedMessages}
-            />
+            /> */}
           </div>
         ))}
         {clientTyping ? (
@@ -217,14 +214,12 @@ export const Messages = ({
             onClick={() => {
               if (agentMessage && agentMessage.trim() !== "") {
                 createMessage({
-                  id: uuidv4(),
+                  conversationId: conversationId,
                   message: agentMessage,
                   messagedAt: new Date(Date.now()).toLocaleTimeString("en-US", {
                     hour: "2-digit",
                     minute: "2-digit",
                   }),
-                  agentImage: project.agentImage,
-                  agentName: project.agentName,
                   isAgent: true,
                 });
               } else {
