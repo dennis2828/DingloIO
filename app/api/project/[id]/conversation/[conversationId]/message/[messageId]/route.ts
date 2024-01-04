@@ -26,7 +26,6 @@ export async function DELETE(req: NextRequest, {params}:{params:{id: string, con
       });
 
       if(!targetProject) throw new Error("Cannot find any project.");
-
       await db.message.delete({
         where:{
             id: params.messageId,

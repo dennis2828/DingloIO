@@ -9,7 +9,6 @@ import axios from "axios";
 import { useState } from "react";
 import { useClickOutside } from "@mantine/hooks";
 import { PredefinedAnswer } from "@prisma/client";
-import { v4 as uuidv4 } from "uuid";
 import { Answer } from "./answer";
 import { revalidate } from "@/actions/revalidatePath";
 
@@ -53,16 +52,21 @@ export const CreateAnswer = ({
       return res.data;
     },
     onMutate: (variable) => {
-      queryClient.setQueryData(["predAnswers"], (old: PredefinedAnswer[]) => [
-        ...old,
-        {
-          question: variable.question,
-          answer: variable.answer,
-          projectId: variable.projectId,
-        },
-      ]);
+      queryClient.setQueryData(["predAnswers"], (old: PredefinedAnswer[]) =>{
+        if(old && old.length>0) return [...old,
+          {
+            question: variable.question,
+            answer: variable.answer,
+            projectId: variable.projectId,
+          }];
+          return [{question: variable.question,
+            answer: variable.answer,
+            projectId: variable.projectId}];
+      });
     },
-    onError: () => {
+    onError: (err) => {
+      console.log(err);
+      
       toast({
         toastType: "ERROR",
         title: "Something went wrong. Please try again later!",
@@ -70,6 +74,7 @@ export const CreateAnswer = ({
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["predAnswers"] });
+      revalidate(`/dashboard/${projectId}`);
     },
   });
 

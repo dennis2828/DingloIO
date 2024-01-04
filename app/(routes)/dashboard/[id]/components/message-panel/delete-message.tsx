@@ -4,21 +4,20 @@ import { toast } from "@/components/ui/use-toast";
 import { useSocket } from "@/hooks/useSocket";
 import { NewMessage } from "@/types";
 import { Message } from "@prisma/client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { TrashIcon } from "lucide-react"
-import { Dispatch, SetStateAction } from "react";
 
 interface DeleteMessageProps{
     projectId: string;
     conversationId: string;
-    messages: Array<Message>;
     msg: Message
-    setSyncedMessages: Dispatch<SetStateAction<Array<Message>>>;
 }
 
-export const DeleteMessage = ({projectId, msg, conversationId, messages, setSyncedMessages}: DeleteMessageProps) =>{
+export const DeleteMessage = ({projectId, msg, conversationId}: DeleteMessageProps) =>{
     const {socket} = useSocket();
+
+      const queryClient = useQueryClient();
 
     const {mutate: deleteMessage, isPending: isDeleting} = useMutation({
         mutationFn: async(messageId: string)=>{
@@ -34,12 +33,14 @@ export const DeleteMessage = ({projectId, msg, conversationId, messages, setSync
         },
         onError:(err)=>{
           toast({toastType:"ERROR",title:"Message was not deleted"});
-          setSyncedMessages(messages);
         },
-        onMutate:(variables)=>{
-          setSyncedMessages(prev=>{
-            return prev.filter(msg=>msg.id!==variables);
-          });
+        onMutate:(variable)=>{
+         queryClient.setQueryData(["messages"],(old: Message[])=>{
+          return old.filter(prevMsg=>prevMsg.id!==variable);
+         });  
+        },
+        onSettled:()=>{
+          queryClient.invalidateQueries({queryKey:["messages"]});
         }
       });
 

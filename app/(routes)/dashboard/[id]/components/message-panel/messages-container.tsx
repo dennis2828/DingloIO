@@ -14,9 +14,8 @@ export const MessagesContainer = async ({
   project,
   conversation,
 }: MessagesContainerProps) => {
-  
   const predefinedAnswers = await db.predefinedAnswer.findMany({
-    where:{
+    where: {
       projectId: project.id,
     },
   });
@@ -36,9 +35,12 @@ export const MessagesContainer = async ({
               project={project}
               conversationId={conversation.connectionId}
               messages={conversation.messages}
-              predefinedAnswers={predefinedAnswers}
             />
-            <CreateMessage project={project} conversationId={conversation.connectionId}/>
+            <CreateMessage
+              predefinedAnswers={predefinedAnswers}
+              project={project}
+              conversationId={conversation.connectionId}
+            />
           </div>
         </div>
       </div>

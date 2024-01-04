@@ -4,20 +4,18 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { DeleteMessage } from "./delete-message";
-import { Message, PredefinedAnswer, Project } from "@prisma/client";
+import { Message, Project } from "@prisma/client";
 
 interface MessagesProps {
   project: Project;
   conversationId: string;
   messages: Array<Message>;
-  predefinedAnswers: Array<PredefinedAnswer>;
 }
 
 export const Messages = ({
   project,
   conversationId,
   messages,
-  predefinedAnswers,
 }: MessagesProps) => {
   const { socket } = useSocket((state) => state);
   const containerRef = useRef(null);
@@ -43,27 +41,10 @@ export const Messages = ({
       // admin is joined in the same room for multiple client, update the current conversation
       if (msg.conversationId === conversationId)
       {
-        queryClient.setQueryData(["messages"], (old: Message[])=>[
-          ...old,
-          msg,
-        ]);
-      }
-
-      // check for possible automated message
-      const possbileAnswer = predefinedAnswers.filter(
-        (answ) => answ.question === msg.message
-      );
-
-      if (possbileAnswer && possbileAnswer.length>0) {
-        // createMessage({
-        //   message: possbileAnswer[0].answer,
-        //   messagedAt: new Date(Date.now()).toLocaleTimeString("en-US", {
-        //     hour: "2-digit",
-        //     minute: "2-digit",
-        //   }),
-        //   conversationId: conversationId,
-        //   isAgent: true,
-        // });
+        queryClient.setQueryData(["messages"], (old: Message[])=>{
+          if(old && old.length>0) return [...old, msg];
+          return [msg];
+        });
       }
     });
 
@@ -107,13 +88,11 @@ export const Messages = ({
             <p className={`${msg.isAgent ? "text-end" : "text-start"}`}>
               {msg.message}
             </p>
-            {/* <DeleteMessage
+            <DeleteMessage
               projectId={project.id}
               conversationId={conversationId}
-              messages={messages}
               msg={msg}
-              setSyncedMessages={setSyncedMessages}
-            /> */}
+            />
           </div>
         ))}
         {clientTyping ? (

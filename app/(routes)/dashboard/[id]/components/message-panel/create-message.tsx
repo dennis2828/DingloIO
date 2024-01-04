@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { useSocket } from "@/hooks/useSocket";
-import { Message, Project } from "@prisma/client";
+import { Message, PredefinedAnswer, Project } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
@@ -12,15 +12,39 @@ import { useEffect, useState } from "react";
 interface CreateMessagesProps{
     project: Project;
     conversationId: string;
+    predefinedAnswers: Array<PredefinedAnswer>;
 }
 
-export const CreateMessage = ({project, conversationId}: CreateMessagesProps) =>{
+export const CreateMessage = ({project, conversationId, predefinedAnswers}: CreateMessagesProps) =>{
     const {socket} = useSocket();
 
     const [agentMessage, setAgentMessage] = useState<string>("");
     const [placeholderMessage, setPlaceholderMessage] = useState<string>("Write your message");
 
     const queryClient = useQueryClient();
+
+    useEffect(() => {
+        if (!socket) return;
+    
+        socket.on("DingloClient-DashboardMessage", (msg) => {
+          // check for possible automated message
+          const possbileAnswer = predefinedAnswers.filter(
+            (answ) => answ.question === msg.message
+          );
+    
+          if (possbileAnswer && possbileAnswer.length>0) {
+            createMessage({
+              message: possbileAnswer[0].answer,
+              messagedAt: new Date(Date.now()).toLocaleTimeString("en-US", {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+              conversationId: conversationId,
+              isAgent: true,
+            });
+          }
+        });
+    },[socket]);
 
     useEffect(() => {
         if (agentMessage && agentMessage !== "") {
