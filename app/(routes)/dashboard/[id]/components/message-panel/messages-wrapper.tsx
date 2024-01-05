@@ -29,13 +29,6 @@ export const MessagesWrapper = async ({
       />
     );
 
-
-  const predefinedAnswers = await db.predefinedAnswer.findMany({
-    where: {
-      projectId: project.id,
-    },
-  });
-
   const conversation = await db.conversation.findUnique({
     where: {
       connectionId: conversationId,
@@ -68,7 +61,6 @@ export const MessagesWrapper = async ({
               messages={conversation!.messages || []}
             />
             <CreateMessage
-              predefinedAnswers={predefinedAnswers || []}
               project={project}
               conversationId={conversation!.connectionId}
             />

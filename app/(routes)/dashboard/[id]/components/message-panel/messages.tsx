@@ -46,7 +46,9 @@ export const Messages = ({
         });
       }
     });
-
+    socket.on("DingloClient-InvalidateQuery",()=>{
+      queryClient.invalidateQueries({queryKey:["messages"]});
+    });
     socket.on("DingloClient-Typing", (typing) => {
       if (typing.connectionId === conversationId)
         setClientTyping(typing.isTyping);
@@ -72,7 +74,7 @@ export const Messages = ({
           <div
             key={index}
             className={`${
-              msg.isAgent
+              msg.isAgent || msg.automated
                 ? "bg-softBlue ml-auto text-white duration-150 group cursor-pointer"
                 : "bg-white mr-auto text-softBlue"
             } px-2 py-.5 max-w-full w-fit font-medium rounded-md`}
@@ -82,9 +84,11 @@ export const Messages = ({
                 msg.isAgent ? "text-gray-300" : "text-gray-400"
               } font-normal text-center`}
             >
-              {msg.isAgent ? "admin" : "client"}
+              {msg.automated ? "automat":null}
+              {msg.isAgent ? "admin" : null}
+              {!msg.isAgent && !msg.automated ? "client":null}
             </p>
-            <p className={`${msg.isAgent ? "text-end" : "text-start"}`}>
+            <p className={`${msg.isAgent || msg.automated ? "text-end" : "text-start"}`}>
               {msg.message}
             </p>
             <DeleteMessage
