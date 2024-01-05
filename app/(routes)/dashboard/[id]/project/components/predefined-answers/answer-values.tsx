@@ -6,7 +6,7 @@ import { PredefinedAnswer } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Check } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 
 interface AnswerValuesProps {
   answer: PredefinedAnswer;
@@ -28,11 +28,13 @@ export const AnswerValues = ({ answer, projectId }: AnswerValuesProps) => {
             toast({toastType:"SUCCESS", title:"Item was successfully updated!"});
         },
         onError:(err)=>{
+            console.log("err", err);
+            
             toast({toastType:'ERROR', title:"Something went wrong. Please try again later!"});
         },
         onMutate:(variable)=>{
             queryClient.setQueryData(["predAnswers"],(old: PredefinedAnswer[])=>{
-                return old.map(answ=>{
+                return old?.map(answ=>{
                     return {
                         ...answ,
                         question: answ.id===variable ? answerData.question: answ.question,

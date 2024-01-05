@@ -69,10 +69,7 @@ export const CreateMessage = ({
         isAgent: variable.isAgent,
         agentName: project.agentName,
         agentImage: project.agentImage,
-        messagedAt: new Date(Date.now()).toLocaleTimeString("en-US", {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
+        messagedAt: variable.messagedAt,
       });
     },
     onError: (error) => {
