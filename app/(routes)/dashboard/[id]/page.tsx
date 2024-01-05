@@ -17,7 +17,6 @@ const DashboardProjectPage = async ({params, searchParams}:{params:{id: string},
             userId: session!.user!.id,
         },
     }); 
-    console.log(searchParams);
     
     if(!project)
         redirect("/create");

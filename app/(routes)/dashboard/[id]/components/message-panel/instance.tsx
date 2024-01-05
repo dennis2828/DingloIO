@@ -1,9 +1,7 @@
 "use client";
 
-import { revalidate } from "@/actions/revalidatePath";
 import { Conversation } from "@prisma/client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 
 interface InstanceProps {
@@ -17,13 +15,11 @@ export const Instance = ({
   selectedConv,
   setSelectedConv
 }: InstanceProps) => {
-
+  const router = useRouter();
     const pathname = usePathname();
   return (
-    <Link
+    <a
     onClick={()=>{
-      revalidate(`/dashboard/${convInstance.projectId}?conversation=${convInstance.connectionId}`)
-      revalidate(`/dashboard/${convInstance.projectId}`);
       setSelectedConv(convInstance);
     }}
     href={`http://localhost:3000/${pathname}?conversation=${convInstance.connectionId}`}
@@ -39,6 +35,6 @@ export const Instance = ({
         }`}
       />
       {convInstance.connectionId}
-    </Link>
+    </a>
   );
 };

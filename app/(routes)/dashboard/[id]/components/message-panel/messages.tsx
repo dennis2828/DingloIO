@@ -5,8 +5,6 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { DeleteMessage } from "./delete-message";
 import { Message, Project } from "@prisma/client";
-import { revalidate } from "@/actions/revalidatePath";
-import { revalidatePath } from "next/cache";
 
 interface MessagesProps {
   project: Project;
@@ -26,7 +24,7 @@ export const Messages = ({
   
   const queryClient = useQueryClient();
   
-  const {data, isPending} = useQuery({
+  const { data } = useQuery({
     queryKey:["messages"],
     queryFn: async()=>{
       const res = await axios.get(`/api/project/${project.id}/conversation/${conversationId}/message`);
@@ -44,8 +42,7 @@ export const Messages = ({
       if (msg.conversationId === conversationId)
       {
         queryClient.setQueryData(["messages"], (old: Message[])=>{
-          if(old && old.length>0) return [...old, msg];
-          return [msg];
+          return [...old, msg];
         });
       }
     });

@@ -1,6 +1,5 @@
 "use client";
 
-import { revalidate } from "@/actions/revalidatePath";
 import { useSocket } from "@/hooks/useSocket";
 import { Conversation } from "@prisma/client";
 import { useEffect, useState } from "react";
@@ -17,17 +16,18 @@ interface MessagesHeaderProps {
 export const MessagesHeader = ({
   allConversations,
   projectId,
-  conversationId
+  conversationId,
 }: MessagesHeaderProps) => {
   const { socket } = useSocket();
   const queryClient = useQueryClient();
 
-  const [selectedConv, setSelectedConv] = useState<Conversation | undefined>(undefined);
+  const [selectedConv, setSelectedConv] = useState<Conversation | undefined>(
+    undefined
+  );
 
-
-  const {data} = useQuery({
-    queryKey:["connections"],
-    queryFn: async()=>{
+  const { data } = useQuery({
+    queryKey: ["connections"],
+    queryFn: async () => {
       const res = await axios.get(`/api/project/${projectId}/conversation`);
 
       return res.data as Conversation[];
@@ -41,32 +41,30 @@ export const MessagesHeader = ({
     if (!socket) return;
 
     socket.on("DingloClient-NewConnection", (connectionId: string) => {
-      queryClient.setQueryData(["connections"], (old: Conversation[])=>{
-          const findConv = old.find((conv) => conv.connectionId === connectionId);
-          if (!findConv && old && old.length>0)
-            return [{ connectionId, projectId, online: true }, ...old];
-          else if(!findConv) return [{ connectionId, projectId, online: true }];
-            return old.map((conv) => {
-              if (conv.connectionId === connectionId) {
-                return { ...conv, online: true };
-              }
-              return conv;
-            });
-      })
-      queryClient.invalidateQueries({queryKey:["connections"]});
+      queryClient.setQueryData(["connections"], (old: Conversation[]) => {
+        const findConv = old.find((conv) => conv.connectionId === connectionId);
+        if (!findConv)
+          return [{ connectionId, projectId, online: true }, ...old];
+        return old.map((conv) => {
+          if (conv.connectionId === connectionId) {
+            return { ...conv, online: true };
+          }
+          return conv;
+        });
+      });
+      queryClient.invalidateQueries({ queryKey: ["connections"] });
     });
 
     socket.on("DingloClient-Disconnect", (connectionId: string) => {
-      queryClient.setQueryData(["connections"], (old: Conversation[])=>{
-          if(old && old.length>0 )
+      queryClient.setQueryData(["connections"], (old: Conversation[]) => {
           return old.map((conv) => {
             if (conv.connectionId === connectionId) {
               return { ...conv, online: false };
             }
             return conv;
           });
-      })
-      queryClient.invalidateQueries({queryKey:["connections"]});
+      });
+      queryClient.invalidateQueries({ queryKey: ["connections"] });
     });
 
     return () => {
@@ -75,16 +73,16 @@ export const MessagesHeader = ({
     };
   }, [socket, data]);
 
-  useEffect(()=>{
+  useEffect(() => {
     // change the selected conversation
-    if(conversationId){
-      const targetConversation = data.find(conv=>conv.connectionId===conversationId);
+    if (conversationId) {
+      const targetConversation = data.find(
+        (conv) => conv.connectionId === conversationId
+      );
 
       setSelectedConv(targetConversation);
     }
- 
-  },[conversationId]);
-
+  }, [conversationId]);
 
   return (
     <div>
