@@ -24,7 +24,6 @@ export async function POST(
 
     await db.message.create({
       data: {
-        id: data.id,
         conversationId: params.connectionId,
         message: data.message,
         messagedAt: data.messagedAt,
@@ -82,7 +81,6 @@ export async function GET(
 
 
 
-    console.log("cm",connectionMessages);
     const messagesWithAgent = connectionMessages.map(conn=>({
       ...conn,
       agentName: conn.isAgent ? targetProject.agentName : undefined,

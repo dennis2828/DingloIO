@@ -13,7 +13,6 @@ import { AnswersContainer } from "./components/predefined-answers/answers-contai
 
 const ProjectPage = async ({ params }: { params: { id: string } }) => {
   const session = await getAuthSession();
-
   const targetProject = await db.project.findUnique({
     where: {
       id: params.id,

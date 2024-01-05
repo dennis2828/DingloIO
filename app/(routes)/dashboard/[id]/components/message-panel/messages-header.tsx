@@ -5,6 +5,8 @@ import { useSocket } from "@/hooks/useSocket";
 import { Conversation } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { Instance } from "./instance";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 interface MessagesHeaderProps {
   projectId: string;
@@ -18,68 +20,71 @@ export const MessagesHeader = ({
   conversationId
 }: MessagesHeaderProps) => {
   const { socket } = useSocket();
+  const queryClient = useQueryClient();
 
   const [selectedConv, setSelectedConv] = useState<Conversation | undefined>(undefined);
-  const [currentConversations, setCurrentConversations] =
-    useState<Array<Conversation>>(allConversations);
 
-  const activeConnections = currentConversations.filter((conv) => conv.online);
+
+  const {data} = useQuery({
+    queryKey:["connections"],
+    queryFn: async()=>{
+      const res = await axios.get(`/api/project/${projectId}/conversation`);
+
+      return res.data as Conversation[];
+    },
+    initialData: allConversations,
+  });
+
+  const activeConnections = data.filter((conv) => conv.online);
 
   useEffect(() => {
     if (!socket) return;
 
     socket.on("DingloClient-NewConnection", (connectionId: string) => {
-      setCurrentConversations((prev) => {
-        const findConv = prev.find(
-          (conv) => conv.connectionId === connectionId
-        );
-        if (!findConv)
-          return [{ connectionId, projectId, online: true }, ...prev];
-        else {
-          return prev.map((conv) => {
-            if (conv.connectionId === connectionId) {
-              return { ...conv, online: true };
-            }
-            return conv;
-          });
-        }
-      });
-      revalidate(`/dashboard/${projectId}`);
+      queryClient.setQueryData(["connections"], (old: Conversation[])=>{
+          const findConv = old.find((conv) => conv.connectionId === connectionId);
+          if (!findConv && old && old.length>0)
+            return [{ connectionId, projectId, online: true }, ...old];
+          else if(!findConv) return [{ connectionId, projectId, online: true }];
+            return old.map((conv) => {
+              if (conv.connectionId === connectionId) {
+                return { ...conv, online: true };
+              }
+              return conv;
+            });
+      })
+      queryClient.invalidateQueries({queryKey:["connections"]});
     });
 
     socket.on("DingloClient-Disconnect", (connectionId: string) => {
-      setCurrentConversations((prev) => {
-        return prev.map((conv) => {
-          if (conv.connectionId === connectionId) {
-            return {
-              ...conv,
-              online: false,
-            };
-          }
-          return conv;
-        });
-      });
+      queryClient.setQueryData(["connections"], (old: Conversation[])=>{
+          if(old && old.length>0 )
+          return old.map((conv) => {
+            if (conv.connectionId === connectionId) {
+              return { ...conv, online: false };
+            }
+            return conv;
+          });
+      })
+      queryClient.invalidateQueries({queryKey:["connections"]});
     });
 
     return () => {
       socket.off("DingloClient-NewConnection");
       socket.off("DingloClient-Disconnect");
     };
-  }, [socket, allConversations, currentConversations]);
+  }, [socket, data]);
 
   useEffect(()=>{
     // change the selected conversation
     if(conversationId){
-      const targetConversation = allConversations.find(conv=>conv.connectionId===conversationId);
+      const targetConversation = data.find(conv=>conv.connectionId===conversationId);
 
       setSelectedConv(targetConversation);
     }
  
   },[conversationId]);
 
-  useEffect(() => {
-    setCurrentConversations(allConversations);
-  }, [allConversations]);
 
   return (
     <div>
@@ -88,7 +93,7 @@ export const MessagesHeader = ({
       </p>
 
       <div className="flex flex-wrap items-center gap-4 mb-4">
-        {currentConversations.map((conv, idx) => (
+        {data.map((conv, idx) => (
           <Instance
             key={idx}
             selectedConv={selectedConv}

@@ -11,6 +11,8 @@ interface MessagesWrapperProps{
 
 export const MessagesWrapper = async ({project, conversationId}: MessagesWrapperProps) =>{
     // conversation connections
+    console.log("mw", conversationId);
+    
     const allConversations = await db.conversation.findMany({
         where:{
             projectId: project.id,
@@ -31,10 +33,12 @@ export const MessagesWrapper = async ({project, conversationId}: MessagesWrapper
         },
     });
 
+    
+
 
     return (
         <div>
-            <MessagesHeader conversationId={conversationId} projectId={project.id} allConversations={allConversations}/>
+            <MessagesHeader conversationId={conversationId} projectId={project.id} allConversations={allConversations || []}/>
             <MessagesContainer project={project} conversation={targetConversation!}/>
         </div>
     )

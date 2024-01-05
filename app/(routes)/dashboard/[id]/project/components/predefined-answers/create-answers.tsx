@@ -78,7 +78,6 @@ export const CreateAnswer = ({
     },
   });
 
-  console.log(data)
 
   return (
     <div>

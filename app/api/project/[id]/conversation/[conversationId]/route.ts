@@ -13,7 +13,6 @@ export async function DELETE(req: NextRequest, {params}:{params:{id: string, con
   
       //verifiy session intergrity
         AuthorizationToken(session.user.accessToken);
-      console.log(params);
       
         if(!params.id || !params.conversationId)
           throw new Error("Invalid delete request. Please provide the project id and conversation id");

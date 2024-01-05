@@ -22,7 +22,6 @@ export const CreateMessage = ({project, conversationId, predefinedAnswers}: Crea
     const [placeholderMessage, setPlaceholderMessage] = useState<string>("Write your message");
 
     const queryClient = useQueryClient();
-
     useEffect(() => {
         if (!socket) return;
     
@@ -94,7 +93,7 @@ export const CreateMessage = ({project, conversationId, predefinedAnswers}: Crea
           });
         },
         onError: (error) => {
-          console.log("CREATE",error);
+          console.log("EROARE", error);
           
           if (error instanceof AxiosError)
             toast({

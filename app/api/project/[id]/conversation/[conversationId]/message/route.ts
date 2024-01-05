@@ -85,10 +85,7 @@ export async function POST(req: NextRequest, {params}:{params:{id: string, conve
         where:{
           conversationId: params.conversationId,
         },
-      });
-
-      console.log(allMessages);
-      
+      });      
   
       return NextResponse.json(allMessages);
     } catch (error) {

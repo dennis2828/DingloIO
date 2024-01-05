@@ -19,6 +19,7 @@ export const MessagesContainer = async ({
       projectId: project.id,
     },
   });
+  
 
   return (
     <div>
@@ -34,10 +35,10 @@ export const MessagesContainer = async ({
             <Messages
               project={project}
               conversationId={conversation.connectionId}
-              messages={conversation.messages}
+              messages={conversation.messages || []}
             />
             <CreateMessage
-              predefinedAnswers={predefinedAnswers}
+              predefinedAnswers={predefinedAnswers || []}
               project={project}
               conversationId={conversation.connectionId}
             />

@@ -78,10 +78,7 @@ export async function GET(req: NextRequest){
       where:{
         userId: user.userId,
       },
-    });
-    
-    console.log(allProjects);
-    
+    });    
 
     return NextResponse.json(
       { projects: allProjects },
