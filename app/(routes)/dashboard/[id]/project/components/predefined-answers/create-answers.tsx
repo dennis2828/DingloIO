@@ -65,7 +65,6 @@ export const CreateAnswer = ({
       });
     },
     onError: (err) => {
-      console.log(err);
       
       toast({
         toastType: "ERROR",
@@ -75,6 +74,12 @@ export const CreateAnswer = ({
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["predAnswers"] });
       revalidate(`/dashboard/${projectId}`);
+      setNewInstance(prev=>({
+        ...prev,
+        answer:"",
+        question:"",
+      }));
+      setIsOpen(false);
     },
   });
 
@@ -88,10 +93,10 @@ export const CreateAnswer = ({
         </Button>
       </div>
       {/* render all the predefined answers */}
-      <div className="space-y-2 mt-6">
+      <div className="space-y-2 mt-6 max-h-[350px] overflow-y-scroll overflowContainer">
         {data.map((answ, i) => (
             <Answer
-              key={answ.id}
+              key={i}
               answer={answ}
               projectId={projectId}
             />

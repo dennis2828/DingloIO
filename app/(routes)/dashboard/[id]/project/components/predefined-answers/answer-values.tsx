@@ -1,5 +1,6 @@
 "use client";
 
+import { revalidate } from "@/actions/revalidatePath";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { PredefinedAnswer } from "@prisma/client";
@@ -28,7 +29,6 @@ export const AnswerValues = ({ answer, projectId }: AnswerValuesProps) => {
             toast({toastType:"SUCCESS", title:"Item was successfully updated!"});
         },
         onError:(err)=>{
-            console.log("err", err);
             
             toast({toastType:'ERROR', title:"Something went wrong. Please try again later!"});
         },
@@ -41,7 +41,8 @@ export const AnswerValues = ({ answer, projectId }: AnswerValuesProps) => {
                         answer: answ.id===variable ? answerData.answer: answ.answer,
                     }
                 });
-            })
+            });
+
         },
         onSettled:()=>{
             queryClient.invalidateQueries({queryKey:["predAnswers"]});
