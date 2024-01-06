@@ -47,6 +47,7 @@ export const Messages = ({
       }
     });
     socket.on("DingloClient-InvalidateQuery",()=>{
+      
       queryClient.invalidateQueries({queryKey:["messages"]});
     });
     socket.on("DingloClient-Typing", (typing) => {
