@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { Footer } from "./components/Footer/footer";
 import { EnrollWrapper } from "./components/EnrollGift/enroll-wrapper";
 import { Suspense } from "react";
+import { NPMPackage } from "./components/Npm/npm-package";
 
 export default function Home({searchParams}: {searchParams:{inviter: string}}) {
     
@@ -23,6 +24,9 @@ export default function Home({searchParams}: {searchParams:{inviter: string}}) {
             <span className="font-bold">Dinglo.<InfoText>IO</InfoText></span> is here and is giving it all <InfoText className="font-medium">for free</InfoText>
           </div>
           <h1 className="text-left xsM:text-center text-[1.3em] xsBig:text-[1.4em] sm:text-[1.7em] md:text-[2.2em] font-bold sm:font-medium"><InfoText>Elevate</InfoText> your customer <InfoText>support</InfoText> to achieve <InfoText>new</InfoText> peeks of profits and <InfoText>orders</InfoText></h1>
+          <div className="flex justify-center mt-5">
+            <NPMPackage/>
+          </div>
           <div className="mt-4 flex flex-col xsMd:flex-row items-center justify-center gap-3">
             <Link href={"/dashboard"} role="button" aria-label="Get Started For Free" className={cn(buttonVariants({variant:"outline"}), "w-full xsM:w-fit")}>Get Started For Free</Link>
             <Link href={"/docs"} role="button" aria-label="Docs" className={cn(buttonVariants({variant:"default"}), "flex items-center gap-1 w-full xsMd:w-fit")}>Docs <FileCode className="w-4 h-4"/></Link>

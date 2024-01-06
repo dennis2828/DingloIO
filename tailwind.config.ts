@@ -8,6 +8,9 @@ module.exports = {
     './src/**/*.{ts,tsx}',
 	],
   theme: {
+    fontFamily:{
+      "roboto":['Roboto', "sans-serif"],
+    },
     container: {
       center: true,
       padding: "2rem",
@@ -37,6 +40,7 @@ module.exports = {
       // => @media (min-width: 1536px) { ... }
     },
     extend: {
+
       colors: {
         darkBlack:"#0b0b0d",
         softLight:"#e8eaee",
