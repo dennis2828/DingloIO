@@ -41,7 +41,7 @@ export const Invitation = ({inviterId, invitations}:{inviterId: string, invitati
                     }
                 </div>
             </div>
-            <p className={cn("mr-2 font-bold text-center", invitations.length >= 5 && "font-bold")}>{invitations.length <=5 ? <span>{invitations.length}</span>:<span className="text-softBlue">5</span>} / 5</p>
+            <p className={cn("mr-2 font-bold text-center", invitations.length >= 5 && "font-bold text-softBlue")}>{invitations.length <=5 ? <span>{invitations.length}</span>:<span className="text-softBlue">5</span>} / 5</p>
         </>
        
     )

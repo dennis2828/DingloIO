@@ -22,16 +22,10 @@ export async function inviteUser(inviterId: string){
             }
         });
 
-        if(alreadyInvited)
+        if(alreadyInvited && alreadyInvited.length>0)
             throw new Error("You are already invited.");
 
-        const currentUser = await db.user.findUnique({
-            where:{
-                id: session.user.id,
-            },
-        });
-        if(currentUser?.isInvited)
-            throw new Error("You are already invited");
+
 
         const inviter = await db.user.findUnique({
             where:{
