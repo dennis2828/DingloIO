@@ -1,13 +1,12 @@
 "use client";
 
-import { revalidate } from "@/actions/revalidatePath";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { PredefinedAnswer } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Check } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface AnswerValuesProps {
   answer: PredefinedAnswer;
@@ -16,6 +15,18 @@ interface AnswerValuesProps {
 
 export const AnswerValues = ({ answer, projectId }: AnswerValuesProps) => {
     const [answerData, setAnswerData] = useState<PredefinedAnswer>(answer);
+    const [edit, setEdit] = useState<boolean>(false);
+
+    useEffect(()=>{
+        setAnswerData(answer);
+        setEdit(false);
+    },[answer]);
+
+    useEffect(()=>{
+        if(answerData.answer !== answer.answer || answerData.question !== answer.question)
+            setEdit(true);
+        else setEdit(false);
+    },[answerData]);
 
     const queryClient = useQueryClient();
 
@@ -46,6 +57,7 @@ export const AnswerValues = ({ answer, projectId }: AnswerValuesProps) => {
         },
         onSettled:()=>{
             queryClient.invalidateQueries({queryKey:["predAnswers"]});
+            setEdit(false);
         },
     });
 
@@ -73,7 +85,7 @@ export const AnswerValues = ({ answer, projectId }: AnswerValuesProps) => {
         className="rounded-none bg-[#f3f4f6] text-[#747881] rounded-r-md placeholder:text-center px-2"
         placeholder="Answer to repond"
       />
-        {answerData.question !== answer.question || answerData.answer !== answer.answer ? (
+        {edit ? (
             <Check onClick={()=>editPredefinedAnswer(answer.id)} role="button" className="text-green-500 w-10 h-10 cursor-pointer hover:text-green-600 duration-150" />
         ):null}
     </div>
