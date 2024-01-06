@@ -3,7 +3,6 @@ import { MessagesHeader } from "./messages-header";
 import { Project } from "@prisma/client";
 import { CreateMessage } from "./create-message";
 import { Messages } from "./messages";
-import { Separator } from "@/components/ui/separator";
 
 interface MessagesWrapperProps {
   project: Project;
@@ -40,18 +39,19 @@ export const MessagesWrapper = async ({
   });
 
   return (
-    <div>
+    <div className="flex gap-10">
       <MessagesHeader
         conversationId={conversationId}
         projectId={project.id}
         allConversations={allConversations || []}
       />
-      <div>
-        <Separator className="w-full h-[1.1px] bg-softBlue mb-6" />
+      <div className="w-full">
         <div className="shadow-[0px_0px_10px_1px_rgb(67,117,224)] rounded-t-sm rounded-b-sm">
           <div className="flex justify-center bg-softBlue p-2 rounded-t-sm">
             <p className="font-bold text-center text-white">
               Realtime conversation
+              <br/>
+              <span className="text-xs text-gray-300 font-normal">Connection: {conversationId}</span>
             </p>
           </div>
           <div className="bg-transparent dark:bg-[#0d0d0f] p-3 rounded-b-sm">

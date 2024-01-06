@@ -31,7 +31,7 @@ model Project {
   agentName     String
   agentImage    String 
   predefinedAnswers PredefinedAnswer[] 
-
+  createdAt DateTime @default(now())
 
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   conversations Conversation[]

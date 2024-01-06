@@ -66,8 +66,7 @@ export const CreateAnswer = ({
 
       });
     },
-    onError: (err) => {
-      
+    onError: () => {
       toast({
         toastType: "ERROR",
         title: "Something went wrong. Please try again later!",

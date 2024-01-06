@@ -23,7 +23,7 @@ export const Instance = ({
       setSelectedConv(convInstance);
     }}
     href={`http://localhost:3000/${pathname}?conversation=${convInstance.connectionId}`}
-      className={`font-bold text-lightBlue cursor-pointer hover:-translate-y-1 duration-100 flex items-center gap-1 ${
+      className={`font-bold whitespace-nowrap text-lightBlue cursor-pointer hover:-translate-y-1 duration-100 flex items-center gap-1 ${
         convInstance.connectionId === selectedConv?.connectionId
           ? "text-softBlue"
           : null

@@ -86,11 +86,11 @@ export const MessagesHeader = ({
 
   return (
     <div>
-      <p className="font-bold text-[1.5em] mb-4">
+      <p className="font-bold text-[1.5em] whitespace-nowrap mb-4">
         Active connections &#40;{activeConnections.length}&#41;
       </p>
 
-      <div className="flex flex-wrap items-center gap-4 mb-4">
+      <div className="flex flex-col items-start justify-center gap-4 mb-4">
         {data.map((conv, idx) => (
           <Instance
             key={idx}
