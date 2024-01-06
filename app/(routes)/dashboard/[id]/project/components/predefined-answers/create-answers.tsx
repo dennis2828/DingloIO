@@ -38,9 +38,11 @@ export const CreateAnswer = ({
     queryKey: ["predAnswers"],
     queryFn: async () => {
       const res = await axios.get(`/api/project/${projectId}/answers`);
+      console.log("res",res);
+      
       return res.data as PredefinedAnswer[];
     },
-    initialData: initialAnswers,
+    initialData: initialAnswers || [],
   });
 
   const { mutate: createPredefinedAnswer, isPending } = useMutation({
@@ -52,16 +54,16 @@ export const CreateAnswer = ({
       return res.data;
     },
     onMutate: (variable) => {
-      queryClient.setQueryData(["predAnswers"], (old: PredefinedAnswer[]) =>{
-        if(old && old.length>0) return [...old,
+      queryClient.setQueryData(["predAnswers"], (old: PredefinedAnswer[]) => {
+        return [
+          ...old,
           {
             question: variable.question,
             answer: variable.answer,
             projectId: variable.projectId,
-          }];
-          return [{question: variable.question,
-            answer: variable.answer,
-            projectId: variable.projectId}];
+          },
+        ];
+
       });
     },
     onError: (err) => {
@@ -73,16 +75,14 @@ export const CreateAnswer = ({
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["predAnswers"] });
-      revalidate(`/dashboard/${projectId}`);
-      setNewInstance(prev=>({
+      setNewInstance((prev) => ({
         ...prev,
-        answer:"",
-        question:"",
+        answer: "",
+        question: "",
       }));
       setIsOpen(false);
     },
   });
-
 
   return (
     <div>
@@ -95,11 +95,7 @@ export const CreateAnswer = ({
       {/* render all the predefined answers */}
       <div className="space-y-2 mt-6 max-h-[350px] overflow-y-scroll overflowContainer">
         {data.map((answ, i) => (
-            <Answer
-              key={i}
-              answer={answ}
-              projectId={projectId}
-            />
+          <Answer key={i} answer={answ} projectId={projectId} />
         ))}
       </div>
 
