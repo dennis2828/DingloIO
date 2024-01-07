@@ -6,7 +6,13 @@ import { ThemeToggler } from "@/components/theme-toggler";
 import { AuthButton } from "@/components/auth-button";
 import { SignOut } from "@/components/sign-out";
 
-export const MobileNav = () => {
+interface MobileNavProps{
+    profileImage: string;
+    profileName: string;
+    isAuthenticated: boolean
+}
+
+export const MobileNav = ({profileImage, profileName, isAuthenticated}: MobileNavProps) => {
     const isActive = useMenu(state=>state.isActive);
 
     if(!isActive) return null;
@@ -20,7 +26,7 @@ export const MobileNav = () => {
                 ))}
             </div>
             <div className="flex flex-col-reverse xs:flex-row items-center justify-center mt-3 gap-3">
-                <SignOut/>
+                {isAuthenticated ? <SignOut profileImage={profileImage} profileName={profileName}/>:null}
                 <ThemeToggler/>
                 <AuthButton/>
             </div>
