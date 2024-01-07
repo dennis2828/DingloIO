@@ -4,9 +4,11 @@ import { ClientProject } from "@/types";
 
 interface ProjectStatisticsProps {
     project: ClientProject;
+    invitations: string[];
 }
 
-export const ProjectStatistics = ({project}: ProjectStatisticsProps) =>{
+export const ProjectStatistics = ({project, invitations}: ProjectStatisticsProps) =>{
+    
     return (
         <div className="flex flex-col sm:flex-row items-center justify-between">
             <div className="flex items-center order-3 sm:order-none">
@@ -20,7 +22,12 @@ export const ProjectStatistics = ({project}: ProjectStatisticsProps) =>{
                 </p>
                 <AppApiKey project={project}/>
             </div>
-            <p className="text-gray-500 font-medium text-sm mt-4 sm:mt-0">{formatCreatedAt(project.createdAt)}</p>
+            <div>
+                <p className="text-gray-500 font-medium text-sm mt-4 sm:mt-0">{formatCreatedAt(project.createdAt)}</p>
+                <p className={`text-sm font-medium ${invitations.length>=5 ? "text-gray-400":null}`}>Invitations: <span className={`${invitations.length >=5 ? "font-bold text-softBlue":null}`}>{invitations.length}/5</span></p>
+                <small className="text-gray-500">get mail notification while offline</small>
+            </div>
+            
         </div>
     )
 }
