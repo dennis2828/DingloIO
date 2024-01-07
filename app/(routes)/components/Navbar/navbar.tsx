@@ -6,6 +6,7 @@ import { NavLink } from "./nav-link";
 import { HamburgerMenu } from "./hamburger-menu";
 import { MobileNav } from "./mobile-nav";
 import { getAuthSession } from "@/lib/authOptions";
+import { SignOut } from "@/components/sign-out";
 
 export const Navbar = async() => {
   const session = await getAuthSession();
@@ -18,7 +19,7 @@ export const Navbar = async() => {
           <HamburgerMenu />
           {/* Desktop Navigation */}
           <div className="flex items-center gap-4">
-            <div className="hidden md:block">
+            <div className="hidden lg:block">
               {session && session.user ? (
                 <div className="flex items-center gap-3">
                   {navbarLinks.map((navLink, index) => (
@@ -31,8 +32,11 @@ export const Navbar = async() => {
                 </div>
               )}
             </div>
-            <div className="hidden md:block">
+            <div className="hidden lg:block">
               <ThemeToggler />
+            </div>
+            <div className="hidden lg:block">
+              <SignOut/>
             </div>
           </div>
         </div>
