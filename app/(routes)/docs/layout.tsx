@@ -14,7 +14,7 @@ const DocumentationPageLayout = ({
       <div className="mt-16">
         <DocumentationTypes/>
       </div>
-      <div className="flex mt-10 gap-5">
+      <div className="flex mt-10 gap-20">
         <LeftSide/>
         <div className="w-full">{children}</div>
       </div>
