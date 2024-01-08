@@ -10,7 +10,6 @@ import { useState } from "react";
 import { useClickOutside } from "@mantine/hooks";
 import { PredefinedAnswer } from "@prisma/client";
 import { Answer } from "./answer";
-import { revalidate } from "@/actions/revalidatePath";
 
 interface CreateAnswerProps {
   projectId: string;
@@ -66,7 +65,9 @@ export const CreateAnswer = ({
 
       });
     },
-    onError: () => {
+    onError: (err) => {
+      console.log("ERROR",err);
+      
       toast({
         toastType: "ERROR",
         title: "Something went wrong. Please try again later!",

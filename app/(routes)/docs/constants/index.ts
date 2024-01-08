@@ -32,8 +32,8 @@ export const Documentation: DocumentationSection = {
 };
 
 export const APIReference: DocumentationSection = {
-  title: "Introduction",
-  path: "docs//api-reference",
+  title: "API Reference",
+  path: "docs/api-reference",
   links: [
     {
       title: "Initialization",
