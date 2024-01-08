@@ -9,7 +9,7 @@ export const LeftSideItem = ({ doc }: { doc: DocumentationSection }) => {
   return (
     <div className="space-y-4">
       {doc.links.map((section, idx) => {
-        if (doc.path.includes(pathname))
+        if (pathname.includes(doc.path))
           return (
             <div>
               <p className="font-bold mb-2 whitespace-nowrap">{section.title}</p>
