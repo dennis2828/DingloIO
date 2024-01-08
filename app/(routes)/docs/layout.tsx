@@ -12,10 +12,12 @@ const DocumentationPageLayout = ({
     <Container className="py-6">
       <Header />
       <div className="mt-16">
-        <DocumentationTypes/>
+        <DocumentationTypes />
       </div>
       <div className="flex mt-10 gap-20">
-        <LeftSide/>
+        <div className="hidden lg:block">
+          <LeftSide />
+        </div>
         <div className="w-full">{children}</div>
       </div>
     </Container>

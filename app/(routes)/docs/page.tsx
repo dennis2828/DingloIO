@@ -1,6 +1,6 @@
 import { InfoText } from "@/components/info-text";
 import { DocumentationSectionLink } from "./components/documentation-section-link";
-import { Rocket } from "lucide-react";
+import { Code, Rocket } from "lucide-react";
 
 const DocumentationPage = () =>{
     return (
@@ -33,9 +33,9 @@ const DocumentationPage = () =>{
                     </div>
                 </div>
             </div>
-            <div className="mt-12 flex items-center justify-between gap-10">
+            <div className="mt-12 flex flex-col md:flex-row justify-between gap-10">
                 <DocumentationSectionLink path={"/docs/quickstart"} icon={<Rocket className="w-6 h-6 text-softBlue"/>} title="Quickstart" label="I want to use it now"/>
-                <DocumentationSectionLink path={"/docs/api-reference"} icon={<Rocket className="w-6 h-6 text-softBlue"/>} title="Quickstart" label="I want to use it now"/>
+                <DocumentationSectionLink path={"/docs/api-reference"} icon={<Code className="w-6 h-6 text-softBlue"/>} title="API Reference" label="Learn how can you interact with our servers"/>
             </div>
         </div>
     )
