@@ -49,3 +49,11 @@ export const APIReference: DocumentationSection = {
 };
 
 export const DocumentationTypes: Array<DocumentationSection> = [Documentation, APIReference];
+
+
+//code example
+export const packageSetup = `import DingloIO from "dinglo-io";
+
+const dingloIO = new DingloIO();
+dingloIO.initializeSocket("dinglo-e4d4fd64e6ab4bd19e2cf3684ad70dd8");
+`

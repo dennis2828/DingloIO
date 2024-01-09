@@ -1,3 +1,5 @@
+import { SyntaxHighlighterPreview } from "./syntax-highlighter";
+
 interface StepProps{
     stepNumber: number;
     title: string;
@@ -6,6 +8,12 @@ interface StepProps{
 
 export const Step = ({stepNumber, title, children}: StepProps) =>{
  return (
-    <div></div>
+    <div>
+        <p className="font-bold text-[1.2em]"><span>{stepNumber}.</span> {title}</p>
+        <div>
+            {children}
+           
+        </div>
+    </div>
  )
 }
