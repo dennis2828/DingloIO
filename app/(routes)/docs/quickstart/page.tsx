@@ -3,7 +3,7 @@ import { Code, Rocket } from "lucide-react";
 import { Step } from "../components/step";
 import { NPMPackage } from "../../components/Npm/npm-package";
 import { SyntaxHighlighterPreview } from "../components/syntax-highlighter";
-import { packageSetup } from "../constants";
+import { codeExample, createMessage, packageSetup } from "../constants";
 
 const QuickstartPage = () =>{
     return (
@@ -23,7 +23,13 @@ const QuickstartPage = () =>{
                 <SyntaxHighlighterPreview codeHeader="dinglo-io.ts" code={packageSetup}/>
             </Step>
             <Step stepNumber={3} title="Engage on your users">
-                <NPMPackage/>
+                <p className="text-sm font-medium mb-3 dark:text-gray-300">
+                    Listen and respond to your users
+                </p>
+                <div className="space-y-3">
+                    <SyntaxHighlighterPreview codeHeader="messages.tsx" code={codeExample}/>
+                    <SyntaxHighlighterPreview codeHeader="create-message.tsx" code={createMessage}/>
+                </div>
             </Step>
         </div>
         <div className="mt-12 flex flex-col md:flex-row justify-between gap-10">

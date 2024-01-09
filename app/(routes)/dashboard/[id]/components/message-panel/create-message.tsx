@@ -123,6 +123,7 @@ export const CreateMessage = ({
                   hour: "2-digit",
                   minute: "2-digit",
                 }),
+                createdAt: new Date(),
                 isAgent: true,
                 automated: false,
               });
