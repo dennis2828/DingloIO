@@ -1,15 +1,43 @@
+import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
+import { DocumentationSectionLink } from "../components/documentation-section-link";
+import { Code, MessageCircle, PersonStanding, Rocket, User } from "lucide-react";
 
-const DashboardInterfacePage = () =>{
-    return (
-        <div>
-            <h1 className="font-bold text-[2.3em]">Dashboard Interface</h1>
-            <p className="text-sm font-medium dark:text-gray-300">
-                Explore our super lightweight and intuitive dashboard interface!
-            </p>
-            <Image src={"/predefined-answers.png"} width={250} height={250} className="w-full h-full max-w-[250px] max-h-[250px] rounded-md object-cover" priority quality={100} alt="Dashboard interface"/>
-        </div>
-    )
-}
+const DashboardInterfacePage = () => {
+  return (
+    <div>
+      <h1 className="font-bold text-[2.3em]">Dashboard Interface</h1>
+      <p className="text-sm font-medium dark:text-gray-300">
+        Explore our super lightweight and intuitive dashboard interface!
+      </p>
+      <div className="mt-6">
+        <Image
+          src={"/dashboard-interface.png"}
+          width={2295}
+          height={1263}
+          className="w-full h-full mx-auto max-h-[600px] rounded-md object-cover"
+          priority
+          quality={100}
+          alt="Dashboard interface"
+        />
+        <p className="text-sm font-medium dark:text-gray-300 mt-5">
+          Reach to your users marked as a connection string on the left side and
+          start elevating your profit !
+        </p>
+        <p className="text-sm font-medium dark:text-gray-300 mt-5">
+          New connections string will appear as a new user is visting your
+          website having a unique identifier attached to them. You can also
+          delete a conversation represented by the connection string and the
+          changes will also reflect to the client.
+        </p>
+        <p className="text-sm font-medium dark:text-gray-300 mt-5"></p>
+      </div>
+      <div className="mt-12 flex flex-col md:flex-row justify-between gap-10">
+                <DocumentationSectionLink path={"/docs/agent-customization"} icon={<User className="w-6 h-6 text-softBlue"/>} title="Agent customization" label="Customize what your users see"/>
+                <DocumentationSectionLink path={"/docs/api-reference"} icon={<MessageCircle className="w-6 h-6 text-softBlue"/>} title="Workflow" label="Learn our chat widget flow"/>
+            </div>
+    </div>
+  );
+};
 
 export default DashboardInterfacePage;
