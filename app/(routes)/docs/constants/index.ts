@@ -17,7 +17,7 @@ export const Documentation: DocumentationSection = {
       title: "Dashboard",
       links: [
         { title: "Interface", link: "/docs/interface" },
-        { title: "Agent customization", link: "docs/agent-customization" },
+        { title: "Agent customization", link: "/docs/agent-customization" },
       ],
     },
     {

@@ -1,7 +1,6 @@
 import { InfoText } from "@/components/info-text";
 import { DocumentationSectionLink } from "./components/documentation-section-link";
 import { Code, Rocket } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 
 const DocumentationPage = () =>{
     return (
