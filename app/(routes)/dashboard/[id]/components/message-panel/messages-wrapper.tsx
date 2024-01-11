@@ -34,7 +34,11 @@ export const MessagesWrapper = async ({
       projectId: project.id,
     },
     include: {
-      messages: true,
+      messages: {
+        orderBy:{
+          createdAt:"asc",
+        },
+      },
     },
   });
 

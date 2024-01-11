@@ -7,7 +7,7 @@ export const Header = () =>{
         <div className="py-3 flex items-center justify-between">
             <Logo/>
             <div className="flex items-center">
-                <SignOut/>
+                <SignOut profileName="dns" profileImage="/workflow.png"/>
                 <ThemeToggler/>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { DocumentationSectionLink } from "../components/documentation-section-link";
-import { MessageCircle, User } from "lucide-react";
+import { FileBox, MessageCircle, User, Waves } from "lucide-react";
 import Link from "next/link";
 
 const AgentCustomizationPage = () => {
@@ -35,7 +35,7 @@ const AgentCustomizationPage = () => {
                 Default answers
             </p>
             <p className="text-sm font-medium dark:text-gray-300">
-                Define a question - answer structure that will be automatically triggered if the user intended to. This will create a section on your chat widget with all the questions that you've defined allowing users to select them, making a better UX for asking common questions.<br/>
+                Define a question - answer structure that will be automatically triggered if the user intended to. This will create a section on your chat widget with all the questions that you&apos;ve defined allowing users to select them, making a better UX for asking common questions.<br/>
             </p>
         </div>
        
@@ -58,8 +58,8 @@ const AgentCustomizationPage = () => {
         </div>
       </div>
       <div className="mt-12 flex flex-col md:flex-row justify-between gap-10">
-                <DocumentationSectionLink path={"/agent-customization"} icon={<User className="w-6 h-6 text-softBlue"/>} title="Agent customization" label="Customize what your users see"/>
-                <DocumentationSectionLink path={"/api-reference"} icon={<MessageCircle className="w-6 h-6 text-softBlue"/>} title="Workflow" label="Learn our chat widget flow"/>
+                <DocumentationSectionLink path={"/docs/workflow"} icon={<Waves className="w-6 h-6 text-softBlue"/>} title="Workflow" label="See how Dinglo.IO works"/>
+                <DocumentationSectionLink path={"/docs/customization"} icon={<FileBox className="w-6 h-6 text-softBlue"/>} title="Widget Customization" label="Learn how to customize your chat widget"/>
             </div>
     </div>
   );
