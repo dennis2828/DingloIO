@@ -10,7 +10,7 @@ const QuickstartPage = () =>{
         <div>
         <h1 className="font-bold text-[2.3em]">Quickstart</h1>
         <p className="text-sm font-medium dark:text-gray-300">
-            Get started in minutes by following our few steps!
+            Get started in minutes by following our step by step guide !
         </p>
         <div className="mt-12 space-y-4">
             <Step stepNumber={1} title="Installation">

@@ -7,13 +7,13 @@ const DashboardInterfacePage = () => {
     <div>
       <h1 className="font-bold text-[2.3em]">Dashboard Interface</h1>
       <p className="text-sm font-medium dark:text-gray-300">
-        Explore our super lightweight and intuitive dashboard interface!
+        Explore our super lightweight and intuitive dashboard interface !
       </p>
       <div className="mt-6">
         <Image
           src={"/dashboard-interface.png"}
-          width={2295}
-          height={1263}
+          width={2267}
+          height={1255}
           className="w-full h-full mx-auto max-h-[600px] rounded-md object-cover"
           priority
           quality={100}

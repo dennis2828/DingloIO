@@ -12,9 +12,9 @@ const AgentCustomizationPage = () => {
       </p>
       <div className="mt-6">
         <Image
-          src={"/agent-customization.png"}
-          width={2406}
-          height={2202}
+          src={"/predefined-answers.png"}
+          width={2242}
+          height={1230}
           className="w-full h-full mx-auto max-h-[600px] rounded-md object-cover"
           priority
           quality={100}
@@ -53,7 +53,7 @@ const AgentCustomizationPage = () => {
                 Project status
             </p>
             <p className="text-sm font-medium dark:text-gray-300">
-                You can toggle the chat widget status by interacting with the turn off button, which will trigger an event that will shut down the project, making it unusable until your reboot it again. This can be useful if you want to disable it for some reasons like, a website breach, experimenting, etc.
+                You can toggle the chat widget status by interacting with the turn off button, which will trigger an event that will shut down the project, making it unusable until your reboot it again. This can be useful if you want to disable it for some reasons like, a security breach, experimenting, etc.
             </p>
         </div>
       </div>

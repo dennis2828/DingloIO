@@ -56,7 +56,7 @@ export const packageSetup = `import DingloIO from "dinglo-io";
 const dingloIO = new DingloIO();
 dingloIO.initializeSocket("your_api_key");
 
-export {dingloIO};
+export default dingloIO;
 `;
 
 export const codeExample = `import dingloIO, {dingloMessage} from "dinglo-io"
@@ -136,7 +136,7 @@ export const CreateMessage = () => {
     onSettled:()=>{
       queryClient.invalidateQueries({queryKey:["fetchedMessages"]});
 
-      //emit the message to our dashboard
+      //revalidate data on the dashboard
       dingloIO.socket?.emit("invalidate-query");
     }
   });
