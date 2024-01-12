@@ -15,15 +15,23 @@ import {
 import { DocumentationTypes } from "../constants"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { HamburgerMenu } from "../../components/Navbar/hamburger-menu"
+import { useState } from "react"
 
 export const DocumentationMobileMenu = () => {
+    const [isActive, setIsActive] = useState(false);
     const pathname = usePathname();
     console.log("mobiole", pathname);
     
   return (
-    <Sheet>
+    <Sheet open={isActive} onOpenChange={(open)=>setIsActive(open)}>
       <SheetTrigger asChild>
-        <Button variant="outline">Open</Button>
+      <div className="lg:hidden">
+            <div className="cursor-pointer" role="button" onClick={()=>setIsActive(!isActive)}>
+                <div className={`w-[20px] line line1 h-[2px] bg-softBlue dark:bg-white ${isActive ? "active":null}`}/>
+                <div className={`w-[20px] line line2 h-[2px] bg-softBlue dark:bg-white mt-1.5 ${isActive ? "active":null}`}/>
+            </div>
+        </div>
       </SheetTrigger>
       <SheetContent side={"left"} className="flex lg:hidden flex-col gap-10 bg-[#0b0b0d]">
         {DocumentationTypes.map((doc, idx)=>(
