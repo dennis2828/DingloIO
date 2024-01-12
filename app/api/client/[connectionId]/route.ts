@@ -27,8 +27,8 @@ export async function POST(
         conversationId: params.connectionId,
         message: data.message,
         messagedAt: data.messagedAt,
-        isAgent: data.isAgent,
-        automated: data.automated,
+        isAgent: false,
+        automated: false,
       },
     });
 

@@ -1,28 +1,23 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { DocumentationTypes } from "../constants"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { HamburgerMenu } from "../../components/Navbar/hamburger-menu"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export const DocumentationMobileMenu = () => {
     const [isActive, setIsActive] = useState(false);
     const pathname = usePathname();
-    console.log("mobiole", pathname);
-    
+
+    useEffect(()=>{
+      setIsActive(false);
+    },[pathname]);
   return (
     <Sheet open={isActive} onOpenChange={(open)=>setIsActive(open)}>
       <SheetTrigger asChild>

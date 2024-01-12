@@ -7,6 +7,7 @@ import Link from "next/link";
 
 export const DocumentationType = ({documentation}:{documentation: DocumentationSection}) =>{
     const pathname = usePathname();
+    
     return (
         <Link href={documentation.path} className={cn(pathname.includes(documentation.path) ? "text-softBlue font-semibold":"text-gray-300 font-medium hover:text-white", "cursor-pointer duration-100")}>{documentation.title}</Link>
     )

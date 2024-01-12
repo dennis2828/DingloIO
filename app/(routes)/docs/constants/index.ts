@@ -32,18 +32,9 @@ export const Documentation: DocumentationSection = {
 
 export const APIReference: DocumentationSection = {
   title: "API Reference",
-  path: "docs/api-reference",
+  path: "/docs/api-reference",
   links: [
-    {
-      title: "Initialization",
-      links: [
-        { title: "Install package", link: "docs/api-reference" },
-      ],
-    },
-    {
-      title: "Commands",
-      links: [{title: "dingloIO.respond()", link: "docs/api-reference/commands"},{title: "dingloIO.save()", link: "docs/api-reference/commands"},{title: "other", link: "docs/api-reference/commands"}],
-    },
+   
   ],
 };
 
@@ -141,3 +132,86 @@ export const CreateMessage = () => {
     }
   });
 `
+
+export const respondMessage = `interface dingloMessage {
+  message: string;
+  messagedAt: string;
+}
+
+const newMessage = {
+  message: "Hello World !",
+  messagedAt: new Date(Date.now()).toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+  }),
+};
+
+//only emits the message and is not saving it in the database
+dingloIO.respond(newMessage);
+`;
+
+export const saveMessage = `interface dingloMessage {
+  message: string;
+  messagedAt: string;
+}
+
+const newMessage = {
+  message: "Hello World !",
+  messagedAt: new Date(Date.now()).toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+  }),
+};
+
+//only emits the message and is not saving it in the database
+await dingloIO.save(newMessage);
+dingloIO.respond(newMessage);
+`;
+
+export const events = `dingloIO.on("disable_project",(status)=>{
+  setIsProjectActive(status.isActive);
+});
+
+dingloIO.on("invalidate_query",()=>{
+  queryClient.invalidateQueries({queryKey:["getConversationMessages"]});
+});
+
+dingloIO.on("message_client",(msg)=>{
+  setMessages(prev=>[...prev, msg]);
+})
+
+dingloIO.on("available_agent", (availableAgent)=>{
+  queryClient.setQueryData(["getConversationMessages"],(old: dingloMessage[])=>{
+    if(old && old.length>0)
+      return old.map(prevMsg=>({
+        ...prevMsg,
+        agentName: prevMsg.agentName,
+        agentImage: prevMsg.agentImage,
+      }));
+    return [];
+  })
+  setAgent(availableAgent);
+});
+
+
+dingloIO.on("typing", (typing) => {
+  setIsTyping(typing.isTyping);
+});
+
+dingloIO.on("delete_message",(msgId)=>{
+  queryClient.setQueryData(["getConversationMessages"],(old: dingloMessage[])=>{
+    if(old && old.length>0)
+      return old.filter(prevMsg=>prevMsg.id!==msgId);
+    return [];
+  })
+});
+`
+
+export const onEvent = `dingloIO.on("message_client",(msg)=>{
+  setMessages(prev=>[...prev, msg]);
+});
+`;
+
+export const offEvent = `// removes the event
+dinglo.off("message_client")
+`;
