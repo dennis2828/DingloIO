@@ -107,7 +107,7 @@ export const CreateMessage = () => {
   const [message, setMessage] = useState<string>("");
 
   const { mutate: createMessage, isPending: isCreating } = useMutation({
-    mutationFn: async (newMessage: Omit<dingloMessage, "isNew" | "id">) => {
+    mutationFn: async (newMessage: Omit<dingloMessage, "isNew" | "id" | "agentName" | "agentImage" | "automated" | "isAgent">) => {
       //save message in our database to be seen in dashboard
       const data = await dingloIO.save(newMessage);
 
@@ -134,11 +134,17 @@ export const CreateMessage = () => {
 `
 
 export const respondMessage = `interface dingloMessage {
+  id: string
+  isAgent: boolean;
   message: string;
   messagedAt: string;
+  isNew: boolean
+  agentName?: string;
+  agentImage?: string;
+  automated?: boolean;
 }
 
-const newMessage = {
+const newMessage: Omit<dingloMessage, "isNew" | "id" | "agentName" | "agentImage" | "automated" | "isAgent"> = {
   message: "Hello World !",
   messagedAt: new Date(Date.now()).toLocaleTimeString("en-US", {
     hour: "2-digit",
@@ -151,11 +157,17 @@ dingloIO.respond(newMessage);
 `;
 
 export const saveMessage = `interface dingloMessage {
+  id: string
+  isAgent: boolean;
   message: string;
   messagedAt: string;
+  isNew: boolean
+  agentName?: string;
+  agentImage?: string;
+  automated?: boolean;
 }
 
-const newMessage = {
+const newMessage: Omit<dingloMessage, "isNew" | "id" | "agentName" | "agentImage" | "automated" | "isAgent"> = {
   message: "Hello World !",
   messagedAt: new Date(Date.now()).toLocaleTimeString("en-US", {
     hour: "2-digit",
@@ -176,11 +188,23 @@ dingloIO.on("invalidate_query",()=>{
   queryClient.invalidateQueries({queryKey:["getConversationMessages"]});
 });
 
-dingloIO.on("message_client",(msg)=>{
+dingloIO.on("message_client",(msg: {
+connectionId: string,
+message: string,
+isAgent: true,
+agentName: string,
+agentImage: string,
+messagedAt: Date
+})=>{
   setMessages(prev=>[...prev, msg]);
 })
 
-dingloIO.on("available_agent", (availableAgent)=>{
+dingloIO.on("available_agent", (availableAgent:{
+  agentName: string;
+  agentImage: string;
+  available: boolean;
+})=>{
+
   queryClient.setQueryData(["getConversationMessages"],(old: dingloMessage[])=>{
     if(old && old.length>0)
       return old.map(prevMsg=>({
