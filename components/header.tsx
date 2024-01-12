@@ -7,13 +7,11 @@ export const Header = async () =>{
 
     const session = await getAuthSession();
 
-
-
     return (
         <div className="py-3 flex items-center justify-between">
             <Logo/>
             <div className="flex items-center">
-                <SignOut profileName={"your_username"} profileImage={"/default-user-profile.png"}/>
+                <SignOut profileName={session?.user?.name || 'your_username'} profileImage={session?.user?.image || "/default-user-profile.png"}/>
                 <ThemeToggler/>
             </div>
         </div>

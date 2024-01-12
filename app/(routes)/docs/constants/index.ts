@@ -24,7 +24,6 @@ export const Documentation: DocumentationSection = {
       title: "Chat Widget",
       links: [
         { title: "Workflow", link: "/docs/workflow" },
-        { title: "Customization", link: "/docs/customization" },
       ],
     },
   ],

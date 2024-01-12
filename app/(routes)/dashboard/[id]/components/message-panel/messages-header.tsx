@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Instance } from "./instance";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import Link from "next/link";
 
 interface MessagesHeaderProps {
   projectId: string;
@@ -86,9 +87,13 @@ export const MessagesHeader = ({
 
   return (
     <div>
-      <p className="font-bold text-[1.5em] whitespace-nowrap mb-4">
-        Active connections &#40;{activeConnections.length}&#41;
-      </p>
+      <div className="flex flex-col gap-2 items-center sm:flex-row mb-4">
+        <p className="font-bold text-[1.5em] whitespace-nowrap">
+          Active connections &#40;{activeConnections.length}&#41;
+        </p>
+        <Link target="_blank" href={`/test-mode/${projectId}`} className="font-medium text-softBlue hover:underline">No user to talk to? Explore in our test mode</Link>
+      </div>
+  
 
       <div className="flex flex-col items-start justify-center gap-4 mb-4">
         {data.map((conv, idx) => (
