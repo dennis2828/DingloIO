@@ -52,10 +52,10 @@ export const EnrollGift = ({
             onClick={async () => {
               setCollecting(true);
               const { collected, msg } = await collectFeature();
-              toast({
-                toastType: collected ? "SUCCESS" : "DANGER",
-                title: msg,
-              });
+              // toast({
+              //   toastType: collected ? "SUCCESS" : "DANGER",
+              //   title: msg,
+              // });
               setCollecting(false);
               router.refresh();
             }}

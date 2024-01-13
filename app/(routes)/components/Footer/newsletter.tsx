@@ -31,7 +31,7 @@ export const Newsletter = ({newsletter}:{newsletter: string}) =>{
                 const {subscribed, msg} = await subscribeNewsletter(data.email);
                 setIsLoading(false);
 
-                toast({toastType:subscribed ? "SUCCESS":"ERROR", title: msg});
+                //{toastType:subscribed ? "SUCCESS":"ERROR", title: msg});
             })} className="flex items-center bg-white rounded-sm px-2 dark:bg-transparent dark:border-b dark:rounded-none dark:border-softBlue max-w-[500px] mx-auto">
                 <Input {...register("email")} placeholder={errors && errors.email && errors.email.message ? errors.email.message as string:"email address for newsletter"} className="border-none bg-white dark:bg-transparent max-w-[500px]"/>
                 <Button variant={"empty"} disabled={isLoading}>
@@ -43,7 +43,7 @@ export const Newsletter = ({newsletter}:{newsletter: string}) =>{
                 setIsLoading(true);
                 const {unsubscribed, msg} = await unsubscribeNewsletter();
                 setIsLoading(false)
-                toast({toastType:unsubscribed ? "SUCCESS":"ERROR", title: msg});
+                //{toastType:unsubscribed ? "SUCCESS":"ERROR", title: msg});
             }} className="text-xs underline cursor-pointer text-gray-100 hover:text-softBlue">unsubscribe from newsletter</Button>
             </div> :null}
         </>

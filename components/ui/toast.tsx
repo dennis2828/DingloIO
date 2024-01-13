@@ -40,20 +40,14 @@ const Toast = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> &
     VariantProps<typeof toastVariants>
->(({ className, variant, toastType, children ,...props }, ref) => {
+>(({ className, variant, children ,...props }, ref) => {
   return (
     <ToastPrimitives.Root
       ref={ref}
       className={cn(toastVariants({ variant }), className)}
-      toastType={toastType}
       {...props}
     >
-      {toastType==="SUCCESS" ? <Check className="w-7 h-7 text-softBlue"/>:null}
-      {toastType==="ERROR" ? <X className="w-7 h-7 text-softBlue"/>:null}
-      {toastType==="INFO" ? <Info className="w-7 h-7 text-softBlue"/>:null}
-      {toastType==="DANGER" ? <AlertCircle className="w-7 h-7 text-softBlue"/>:null}
-      {toastType==="COPY" ? <CopyCheck className="w-7 h-7 text-softBlue"/>:null}
-
+  
       {children}
     </ToastPrimitives.Root>
   )

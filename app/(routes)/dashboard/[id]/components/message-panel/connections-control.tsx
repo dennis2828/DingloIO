@@ -49,14 +49,14 @@ export const ConnectionsControl = ({connections, projectId}:ConnectionsControlPr
             return res.data;
         },
         onSuccess(data){
-            toast({toastType:"SUCCESS", title:"Conversation was successfully deleted !"});
+            //{toastType:"SUCCESS", title:"Conversation was successfully deleted !"});
             window.location.reload();
         },
         onError(error){
-            if(error instanceof AxiosError)
-                toast({toastType:"ERROR", title:error.response?.data || "Something went wrong. Please try again later."});
-            else toast({toastType:"ERROR",title:"Something went wrong. Please try again later."});
-        },
+            // if(error instanceof AxiosError)
+                //{toastType:"ERROR", title:error.response?.data || "Something went wrong. Please try again later."});
+            // else //{toastType:"ERROR",title:"Something went wrong. Please try again later."});
+        }
     })
     
     return (

@@ -37,7 +37,7 @@ export const SignInForm = ({errorMessage}:{errorMessage: string}) =>{
         },
         
         onError:(error)=>{
-            toast({toastType:"ERROR",title:"Something went wrong. Please try again later."});
+            //{toastType:"ERROR",title:"Something went wrong. Please try again later."});
         }
     });
     //Form error handling
@@ -61,7 +61,7 @@ export const SignInForm = ({errorMessage}:{errorMessage: string}) =>{
     useEffect(()=>{
         
         if(authErrorMessage && authErrorMessage.trim()!==''){
-            toast({toastType:"ERROR", title:authErrorMessage || "Something went wrong. Please try again later."});
+            //{toastType:"ERROR", title:authErrorMessage || "Something went wrong. Please try again later."});
         }
     },[authErrorMessage]);
 

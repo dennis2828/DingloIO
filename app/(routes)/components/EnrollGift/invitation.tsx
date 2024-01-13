@@ -14,9 +14,9 @@ export const Invitation = ({inviterId, invitations}:{inviterId: string, invitati
         try {
             await copyText(invitationLink);
             setCopied(true);
-            toast({title:"Copied to clipboard.",toastType:"COPY"})
+            //{title:"Copied to clipboard.",toastType:"COPY"})
         } catch (error) {
-            toast({title:"Something went wrong.", toastType:"DANGER"})
+            //{title:"Something went wrong.", toastType:"DANGER"})
         }
     }
 

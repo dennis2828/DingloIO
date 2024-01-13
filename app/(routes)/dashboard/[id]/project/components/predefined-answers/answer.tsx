@@ -28,7 +28,7 @@ export const Answer = ({ answer, projectId}:AnswerProps) => {
             });
         },
         onError:(err)=>{
-            toast({toastType:'ERROR', title:"Error!"});
+            //{toastType:'ERROR', title:"Error!"});
         },
         onSettled:()=>{
             queryClient.invalidateQueries({ queryKey: ["predAnswers"] });

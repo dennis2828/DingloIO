@@ -31,15 +31,15 @@ export const CreateProjectForm = () =>{
         },
         onSuccess:(data)=>{
             router.push("/dashboard");
-            toast({toastType:"SUCCESS",title:data.msg});
+            //{toastType:"SUCCESS",title:data.msg});
             setTimeout(()=>{
                 resetForm();
             },2500);
         },
         onError:(error)=>{
             if(error instanceof AxiosError)
-                toast({toastType:"ERROR", title:error.response?.data || "Something went wrong. Please try again later."});
-            else toast({toastType:"ERROR",title:"Something went wrong. Please try again later."});
+                //{toastType:"ERROR", title:error.response?.data || "Something went wrong. Please try again later."});
+            else //{toastType:"ERROR",title:"Something went wrong. Please try again later."});
         }
     });
     //Form error handling

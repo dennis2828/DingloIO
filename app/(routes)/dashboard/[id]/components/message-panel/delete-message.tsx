@@ -31,10 +31,10 @@ export const DeleteMessage = ({
       return res.data;
     },
     onSuccess: (data, variables) => {
-      toast({
-        toastType: "SUCCESS",
-        title: "Message was successfully deleted",
-      });
+      // //{
+      //   toastType: "SUCCESS",
+      //   title: "Message was successfully deleted",
+      // });
 
       if (!socket) return;
       socket.emit("DingloServer-DeleteMessage", {
@@ -43,7 +43,7 @@ export const DeleteMessage = ({
       });
     },
     onError: (err) => {
-      toast({ toastType: "ERROR", title: "Message was not deleted" });
+      //{ toastType: "ERROR", title: "Message was not deleted" });
     },
     onMutate: (variable) => {
       queryClient.setQueryData(["messages"], (old: Message[]) => {

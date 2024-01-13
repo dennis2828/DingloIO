@@ -68,10 +68,10 @@ export const CreateAnswer = ({
     onError: (err) => {
       console.log("ERROR",err);
       
-      toast({
-        toastType: "ERROR",
-        title: "Something went wrong. Please try again later!",
-      });
+      // //{
+      //   toastType: "ERROR",
+      //   title: "Something went wrong. Please try again later!",
+      // });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["predAnswers"] });

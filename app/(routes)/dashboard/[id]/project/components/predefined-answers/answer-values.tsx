@@ -37,11 +37,11 @@ export const AnswerValues = ({ answer, projectId }: AnswerValuesProps) => {
             return res.data;
         },
         onSuccess:()=>{
-            toast({toastType:"SUCCESS", title:"Item was successfully updated!"});
+            //{toastType:"SUCCESS", title:"Item was successfully updated!"});
         },
         onError:(err)=>{
             
-            toast({toastType:'ERROR', title:"Something went wrong. Please try again later!"});
+            //{toastType:'ERROR', title:"Something went wrong. Please try again later!"});
         },
         onMutate:(variable)=>{
             queryClient.setQueryData(["predAnswers"],(old: PredefinedAnswer[])=>{

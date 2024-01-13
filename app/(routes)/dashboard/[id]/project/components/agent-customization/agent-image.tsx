@@ -26,11 +26,11 @@ export const AgentImage = ({agentImage, projectId}: AgentImageProps) =>{
         },
         onSuccess:()=>{
             socket?.emit("DingloServer-AgentChange")
-            toast({toastType:"SUCCESS", title:"Profile image was successfully updated!"})
+            //{toastType:"SUCCESS", title:"Profile image was successfully updated!"})
         },
         onError:()=>{
             setCurrentImage(agentImage);
-            toast({toastType:"ERROR", title:"Something went wrong while uploading. Please try again later."})
+            //{toastType:"ERROR", title:"Something went wrong while uploading. Please try again later."})
         },
         onMutate:(variable)=>{
             setCurrentImage(variable);

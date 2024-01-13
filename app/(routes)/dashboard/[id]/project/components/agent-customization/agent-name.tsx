@@ -34,10 +34,10 @@ export const AgentName = ({projectId, agentName}: AgentNameProps) =>{
         },
         onSuccess:()=>{
             socket?.emit("DingloServer-AgentChange");
-            toast({toastType:"SUCCESS", title:"Profile name was successfully updated!"})
+            //{toastType:"SUCCESS", title:"Profile name was successfully updated!"})
         },
         onError:()=>{
-            toast({toastType:"ERROR", title:"Something went wrong while updating. Please try again later."})
+            //{toastType:"ERROR", title:"Something went wrong while updating. Please try again later."})
         },
         onSettled:()=>{
             revalidate(`/dashboard/${projectId}/project`);
