@@ -34,7 +34,7 @@ export const DocumentationMobileMenu = () => {
                 <p className="font-bold text-[1.2em]">{doc.title}</p>
                 <div className="mt-4 space-y-6">
                     {doc.links.map((subLink, idx)=>(
-                        <div>
+                        <div key={idx}>
                             <p className="font-bold">{subLink.title}</p>
                             <div className="mt-2 flex flex-col gap-4">
                                 {subLink.links.map((child,idx)=>(
