@@ -37,9 +37,9 @@ export const CreateProjectForm = () =>{
             },2500);
         },
         onError:(error)=>{
-            if(error instanceof AxiosError)
-                //{toastType:"ERROR", title:error.response?.data || "Something went wrong. Please try again later."});
-            else //{toastType:"ERROR",title:"Something went wrong. Please try again later."});
+            // if(error instanceof AxiosError)
+            //     //{toastType:"ERROR", title:error.response?.data || "Something went wrong. Please try again later."});
+            // else //{toastType:"ERROR",title:"Something went wrong. Please try again later."});
         }
     });
     //Form error handling
