@@ -16,7 +16,7 @@ export const LeftSideItem = ({ doc }: { doc: DocumentationSection }) => {
               <div className="flex flex-col">
                 {section.links.map((subLink, idx) => {
                     return (
-                      <Link key={idx}  href={subLink.link} className={`font-semibold text-[.85em] text-softBlue rounded-md p-1 ${subLink.link===pathname ? "bg-[#4375e0] text-white":"hover:bg-gray-900/60"} p-2 whitespace-nowrap`}>
+                      <Link key={idx}  href={subLink.link} className={`font-semibold text-[.85em] text-softBlue rounded-md p-1 ${subLink.link===pathname ? "bg-[#4375e0] text-white":"hover:bg-softBlue hover:text-white dark:hover:text-softBlue dark:hover:bg-gray-900/60"}  p-2 whitespace-nowrap`}>
                         {subLink.title}
                       </Link>
                     );

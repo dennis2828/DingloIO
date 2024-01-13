@@ -18,6 +18,7 @@ const DashboardProjectPage = async ({params, searchParams}:{params:{id: string},
             userId: session!.user!.id,
         },
     }); 
+    
 
     const user = await db.user.findUnique({
         where:{
