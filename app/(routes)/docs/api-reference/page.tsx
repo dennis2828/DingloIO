@@ -3,20 +3,37 @@ import { Text } from "lucide-react";
 import { InfoText } from "@/components/info-text";
 import { SyntaxHighlighterPreview } from "../components/syntax-highlighter";
 import {
+  codeExample,
+  createMessage,
   events,
   offEvent,
   onEvent,
+  packageSetup,
   respondMessage,
   saveMessage,
+  tailwindGlobal,
+  tailwindInit,
 } from "../constants";
+import { NPMPackage } from "../../components/Npm/npm-package";
 
 const ApiReferencePage = () => {
   return (
     <div>
       <h1 className="font-bold text-[2.3em]">API Reference</h1>
-      <p className="text-sm font-medium dark:text-gray-300">
+      <p className="text-sm font-medium dark:text-gray-300 mb-4">
         Explore our object methods in order to get started !
       </p>
+      <NPMPackage/>
+      <div className="mt-6">
+        <SyntaxHighlighterPreview codeHeader="dinglo-io.ts" code={packageSetup}/>
+      </div>
+      <div className="mt-6">
+        <SyntaxHighlighterPreview codeHeader="tailwind.config.ts" code={tailwindInit}/>
+      </div>
+      <div className="mt-6">
+        <SyntaxHighlighterPreview codeHeader="globals.css" code={tailwindGlobal}/>
+      </div>
+   
       <div className="mt-6">
         <div>
           <p className="font-bold">
@@ -68,8 +85,10 @@ const ApiReferencePage = () => {
           </p>
           <SyntaxHighlighterPreview code={offEvent} />
         </div>
-        <p className="text-sm font-medium dark:text-gray-300 mt-5"></p>
-      </div>
+        <div className="mt-6 space-y-6 ">
+                    <SyntaxHighlighterPreview codeHeader="messages.tsx" code={codeExample}/>
+                    <SyntaxHighlighterPreview codeHeader="create-message.tsx" code={createMessage}/>
+                </div>      </div>
       <div className="mt-12 flex justify-center">
         <DocumentationSectionLink
           path={"/docs"}

@@ -49,6 +49,30 @@ dingloIO.initializeSocket("your_api_key");
 export default dingloIO;
 `;
 
+export const tailwindInit = `...
+content: [
+  './node_modules/dinglo-io/dist/components/**/*.{js,jsx,ts,tsx}',
+  ...
+],
+...`
+
+export const tailwindGlobal = `
+//this applies the default style to the overflow bar
+
+.overflowContainer::-webkit-scrollbar {
+  width: 8px; /* Set the width of the scrollbar */
+}
+
+.overflowContainer::-webkit-scrollbar-thumb {
+  background-color: #808080; /* Set the color of the thumb (scrollable part) */
+  border-radius: 4px; /* Set the border radius of the thumb */
+}
+
+.overflowContainer::-webkit-scrollbar-track {
+  background-color: #1e1e1e; /* Set the color of the track (non-scrollable part) */
+  border-radius: 4px; /* Set the border radius of the track */
+}`
+
 export const codeExample = `import dingloIO, {dingloMessage} from "dinglo-io"
 import {useState, useEffect} from "react";
 
