@@ -8,6 +8,7 @@ export async function POST(
   { params }: { params: { connectionId: string } }
 ) {
   try {
+    
     const data = await req.json();
     
     if (!params.connectionId || params.connectionId.trim() === "")
@@ -94,6 +95,9 @@ export async function GET(
         agentImage: conn.isAgent ? targetProject.agentImage : undefined,
       };
     });
+
+    console.log("gh", messagesWithAgent);
+    
 
     return NextResponse.json({ messages: messagesWithAgent }, { status: 200 });
   } catch (error) {
