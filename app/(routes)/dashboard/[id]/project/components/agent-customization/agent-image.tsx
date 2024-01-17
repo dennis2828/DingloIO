@@ -5,7 +5,7 @@ import { CldUploadWidget } from "next-cloudinary";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { toast } from "@/components/ui/use-toast";
+import toast from "react-hot-toast";
 import { useSocket } from "@/hooks/useSocket";
 
 
@@ -26,11 +26,11 @@ export const AgentImage = ({agentImage, projectId}: AgentImageProps) =>{
         },
         onSuccess:()=>{
             socket?.emit("DingloServer-AgentChange")
-            //{toastType:"SUCCESS", title:"Profile image was successfully updated!"})
+            toast.success("Profile image was successfully updated!");
         },
         onError:()=>{
             setCurrentImage(agentImage);
-            //{toastType:"ERROR", title:"Something went wrong while uploading. Please try again later."})
+            toast.error("Something went wrong while uploading. Please try again later.");
         },
         onMutate:(variable)=>{
             setCurrentImage(variable);

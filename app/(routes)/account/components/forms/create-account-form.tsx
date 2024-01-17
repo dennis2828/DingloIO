@@ -11,12 +11,12 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AccountRequest, AccountValidator } from "@/validators/account"
 import { useEffect, useState } from "react"
-import { toast } from "@/components/ui/use-toast"
 import { useMutation } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios";
 import {signIn} from "next-auth/react";
 import { useTheme } from "next-themes"
 import { useRouter } from "next/navigation"
+import toast from "react-hot-toast"
 
 export const CreateAccountForm = () =>{
     const router = useRouter();
@@ -39,6 +39,7 @@ export const CreateAccountForm = () =>{
         },
         onSuccess:(res)=>{
             //{toastType:"SUCCESS",title:res.data.msg});
+            toast.success(res.data.msg)
             router.push("/account");
             
             setTimeout(()=>{
@@ -46,9 +47,9 @@ export const CreateAccountForm = () =>{
             },2500);
         },
         onError:(error)=>{
-            // if(error instanceof AxiosError)
-                //{toastType:"ERROR", title:error.response?.data || "Something went wrong. Please try again later."});
-            // else //{toastType:"ERROR",title:"Something went wrong. Please try again later."});
+            if(error instanceof AxiosError)
+            toast.error(error.response?.data || "Something went wrong. Please try again later.")
+            else toast.error("Something went wrong. Please try again later.");
         }
     });
     //Form error handling

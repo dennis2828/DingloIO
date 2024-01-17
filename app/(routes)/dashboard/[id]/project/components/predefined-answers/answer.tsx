@@ -1,11 +1,10 @@
 "use client";
 
-import { toast } from "@/components/ui/use-toast";
+import toast from "react-hot-toast";
 import { PredefinedAnswer } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Trash } from "lucide-react";
-import { Dispatch, SetStateAction } from "react";
 import { AnswerValues } from "./answer-values";
 
 interface AnswerProps{
@@ -28,7 +27,7 @@ export const Answer = ({ answer, projectId}:AnswerProps) => {
             });
         },
         onError:(err)=>{
-            //{toastType:'ERROR', title:"Error!"});
+            toast.error("Something went wrong. Please try again later.");
         },
         onSettled:()=>{
             queryClient.invalidateQueries({ queryKey: ["predAnswers"] });

@@ -25,12 +25,14 @@ export async function POST(req: NextRequest) {
         ...accountData,
       },
     });
-
+    console.log("gjh");
+    
     return NextResponse.json(
       { account: newAccount, msg: "Your account was successfully created !" },
       { status: 200 }
     );
   } catch (error) {
+    console.log("gjh",error);
 
     if (error instanceof ZodError)
       return new NextResponse(error.issues[0].message, { status: 500 });

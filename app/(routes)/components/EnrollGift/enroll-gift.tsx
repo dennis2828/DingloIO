@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Invitation } from "./invitation";
 import { useEffect, useState } from "react";
 import { inviteUser } from "@/actions/invite";
-import { toast } from "@/components/ui/use-toast";
 import { collectFeature } from "@/actions/collectFeature";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export const EnrollGift = ({
   userId,
@@ -52,10 +52,10 @@ export const EnrollGift = ({
             onClick={async () => {
               setCollecting(true);
               const { collected, msg } = await collectFeature();
-              // toast({
-              //   toastType: collected ? "SUCCESS" : "DANGER",
-              //   title: msg,
-              // });
+          
+              if(collected) toast.success(msg);
+              else toast.error(msg);
+
               setCollecting(false);
               router.refresh();
             }}

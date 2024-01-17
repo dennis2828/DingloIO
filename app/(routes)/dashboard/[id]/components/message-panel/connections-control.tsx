@@ -1,5 +1,5 @@
 "use client"
-import { toast } from "@/components/ui/use-toast"
+import toast from "react-hot-toast"
 import { useSocket } from "@/hooks/useSocket"
 import { useMutation } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios"
@@ -49,13 +49,13 @@ export const ConnectionsControl = ({connections, projectId}:ConnectionsControlPr
             return res.data;
         },
         onSuccess(data){
-            //{toastType:"SUCCESS", title:"Conversation was successfully deleted !"});
+            toast.success("Conversation was successfully deleted !");
             window.location.reload();
         },
         onError(error){
-            // if(error instanceof AxiosError)
-                //{toastType:"ERROR", title:error.response?.data || "Something went wrong. Please try again later."});
-            // else //{toastType:"ERROR",title:"Something went wrong. Please try again later."});
+            if(error instanceof AxiosError)
+            toast.error(error.response?.data || "Something went wrong. Please try again later.")
+            else toast.error("Something went wrong. Please try again later.");
         }
     })
     

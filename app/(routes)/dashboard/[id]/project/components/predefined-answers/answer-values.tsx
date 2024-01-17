@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
+import toast from "react-hot-toast";
 import { PredefinedAnswer } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -37,11 +37,10 @@ export const AnswerValues = ({ answer, projectId }: AnswerValuesProps) => {
             return res.data;
         },
         onSuccess:()=>{
-            //{toastType:"SUCCESS", title:"Item was successfully updated!"});
+            toast.success("Item was successfully updated!");
         },
         onError:(err)=>{
-            
-            //{toastType:'ERROR', title:"Something went wrong. Please try again later!"});
+            toast.error("Something went wrong. Please try again later.");  
         },
         onMutate:(variable)=>{
             queryClient.setQueryData(["predAnswers"],(old: PredefinedAnswer[])=>{

@@ -11,11 +11,12 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {SignInAccountValidator, SignInAccountRequest } from "@/validators/account"
 import { useEffect, useState } from "react"
-import { toast } from "@/components/ui/use-toast"
+import toast from "react-hot-toast"
 import { useMutation } from "@tanstack/react-query"
 import {signIn} from "next-auth/react";
 import { useTheme } from "next-themes"
 import { useRouter } from "next/navigation"
+import { AxiosError } from "axios"
 
 
 export const SignInForm = ({errorMessage}:{errorMessage: string}) =>{
@@ -35,9 +36,10 @@ export const SignInForm = ({errorMessage}:{errorMessage: string}) =>{
         mutationFn: async (account: SignInAccountRequest) =>{
             signIn("credentials",{...account, callbackUrl:"/"});
         },
-        
         onError:(error)=>{
-            //{toastType:"ERROR",title:"Something went wrong. Please try again later."});
+            if(error instanceof AxiosError)
+            toast.error(error.response?.data || "Something went wrong. Please try again later.")
+            else toast.error("Something went wrong. Please try again later.");
         }
     });
     //Form error handling
@@ -61,14 +63,9 @@ export const SignInForm = ({errorMessage}:{errorMessage: string}) =>{
     useEffect(()=>{
         
         if(authErrorMessage && authErrorMessage.trim()!==''){
-            //{toastType:"ERROR", title:authErrorMessage || "Something went wrong. Please try again later."});
+            toast.error(authErrorMessage || "Something went wrong. Please try again later.");
         }
     },[authErrorMessage]);
-
-    function resetForm(){
-        setValue("email","");
-        setValue("password","");
-    }
 
     return (
         <div>

@@ -6,7 +6,7 @@ import { User, Shield, ShieldCheck } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect, useState } from "react"
-import { toast } from "@/components/ui/use-toast"
+import toast from "react-hot-toast"
 import { useMutation } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation"
@@ -31,15 +31,15 @@ export const CreateProjectForm = () =>{
         },
         onSuccess:(data)=>{
             router.push("/dashboard");
-            //{toastType:"SUCCESS",title:data.msg});
+            toast.success(data.msg);
             setTimeout(()=>{
                 resetForm();
             },2500);
         },
         onError:(error)=>{
-            // if(error instanceof AxiosError)
-            //     //{toastType:"ERROR", title:error.response?.data || "Something went wrong. Please try again later."});
-            // else //{toastType:"ERROR",title:"Something went wrong. Please try again later."});
+            if(error instanceof AxiosError)
+            toast.error(error.response?.data || "Something went wrong. Please try again later.")
+            else toast.error("Something went wrong. Please try again later.");
         }
     });
     //Form error handling

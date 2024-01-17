@@ -1,6 +1,6 @@
 "use client";
 
-import { toast } from "@/components/ui/use-toast";
+import toast from "react-hot-toast";
 import { useSocket } from "@/hooks/useSocket";
 import { Message } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -31,10 +31,8 @@ export const DeleteMessage = ({
       return res.data;
     },
     onSuccess: (data, variables) => {
-      // //{
-      //   toastType: "SUCCESS",
-      //   title: "Message was successfully deleted",
-      // });
+  
+      toast.success("Message was successfully deleted");
 
       if (!socket) return;
       socket.emit("DingloServer-DeleteMessage", {
@@ -43,7 +41,7 @@ export const DeleteMessage = ({
       });
     },
     onError: (err) => {
-      //{ toastType: "ERROR", title: "Message was not deleted" });
+      toast.error("Message was not deleted");
     },
     onMutate: (variable) => {
       queryClient.setQueryData(["messages"], (old: Message[]) => {

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
+import toast from "react-hot-toast";
 import { useSocket } from "@/hooks/useSocket";
 import { Message, Project } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -73,18 +73,9 @@ export const CreateMessage = ({
       });
     },
     onError: (error) => {
-      // if (error instanceof AxiosError)
-      //   //{
-      //     toastType: "ERROR",
-      //     title:
-      //       error.response?.data ||
-      //       "Something went wrong. Please try again later.",
-      //   });
-      // else
-      //   //{
-      //     toastType: "ERROR",
-      //     title: "Something went wrong. Please try again later.",
-      //   });
+      if(error instanceof AxiosError)
+            toast.error(error.response?.data || "Something went wrong. Please try again later.")
+            else toast.error("Something went wrong. Please try again later.");
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });

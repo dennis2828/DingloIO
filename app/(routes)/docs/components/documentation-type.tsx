@@ -22,7 +22,6 @@ export const DocumentationType = ({documentation}:{documentation: DocumentationS
         }
     }
     
-    console.log(path,pathnameRoute);
     
     return (
         <Link href={documentation.path} className={cn(pathnameRoute===path ? "text-softBlue font-semibold":"text-black dark:text-gray-300 font-medium hover:text-gray-500 dark:hover:text-white", "cursor-pointer duration-100")}>{documentation.title}</Link>

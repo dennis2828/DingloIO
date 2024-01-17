@@ -3,7 +3,7 @@
 import { FormSubmit } from "@/components/forms/form-submit";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
+import toast from "react-hot-toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
@@ -37,7 +37,6 @@ export const CreateAnswer = ({
     queryKey: ["predAnswers"],
     queryFn: async () => {
       const res = await axios.get(`/api/project/${projectId}/answers`);
-      console.log("res",res);
       
       return res.data as PredefinedAnswer[];
     },
@@ -66,12 +65,7 @@ export const CreateAnswer = ({
       });
     },
     onError: (err) => {
-      console.log("ERROR",err);
-      
-      // //{
-      //   toastType: "ERROR",
-      //   title: "Something went wrong. Please try again later!",
-      // });
+      toast.error("Something went wrong. Please try again later.");
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["predAnswers"] });

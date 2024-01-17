@@ -2,7 +2,7 @@
 
 import { revalidate } from "@/actions/revalidatePath";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
+import toast from "react-hot-toast";
 import { useSocket } from "@/hooks/useSocket";
 import { useClickOutside } from "@mantine/hooks";
 import { useMutation } from "@tanstack/react-query";
@@ -34,10 +34,10 @@ export const AgentName = ({projectId, agentName}: AgentNameProps) =>{
         },
         onSuccess:()=>{
             socket?.emit("DingloServer-AgentChange");
-            //{toastType:"SUCCESS", title:"Profile name was successfully updated!"})
+            toast.success("Profile name was successfully updated!");
         },
         onError:()=>{
-            //{toastType:"ERROR", title:"Something went wrong while updating. Please try again later."})
+            toast.error("Something went wrong while updating. Please try again later.");
         },
         onSettled:()=>{
             revalidate(`/dashboard/${projectId}/project`);

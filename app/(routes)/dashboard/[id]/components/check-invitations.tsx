@@ -1,6 +1,6 @@
 "use client"
 
-import { toast } from "@/components/ui/use-toast";
+import toast from "react-hot-toast";
 import { useEffect } from "react";
 
 export const CheckInvitations = ({invitations}: {invitations: string[]}) =>{
@@ -10,7 +10,7 @@ export const CheckInvitations = ({invitations}: {invitations: string[]}) =>{
             const featureNotification = localStorage.getItem("DingloIO-FeatureNotify");
 
             if(!featureNotification){
-                //{toastType:"SUCCESS", title:"You've unlocked the special feature, MAIL NOTIFICATION while you are offline"});
+                toast.success("You've unlocked the special feature, MAIL NOTIFICATION while you are offline");
                 localStorage.setItem("DingloIO-FeatureNotify", JSON.stringify(true));
             }
     

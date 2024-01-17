@@ -1,6 +1,6 @@
 "use client"
 
-import { toast } from "@/components/ui/use-toast"
+import toast from "react-hot-toast"
 import { absoluteURL, cn, copyText } from "@/lib/utils"
 import { Copy, CopyCheck } from "lucide-react"
 import { useEffect, useState } from "react"
@@ -14,9 +14,9 @@ export const Invitation = ({inviterId, invitations}:{inviterId: string, invitati
         try {
             await copyText(invitationLink);
             setCopied(true);
-            //{title:"Copied to clipboard.",toastType:"COPY"})
+            toast.success("Copied to clipboard.")
         } catch (error) {
-            //{title:"Something went wrong.", toastType:"DANGER"})
+            toast.error("Something went wrong. Please try again later.");
         }
     }
 
