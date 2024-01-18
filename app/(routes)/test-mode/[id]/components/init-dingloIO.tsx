@@ -1,7 +1,7 @@
 "use client"
 import { useEffect } from "react"
 import dingloIO from "@/dinglo"
-import { DingloIOWidget } from "dinglo-widget14";
+import { DingloIOWidget } from "dinglo-widget19";
 
 export const InitDingloIO = () =>{
 
@@ -11,7 +11,7 @@ export const InitDingloIO = () =>{
 
     return (
         <div>
-            <DingloIOWidget dingloIO={dingloIO}/>
+            <DingloIOWidget dingloIO={dingloIO} contentClassname="bg-white" inputClassname="bg-white text-black"/>
         </div>
     )
 }

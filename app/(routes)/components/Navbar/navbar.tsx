@@ -37,14 +37,14 @@ export const Navbar = async() => {
             </div>
             {session && session.user ? (
               <div className="hidden lg:block">
-                <SignOut profileImage={session.user.image!} profileName={session.user.name}/>
+                <SignOut profileImage={session.user.image || "/default-user-profile.png"} profileName={session.user.name}/>
               </div>
             ):null}
             
           </div>
         </div>
       </nav>
-      <MobileNav isAuthenticated={session && session.user ? true:false} profileImage={session?.user!.image!} profileName={session?.user!.name!}/>
+      <MobileNav isAuthenticated={session && session.user ? true:false} profileImage={session?.user!.image || "/default-user-profile.png"} profileName={session?.user!.name!}/>
     </div>
   );
 };

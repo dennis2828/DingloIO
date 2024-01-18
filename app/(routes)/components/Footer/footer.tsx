@@ -4,6 +4,7 @@ import { Newsletter } from "./newsletter"
 import { Copyright } from "lucide-react"
 import { getAuthSession } from "@/lib/authOptions"
 import db from "@/lib/db"
+import { navbarLinks } from "@/constants/navbarLinks"
 
 export const Footer = async () =>{
     const session = await getAuthSession();
@@ -30,10 +31,9 @@ export const Footer = async () =>{
                 </div>
                 <div className="space-y-3">
                     <div className="flex items-center justify-center gap-4 flex-wrap">
-                        <Link href={"/"} className="hover:text-softBlue font-medium">home</Link>
-                        <Link href={"/"} className="hover:text-softBlue font-medium">dashboard</Link>
-                        <Link href={"/"} className="hover:text-softBlue font-medium">documentation</Link>
-                        <Link href={"/"} className="hover:text-softBlue font-medium">pricing</Link>
+                    {navbarLinks.map((navLink, index) => (
+                        <Link key={index} href={navLink.path} className="hover:text-softBlue font-medium">{navLink.label}</Link>
+                        ))}
                     </div>
                     {!session || !session.user ? null:<Newsletter newsletter={user?.newsletter!}/>}
                 </div>

@@ -2,6 +2,8 @@ import { InfoText } from "@/components/info-text";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { InteractiveChatWidget } from "./interactive-chat-widget";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
 
 export const About = () => {
   return (
@@ -29,15 +31,9 @@ export const About = () => {
             <Separator className="max-w-[400px] my-3 mx-auto h-[1px] bg-lightBlue"/>
             <div>
                 <p className="text-center font-bold">Interactive Chat Widget</p>
-                <div className="flex flex-col md:flex-row mt-2 gap-4">
-                    <div className="flex-1">
-                        <p className="font-light">Try out our <InfoText>presentational</InfoText>  widget to make a <InfoText>brief</InfoText> feedback on our <InfoText>system</InfoText>.</p>
-                        <small className="text-slate-600">* note that this is a presenation version of our chat widget to test *</small>
-                    </div>
-                    <div className="flex-1">
-                        <InteractiveChatWidget/>
-                    </div>
-                </div>
+                <p className="text-sm font-medium text-gray-500 my-3">Sign up for an account and try our test mode, without installing it on your machine</p>
+                <Link className={buttonVariants({variant:"outline"})} href={"/dashboard"}>Try now</Link>
+
             </div>
         </div>
         
