@@ -38,7 +38,6 @@ export const CreateAccountForm = () =>{
             return res;
         },
         onSuccess:(res)=>{
-            //{toastType:"SUCCESS",title:res.data.msg});
             toast.success(res.data.msg)
             router.push("/account");
             
