@@ -51,7 +51,7 @@ export default dingloIO;
 
 export const tailwindInit = `...
 content: [
-  './node_modules/dinglo-io/dist/components/**/*.{js,jsx,ts,tsx}',
+  './node_modules/dingloio-widget/dist/components/**/*.{js,jsx,ts,tsx}',
   ...
 ],
 ...`
