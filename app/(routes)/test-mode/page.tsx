@@ -1,21 +1,8 @@
 import { Container } from "@/components/container";
-import { getAuthSession } from "@/lib/authOptions";
-import db from "@/lib/db";
-import { redirect } from "next/navigation";
 import { InitDingloIO } from "./components/init-dingloIO";
 
 
-const DashboardTestPage = async ({params, searchParams}:{params:{id: string}, searchParams:{conversation: string}}) =>{
-    const session = await getAuthSession();
-
-    const targetProject = await db.project.findUnique({
-        where:{
-            id:params.id,
-            userId: session!.user!.id!,
-        },
-    });
-
-    if(!targetProject) redirect("/dashboard");
+const DashboardTestPage = async () =>{
 
     return (
         <div>
