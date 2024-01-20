@@ -1,7 +1,7 @@
 "use client"
 import { useEffect } from "react"
 import dingloIO from "@/dinglo"
-import { DingloIOWidget } from "dingloio1";
+import { DingloIOWidget } from "dingloio2";
 
 export const InitDingloIO = () =>{
 

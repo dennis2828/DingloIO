@@ -27,6 +27,7 @@
     "dinglo-io": "^1.0.0",
     "dingloio-widget": "^1.0.0",
     "dingloio1": "^1.0.0",
+    "dingloio2": "^1.0.0",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.294.0",
     "next": "14.0.3",
