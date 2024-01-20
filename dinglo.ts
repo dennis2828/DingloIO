@@ -1,5 +1,5 @@
 import {DingloIO} from "dingloio2";
 
-const dingloIO = new DingloIO("dinglo-a3180cb3b006422e824dcf0485925caf");
+const dingloIO = new DingloIO("dinglo-f672d61b24e7494d980ebfa1aa5712b8");
 
 export default dingloIO;
