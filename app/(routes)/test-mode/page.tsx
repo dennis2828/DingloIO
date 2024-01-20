@@ -1,5 +1,6 @@
 import { Container } from "@/components/container";
 import { InitDingloIO } from "./components/init-dingloIO";
+import { DingloWrapper } from "./components/dinglo-wrapper";
 
 
 const DashboardTestPage = async () =>{
@@ -12,7 +13,7 @@ const DashboardTestPage = async () =>{
                 Make sure that you have also the dashboard open. You should see a new connection instance
                 </h1>
             </Container>
-            <InitDingloIO/>
+            <DingloWrapper/>
         </div>
     )
 }

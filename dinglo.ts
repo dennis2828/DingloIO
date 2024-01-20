@@ -1,4 +1,5 @@
-import {DingloIO} from "dingloio2";
+import {DingloIO} from "dingloio-chatwidget";
+
 
 const dingloIO = new DingloIO(process.env.NEXT_PUBLIC_DINGLOIO_APIKEY as string);
 

@@ -25,6 +25,7 @@
     "clsx": "^2.0.0",
     "cors": "^2.8.5",
     "dinglo-io": "^1.0.0",
+    "dingloio-chatwidget": "^1.0.0",
     "dingloio-widget": "^1.0.0",
     "dingloio1": "^1.0.0",
     "dingloio2": "^1.0.0",

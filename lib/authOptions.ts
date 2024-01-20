@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import { ZodError } from "zod";
 import { SignInAccountValidator } from "@/validators/account";
 import bcrypt from "bcrypt";
+import { generateApiKey } from "./utils";
 
 
 export const authOptions: NextAuthOptions = {
@@ -120,6 +121,18 @@ export const authOptions: NextAuthOptions = {
                             provider:account?.provider==="github" ? "GITHUB": account?.provider==="google" ? "GOOGLE":"EMAIL",
                         }
                     });
+                    const projectPasswordHash =  await bcrypt.hash("defaultapp",10);
+
+                    await db.project.create({
+                        data: {
+                          projectName:"default_app",
+                          agentImage: "https://res.cloudinary.com/dulb5sobi/image/upload/v1705774134/detn3aisfajqzq0kghaq.png",
+                          agentName: newUser.username,
+                          password: projectPasswordHash,
+                          api_key: generateApiKey(),
+                          userId: newUser.id,
+                        },
+                      });
                     token.id=newUser.id;
                     token.accessToken = jwt.sign({userId: newUser.id, username: newUser.username},process.env.NEXTAUTH_SECRET!,{expiresIn:"6d"});
                 }else{

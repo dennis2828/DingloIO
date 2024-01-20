@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 import bcrypt from "bcrypt";
+import { generateApiKey } from "@/lib/utils";
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,7 +26,19 @@ export async function POST(req: NextRequest) {
         ...accountData,
       },
     });
-    console.log("gjh");
+
+    const projectPasswordHash =  await bcrypt.hash("defaultapp",10);
+    
+    await db.project.create({
+      data: {
+        projectName:"default_app",
+        agentImage: "https://res.cloudinary.com/dulb5sobi/image/upload/v1705774134/detn3aisfajqzq0kghaq.png",
+        agentName: newAccount.username,
+        password: projectPasswordHash,
+        api_key: generateApiKey(),
+        userId: newAccount.id,
+      },
+    });
     
     return NextResponse.json(
       { account: newAccount, msg: "Your account was successfully created !" },

@@ -6,13 +6,7 @@ import { ProjectValidator } from "@/validators/project";
 import { getAuthSession } from "@/lib/authOptions";
 import { JsonWebTokenError } from "jsonwebtoken";
 import AuthorizationToken from "@/lib/verifyToken";
-
-function generateApiKey(){
-  const uniqueID = crypto.randomUUID();
-  const formattedID = uniqueID.replace(/-/g, '');
-
-  return `dinglo-${formattedID}`
-}
+import { generateApiKey } from "@/lib/utils";
 
 export async function POST(req: NextRequest) {
   try {
