@@ -1,7 +1,7 @@
 "use client"
 import { useEffect } from "react"
 import dingloIO from "@/dinglo"
-import { DingloIOWidget } from "dinglo-io";
+import { DingloIOWidget } from "dingloio1";
 
 export const InitDingloIO = () =>{
 
@@ -9,9 +9,10 @@ export const InitDingloIO = () =>{
         dingloIO.initializeSocket();
     },[]);
 
-    return (
-        <div>
-            <DingloIOWidget dingloIO={dingloIO} contentClassname="bg-white" inputClassname="bg-white text-black"/>
-        </div>
-    )
+        return (
+            <div>
+                <DingloIOWidget dingloIO={dingloIO} contentClassname="bg-white" inputClassname="bg-white text-black"/>
+            </div>
+        )
+   
 }
