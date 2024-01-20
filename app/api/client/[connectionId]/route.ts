@@ -96,12 +96,10 @@ export async function GET(
       };
     });
 
-    console.log("gh", messagesWithAgent);
     
 
     return NextResponse.json({ messages: messagesWithAgent }, { status: 200 });
   } catch (error) {
-    console.log(error);
 
     if (error instanceof JsonWebTokenError)
       return new NextResponse("Invalid authorization token", { status: 400 });

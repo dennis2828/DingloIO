@@ -9,7 +9,7 @@ interface ProjectProps{
 export const Project = ({project}:ProjectProps) =>{
     return (
         <Link href={`/dashboard/${project.id}`} className="cursor-pointer bg-white dark:bg-softBlue dark:bg-transparent border-4 border-transparent hover:border-softBlue dark:border-softBlue hover:dark:bg-softBlue duration-150 rounded-md p-2">
-            <Image src={"/profile.jpg"} width={100} height={100} className="w-[100px] h-[100px] mx-auto rounded-full object-cover" priority quality={100} alt="project-image"/>
+            <Image src={project.agentImage} width={100} height={100} className="w-[100px] h-[100px] mx-auto rounded-full object-cover" priority quality={100} alt="project-image"/>
             <div>
                 <p className="font-bold text-sm text-center">{project.projectName}</p>
             </div>

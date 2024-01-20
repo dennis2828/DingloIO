@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     const newProject = await db.project.create({
       data: {
         ...projectData,
-        agentImage: "/profile.jpg",
+        agentImage: "https://res.cloudinary.com/dulb5sobi/image/upload/v1705774134/detn3aisfajqzq0kghaq.png",
         agentName: session.user.name,
         password: passwordToHash,
         api_key: generateApiKey(),
