@@ -22,10 +22,12 @@ export const ProjectStatistics = ({project, invitations}: ProjectStatisticsProps
                 </p>
                 <AppApiKey project={project}/>
             </div>
-            <div>
-                <p className="text-gray-500 font-medium text-sm mt-4 sm:mt-0">{formatCreatedAt(project.createdAt)}</p>
-                <p className={`text-sm font-medium ${invitations.length>=5 ? "text-gray-400":null}`}>Invitations: <span className={`${invitations.length >=5 ? "font-bold text-softBlue":null}`}>{invitations.length}/5</span></p>
-                <small className="text-gray-500">get mail notification while offline</small>
+            <div className="space-y-2">
+                <p className="text-gray-500 font-medium text-sm mt-4 sm:mt-0 text-center">Created at: {formatCreatedAt(project.createdAt)}</p>
+                <div className="flex justify-center flex-wrap gap-2 items-center">
+                    <p className={`text-sm font-medium ${invitations.length>=5 ? "text-gray-400":null}`}>Invitations: <span className={`${invitations.length >=5 ? "font-bold text-softBlue":null}`}>{invitations.length}/5</span></p>
+                    <small className="text-gray-500">get mail notification while offline</small>
+                </div>
             </div>
             
         </div>

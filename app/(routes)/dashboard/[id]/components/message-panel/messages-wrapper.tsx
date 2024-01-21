@@ -43,7 +43,7 @@ export const MessagesWrapper = async ({
   });
 
   return (
-    <div className="flex gap-10">
+    <div className="flex flex-col gap-12 lg:flex-row">
       <MessagesHeader
         conversationId={conversationId}
         projectId={project.id}
