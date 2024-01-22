@@ -33,6 +33,7 @@ export const CreateProjectForm = () =>{
             router.push("/dashboard");
             toast.success(data.msg);
             setTimeout(()=>{
+                router.push("/dashboard");
                 resetForm();
             },2500);
         },

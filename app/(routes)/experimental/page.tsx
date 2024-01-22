@@ -1,9 +1,8 @@
 import { Container } from "@/components/container";
-import { InitDingloIO } from "./components/init-dingloIO";
 import { DingloWrapper } from "./components/dinglo-wrapper";
 
 
-const DashboardTestPage = async () =>{
+const DashboardExperimentalPage = async () =>{
 
     return (
         <div>
@@ -18,4 +17,4 @@ const DashboardTestPage = async () =>{
     )
 }
 
-export default DashboardTestPage;
+export default DashboardExperimentalPage;
