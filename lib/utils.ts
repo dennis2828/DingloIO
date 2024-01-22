@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
- 
+import { Metadata } from "next"
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -55,5 +56,44 @@ export function formatCreatedAt(createdAt: Date): string {
     return `${days}d ago`;
   } else {
     return `${years}y ago`;
+  }
+}
+
+export function constructMetadata({
+  title = "Dinglo.IO",
+  description = "DingloIO is a modern production-ready chat widget, ready to use to give your customers an enhaced customer support.",
+  image = "https://res.cloudinary.com/dulb5sobi/image/upload/v1705774134/detn3aisfajqzq0kghaq.png",
+  icons = "https://res.cloudinary.com/dulb5sobi/image/upload/v1705774134/detn3aisfajqzq0kghaq.png",
+  noIndex = false,
+}: {
+  title?: string
+  description?: string
+  image?: string
+  icons?: string
+  noIndex?: boolean,
+  keywords?: string[],
+} = {}): Metadata {
+  return {
+    title,
+    keywords:["Dinglo IO","chat widget","online customer support"],
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [
+        {
+          url: image,
+        },
+      ]
+    },
+    icons,
+    metadataBase: new URL('https://dinglo-io.vercel.app/'),
+    themeColor: '#4375e0"',
+    ...(noIndex && {
+      robots: {
+        index: true,
+        follow: true
+      }
+    })
   }
 }
