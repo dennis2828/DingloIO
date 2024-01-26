@@ -33,7 +33,7 @@ export const Invitation = ({inviterId, invitations}:{inviterId: string, invitati
                 <div role="button" onClick={handleCopyInvitationLink} className="flex text-xs whitespace-break-spaces items-center px-1 text-muted dark:text-gray-100 text-center group-hover:text-gray-300 font-medium truncate">
                     {invitationLink}
                 </div>
-                <div className="flex items-center justify-center group bg-softBlue px-3rounded-r-md">
+                <div className="flex items-center justify-center group bg-softBlue px-3 rounded-r-md">
                     {!copied ? 
                         <Copy className="w-4 h-4 group-hover:text-gray-200 dark:text-gray-100 text-muted duration-100"/>
                         :

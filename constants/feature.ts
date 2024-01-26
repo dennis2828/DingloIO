@@ -12,7 +12,7 @@ export const features: Array<Feature> = [
         featureImage:"/blue-email.png",
     },
     {
-        title:"Automatic reponses",
+        title:"Automatic responses",
         description:"Enhance efficiency by instantly acknowledging your customer. Define your frequently asked question and let them respond for you.",
         featureImage:"/question-feature.jpg",
     },

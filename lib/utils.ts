@@ -14,7 +14,7 @@ export function generateApiKey(){
 }
 
 export function absoluteURL(path: string){
-  return `http://localhost:3000${path}`;
+  return `https://dinglo-io.vercel.app${path}`;
 }
 
 export function copyText(text: string){
