@@ -57,12 +57,11 @@ const AgentCustomizationPage = () => {
       </div>
       <div className="mt-12 flex flex-col md:flex-row justify-between gap-10">
         <DocumentationSectionLink
-          path={"/docs/customization"}
+          path={"/docs/api-reference"}
           icon={<FileBox className="w-6 h-6 text-softBlue" />}
-          title="Widget Customization"
-          label="Learn how to customize your chat widget"
+          title="API Reference"
+          label="Learn how to use our methods"
         />
-
         <DocumentationSectionLink
           path={"/docs"}
           icon={<Text className="w-6 h-6 text-softBlue" />}

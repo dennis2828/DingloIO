@@ -28,7 +28,7 @@ export const DocumentationMobileMenu = () => {
             </div>
         </div>
       </SheetTrigger>
-      <SheetContent side={"left"} className="flex lg:hidden flex-col gap-10 bg-[#0b0b0d]">
+      <SheetContent side={"left"} className="flex lg:hidden flex-col gap-10 dark:bg-[#0b0b0d]">
         {DocumentationTypes.map((doc, idx)=>(
             <div key={idx}>
                 <p className="font-bold text-[1.2em]">{doc.title}</p>
