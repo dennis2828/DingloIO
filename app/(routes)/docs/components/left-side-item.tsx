@@ -8,7 +8,7 @@ export const LeftSideItem = ({ doc }: { doc: DocumentationSection }) => {
 
   return (
     <div className="space-y-4">
-      {doc.links.map((section, idx) => {
+      {doc.links.map((section) => {
         if (pathname.includes(doc.path))
           return (
             <div>

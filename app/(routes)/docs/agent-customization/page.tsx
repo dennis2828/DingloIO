@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { DocumentationSectionLink } from "../components/documentation-section-link";
-import { FileBox, MessageCircle, User, Waves } from "lucide-react";
+import { FileBox,  Waves } from "lucide-react";
 import Link from "next/link";
 
 const AgentCustomizationPage = () => {

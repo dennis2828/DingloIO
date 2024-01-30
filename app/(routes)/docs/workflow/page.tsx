@@ -1,13 +1,8 @@
 import Image from "next/image";
 import { DocumentationSectionLink } from "../components/documentation-section-link";
 import {
-  ArrowRight,
-  File,
-  FileBadge,
   FileBox,
-  FolderArchive,
   Text,
-  Waves,
 } from "lucide-react";
 
 const AgentCustomizationPage = () => {
