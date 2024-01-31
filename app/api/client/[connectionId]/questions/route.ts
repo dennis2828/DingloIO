@@ -37,16 +37,12 @@ export async function GET(
         },
       });
 
-      console.log("client", questions);
-      
-  
       
       return NextResponse.json(
         { questions},
         { status: 200 }
       );
     } catch (error) {
-      console.log(error);
   
       if (error instanceof JsonWebTokenError)
         return new NextResponse("Invalid authorization token", { status: 400 });

@@ -38,7 +38,6 @@ export async function POST(
       { status: 200 }
     );
   } catch (error) {
-    console.log(error);
 
     if (error instanceof JsonWebTokenError)
       return new NextResponse("Invalid authorization token", { status: 400 });
@@ -78,8 +77,6 @@ export async function GET(
         conversationId: params.connectionId,
       },
     });
-
-    console.log("cm", connectionMessages);
 
     const messagesWithAgent = connectionMessages.map((conn) => {
       if (conn.automated) {

@@ -14,7 +14,6 @@ export async function PATCH(req: NextRequest, {params}:{params:{id: string}}) {
   
       //verifiy session intergrity
       const user = AuthorizationToken(session.user.accessToken);
-      console.log(user, params);
       
       const data = await req.json();
 
@@ -46,7 +45,6 @@ export async function PATCH(req: NextRequest, {params}:{params:{id: string}}) {
         { status: 200 }
       );
     } catch (error) {
-      console.log(error);
       
       if(error instanceof JsonWebTokenError)
           return new NextResponse("Invalid authorization token",{status:400})

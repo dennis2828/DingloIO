@@ -45,7 +45,6 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.log("gjh",error);
 
     if (error instanceof ZodError)
       return new NextResponse(error.issues[0].message, { status: 500 });

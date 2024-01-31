@@ -34,7 +34,6 @@ export async function GET(
 
     return NextResponse.json(allConversations);
   } catch (error) {
-    console.log(error);
 
     if (error instanceof JsonWebTokenError)
       return new NextResponse("Invalid authorization token", { status: 400 });

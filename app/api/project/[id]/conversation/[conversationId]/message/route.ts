@@ -44,7 +44,6 @@ export async function POST(req: NextRequest, {params}:{params:{id: string, conve
         { status: 200 }
       );
     } catch (error) {
-      console.log(error);
       
       if(error instanceof JsonWebTokenError)
           return new NextResponse("Invalid authorization token",{status:400})
@@ -89,7 +88,6 @@ export async function POST(req: NextRequest, {params}:{params:{id: string, conve
   
       return NextResponse.json(allMessages);
     } catch (error) {
-      console.log(error);
       
       if(error instanceof JsonWebTokenError)
           return new NextResponse("Invalid authorization token",{status:400})

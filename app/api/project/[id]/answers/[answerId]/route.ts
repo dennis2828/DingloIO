@@ -40,7 +40,6 @@ export async function DELETE(req: NextRequest, {params}:{params:{id: string, ans
         { status: 200 }
       );
     } catch (error) {
-      console.log("ERROR",error);
       
       if(error instanceof JsonWebTokenError)
           return new NextResponse("Invalid authorization token",{status:400})
@@ -93,7 +92,6 @@ export async function DELETE(req: NextRequest, {params}:{params:{id: string, ans
         { status: 200 }
       );
     } catch (error) {
-      console.log("ERROR",error);
       
       if(error instanceof JsonWebTokenError)
           return new NextResponse("Invalid authorization token",{status:400})
