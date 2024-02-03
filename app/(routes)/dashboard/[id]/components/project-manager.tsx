@@ -1,4 +1,3 @@
-
 import db from "@/lib/db"
 import { ProjectSettings } from "./project-settings"
 import { SelectProject } from "./select-project"
