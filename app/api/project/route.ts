@@ -14,7 +14,6 @@ export async function POST(req: NextRequest) {
     if(!session || !session.user)
         throw new Error("Unauthorized here");
 
-    //verifiy session intergrity
     const user = AuthorizationToken(session.user.accessToken);
 
     const data = await req.json();
