@@ -12,7 +12,6 @@ export const DingloWrapper = async () =>{
             projectName:"default_app",
         },
     });
-
     
 
     if(!defaultProject) redirect("/create");

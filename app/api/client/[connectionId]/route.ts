@@ -8,6 +8,8 @@ export async function POST(
   { params }: { params: { connectionId: string } }
 ) {
   try {
+      
+      
     
     const data = await req.json();
     
@@ -23,6 +25,18 @@ export async function POST(
 
     if (!targetProject) throw new Error("Cannot find any project.");
 
+    const targetConversation = await db.conversation.findUnique({
+      where:{
+        connectionId: params.connectionId,
+      },
+    });
+    if(!targetConversation)
+      await db.conversation.create({
+        data:{
+          connectionId: params.connectionId,
+          projectId:targetProject.id,
+        },
+      });
     await db.message.create({
       data: {
         conversationId: params.connectionId,
@@ -38,7 +52,8 @@ export async function POST(
       { status: 200 }
     );
   } catch (error) {
-
+    console.log(error);
+    
     if (error instanceof JsonWebTokenError)
       return new NextResponse("Invalid authorization token", { status: 400 });
 
