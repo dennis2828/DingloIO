@@ -42,14 +42,14 @@ export const MessagesWrapper = async ({
     },
   });
 
-  if (!conversation)
-    return (
-      <MessagesHeader
-        conversationId={undefined}
-        projectId={project.id}
-        allConversations={allConversations}
-      />
-    );
+  // if (!conversation)
+  //   return (
+  //     <MessagesHeader
+  //       conversationId={undefined}
+  //       projectId={project.id}
+  //       allConversations={allConversations}
+  //     />
+  //   );
 
   
 

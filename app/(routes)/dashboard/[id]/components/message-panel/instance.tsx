@@ -1,30 +1,36 @@
 "use client";
 
 import { Conversation } from "@prisma/client";
-import { usePathname, useRouter } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
+import { useRouter } from "next/navigation"; // ✅
 
 interface InstanceProps {
   selectedConv: Conversation | undefined;
   convInstance: Conversation;
+  projectId: string;
   setSelectedConv: Dispatch<SetStateAction<Conversation | undefined>>;
 }
 
 export const Instance = ({
   convInstance,
   selectedConv,
+  projectId,
   setSelectedConv
 }: InstanceProps) => {
+  const router = useRouter(); // ✅
+
+  const handleClick = () => {
+    setSelectedConv(convInstance);
+    router.push(`/dashboard/${projectId}?conversation=${convInstance.connectionId}`);
+  };
+
   return (
-    <a
-    onClick={()=>{
-      setSelectedConv(convInstance);
-    }}
-    href={`localhost:3000/dashboard?conversation=${convInstance.connectionId}`}
+    <div
+      onClick={handleClick}
       className={`font-bold whitespace-nowrap text-lightBlue cursor-pointer hover:-translate-y-1 duration-100 mx-auto sm:mx-0 flex items-center gap-1 ${
         convInstance.connectionId === selectedConv?.connectionId
           ? "text-softBlue"
-          : null
+          : ""
       }`}
     >
       <div
@@ -33,6 +39,6 @@ export const Instance = ({
         }`}
       />
       {convInstance.connectionId}
-    </a>
+    </div>
   );
 };

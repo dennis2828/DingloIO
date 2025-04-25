@@ -99,6 +99,7 @@ export const MessagesHeader = ({
         {data.map((conv, idx) => (
           <Instance
             key={idx}
+            projectId={projectId}
             selectedConv={selectedConv}
             setSelectedConv={setSelectedConv}
             convInstance={conv}
