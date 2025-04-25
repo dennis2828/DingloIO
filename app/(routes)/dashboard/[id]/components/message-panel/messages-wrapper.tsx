@@ -42,6 +42,17 @@ export const MessagesWrapper = async ({
     },
   });
 
+  if (!conversation)
+    return (
+      <MessagesHeader
+        conversationId={undefined}
+        projectId={project.id}
+        allConversations={allConversations}
+      />
+    );
+
+  
+
   return (
     <div className="flex flex-col gap-12 lg:flex-row">
       <MessagesHeader
