@@ -14,7 +14,7 @@ export const navbarLinks: Array<NavbarLink> = [
         path:"/account",
     },
     {
-        label:"project",
+        label:"my projects",
         path:"/create",
     },
     {

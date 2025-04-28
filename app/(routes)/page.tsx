@@ -2,7 +2,7 @@ import { Container } from "@/components/container";
 import { Navbar } from "./components/Navbar/navbar";
 import { InfoText } from "@/components/info-text";
 import { buttonVariants } from "@/components/ui/button";
-import {FileCode} from "lucide-react"
+import {FileCode, Info} from "lucide-react"
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { About } from "./components/About/about";
@@ -23,7 +23,7 @@ export default function Home({searchParams}: {searchParams:{inviter: string}}) {
           <div className="border border-lightBlue cursor-pointer w-fit text-center mx-auto xsM:rounded-full animate-pulse p-2 mb-5 text-[.9em] xsBig:text-[1em]">
             <span className="font-bold">Dinglo.<InfoText>IO</InfoText></span> is here and is giving it all <InfoText className="font-medium">for free</InfoText>
           </div>
-          <h1 className="text-left xsM:text-center text-[1.3em] xsBig:text-[1.4em] sm:text-[1.7em] md:text-[2.2em] font-bold sm:font-medium"><InfoText>Elevate</InfoText> your customer <InfoText>support</InfoText> to achieve <InfoText>new</InfoText> peeks of profits and <InfoText>orders</InfoText></h1>
+          <h1 className="text-left xsM:text-center text-[1.3em] xsBig:text-[1.4em] sm:text-[1.7em] md:text-[2.2em] font-bold sm:font-medium">Turn <InfoText>conversations</InfoText> into conversions — <InfoText>boost</InfoText> engagement, sales, and <InfoText>support</InfoText> with <span className="font-bold italic text-[1.1em]">Dinglo IO’s</span> <InfoText>powerful</InfoText> chat <InfoText>widget</InfoText></h1>
           <div className="flex justify-center mt-5">
             <NPMPackage/>
           </div>

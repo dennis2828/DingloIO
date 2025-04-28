@@ -1,9 +1,6 @@
 import { InfoText } from "@/components/info-text";
-import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
-import { ArrowRightFromLineIcon } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 export const About = () => {
   return (
@@ -29,12 +26,13 @@ export const About = () => {
             <InfoText className="font-medium">free</InfoText>.
             </p>
             <Separator className="max-w-[400px] my-3 mx-auto h-[1px] bg-lightBlue"/>
+            {/* 
             <div>
                 <p className="text-center font-bold">Interactive Chat Widget</p>
                 <p className="text-sm font-medium text-gray-500 my-3">Sign up for an account and try our experimental mode, without installing it on your machine</p>
                 <Link className={buttonVariants({variant:"outline"}) + " group"} href={"/dashboard"}>Try now <ArrowRightFromLineIcon className="ml-2 text-softBlue group-hover:text-white"/></Link>
 
-            </div>
+            </div> */}
         </div>
         
         <div className="flex-1">
