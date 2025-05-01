@@ -91,7 +91,6 @@ export const MessagesHeader = ({
         <p className="font-bold text-[1.5em] whitespace-nowrap">
           Active connections &#40;{activeConnections.length}&#41;
         </p>
-        <Link target="_blank" href={`/experimental`} className="font-medium text-softBlue hover:underline">No user to talk to? Explore in our experimental mode</Link>
       </div>
   
 

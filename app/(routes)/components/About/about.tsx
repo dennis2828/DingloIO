@@ -10,7 +10,7 @@ export const About = () => {
       </h2>
       <div className="mt-4 flex flex-col-reverse md:flex-row gap-4">
         <div className="flex-1">
-            <p className="leading-8">
+          <p className="leading-8">
             We are a <InfoText className="font-medium">chat widget</InfoText>{" "}
             provider ready-to-use for{" "}
             <InfoText className="font-medium">production</InfoText> to give your
@@ -18,23 +18,24 @@ export const About = () => {
             experience on your platform. And the{" "}
             <InfoText className="font-medium">coolest</InfoText> thing about{" "}
             <span className="bg-lightBlue text-white p-0.5 rounded-sm font-bold">
-                Dinglo
+              Dinglo
             </span>{" "}
             ? We <InfoText className="font-medium">offer</InfoText> the majority
             of the premium <InfoText className="font-medium">features</InfoText>{" "}
             of others providers for absolutley{" "}
             <InfoText className="font-medium">free</InfoText>.
-            </p>
-            <Separator className="max-w-[400px] my-3 mx-auto h-[1px] bg-lightBlue"/>
-            {/* 
-            <div>
-                <p className="text-center font-bold">Interactive Chat Widget</p>
-                <p className="text-sm font-medium text-gray-500 my-3">Sign up for an account and try our experimental mode, without installing it on your machine</p>
-                <Link className={buttonVariants({variant:"outline"}) + " group"} href={"/dashboard"}>Try now <ArrowRightFromLineIcon className="ml-2 text-softBlue group-hover:text-white"/></Link>
-
-            </div> */}
+          </p>
+          <Separator className="max-w-[400px] my-3 mx-auto h-[1px] bg-lightBlue" />
+          <p className="leading-8">
+            And the <InfoText>best</InfoText> part? It is fully <InfoText className="font-medium">customizable</InfoText> and you can get started
+            in <InfoText className="font-medium">less</InfoText> than 5 minutes. You have complete <InfoText className="font-medium">control</InfoText> over how it looks
+            and behaves—adapt it to perfectly match your website's style and
+            flow. We <InfoText className="font-medium">provide</InfoText> the core message socket and <InfoText className="font-medium">event</InfoText> triggers, and all
+            you have to do is <InfoText className="font-medium">listen</InfoText> for them and handle them however you want
+            on your own <InfoText className="font-medium">app</InfoText>.
+          </p>
         </div>
-        
+
         <div className="flex-1">
           <Image
             src={"/smartphone.jpg"}
