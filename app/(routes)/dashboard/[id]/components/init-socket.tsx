@@ -10,7 +10,7 @@ export const InitSocket = ({id}:{id: string}) =>{
     useEffect(()=>{
 
         if(!socket){
-            const newSocket = io("http://localhost:3001",{query:{id}});
+            const newSocket = io("https://dingloio-server.onrender.com",{query:{id}});
             setSocket(newSocket);
         }
         
