@@ -29,7 +29,7 @@ export const About = () => {
           <p className="leading-8">
             And the <InfoText>best</InfoText> part? It is fully <InfoText className="font-medium">customizable</InfoText> and you can get started
             in <InfoText className="font-medium">less</InfoText> than 5 minutes. You have complete <InfoText className="font-medium">control</InfoText> over how it looks
-            and behaves—adapt it to perfectly match your website's style and
+            and behaves—adapt it to perfectly match your website&apos;s style and
             flow. We <InfoText className="font-medium">provide</InfoText> the core message socket and <InfoText className="font-medium">event</InfoText> triggers, and all
             you have to do is <InfoText className="font-medium">listen</InfoText> for them and handle them however you want
             on your own <InfoText className="font-medium">app</InfoText>.
